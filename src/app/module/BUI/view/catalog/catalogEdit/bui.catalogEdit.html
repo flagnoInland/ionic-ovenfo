@@ -1,0 +1,220 @@
+<div class="container-fluid">
+    <div class="card bg-white">
+        <div class="card-header">
+            <span>Catálogo</span>
+            <button class="btn btn-danger btn-sm ml-3 float-right" type="button" (click)="gescatalogoObtener();" ngbTooltip="Reset"><i class="fas fa-undo"></i></button>
+            <div *ngIf="catalogoObtenerResp.catalogo.catalogo_padre_id != null" class="float-right">
+                Padre: <a [routerLink]="['../../edit', catalogoObtenerResp.catalogo.catalogo_padre_id]" href="#" class="text-info"><b>{{catalogoObtenerResp.catalogo.catalogo_padre_id}}</b></a>
+            </div>
+        </div>
+        <div class="card-body">
+            <form class="form-enable">
+                <div class="form-group row">
+                    <label class="col-form-label col-2">
+                        <span>Código de catálogo</span>
+                    </label>
+                    <div class="col-10">
+                        {{catalogoObtenerResp.catalogo.catalogo_id}}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-2">
+                        <span>Descripción</span>
+                    </label>
+                    <div class="col-10">
+                        <input #inp_descripcion="ngModel" class="form-control" name="inp_descripcion" [(ngModel)]="catalogoObtenerResp.catalogo.descripcion" type="text" required="true" maxlength="100">
+                        <div *ngIf="inp_descripcion.invalid && (inp_descripcion.dirty || inp_descripcion.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_descripcion.errors.required">El campo es requerido.</li>
+                                <li *ngIf="inp_descripcion.errors.maxlength">El campo debe tener como máximo 100 caracteres.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-2">
+                        <span>Descripción larga</span>
+                    </label>
+                    <div class="col-10">
+                        <input class="form-control" name="inp_descricion_larga" [(ngModel)]="catalogoObtenerResp.catalogo.descricion_larga" type="text">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-2">
+                        <span>Estado</span>
+                    </label>
+                    <div class="col-10">
+                        <div #inp_estado class="btn-group btn-group-toggle" ngbRadioGroup name="inp_estado" [(ngModel)]="catalogoObtenerResp.catalogo.estado">
+                            <label ngbButtonLabel class="btn-primary" *ngFor="let option of ohbOptions.p_gbgiii_option">
+                                <input ngbButton type="radio" [value]="option.id"> {{option.desc}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-2 mb-3">
+                        <span>Atributos</span>
+                    </label>
+                    <div class="col-10 mb-3">
+                        <button class="btn btn-info btn-sm mr-3" type="button" (click)="childsEditorJSON();" ngbTooltip="Ver Childs"><i class="fas fa-file-code"></i></button>
+                    </div>
+                    <div class="col-12">
+                        <div class="tableContent">
+                            <table class="table table-hover bg-white">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 70px;">
+                                            <span>Código</span>
+                                        </th>
+                                        <th style="width: 225px;">
+                                            <span>Unidad Negocio</span>
+                                        </th>
+                                        <th>
+                                            <span>Descripción</span>
+                                        </th>
+                                        <th>
+                                            <span>Descripción larga</span>
+                                        </th>
+                                        <th>
+                                            <span>Variables</span>
+                                        </th>
+                                        <th style="width: 105px;">
+                                            <span>Estado</span>
+                                        </th>
+                                        <th style="width: 1rem">
+                                            <i title="" class="fas fa-eraser text-muted text-size-10"></i>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of catalogoObtenerResp.atributos;let i = index">
+                                        <td>
+                                            <a [routerLink]="['../../edit', item.catalogo_id]" href="#" class="text-info"><b>{{item.catalogo_id}}</b></a>
+                                        </td>
+                                        <td>
+                                            <select #p_unidad_negocio_id="ngModel" class="form-control" name="p_unidad_negocio_id{{i}}" [(ngModel)]="item.unidad_negocio_id">
+                                                <option [value]="null"></option>
+                                                <option *ngFor="let opcion of bcs.item.unidades" [value]="opcion.unidad_negocio_id">{{opcion.nombre}}</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input #inp_descripcion="ngModel" class="form-control" name="inp_descripcion_{{i}}" [(ngModel)]="item.descripcion" type="text" required="true" maxlength="100">
+                                            <div *ngIf="inp_descripcion.invalid && (inp_descripcion.dirty || inp_descripcion.touched)" class="alert alert-danger alert-form">
+                                                <ul>
+                                                    <li *ngIf="inp_descripcion.errors.required">El campo es requerido.
+                                                    </li>
+                                                    <li *ngIf="inp_descripcion.errors.maxlength">El campo debe tener como máximo 100 caracteres.</li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control" rows="2" name="inp_descricion_larga_{{i}}" [(ngModel)]="item.descricion_larga"></textarea>
+                                        </td>
+                                        <td class="p-2">
+                                            <div class="row mb-1">
+                                                <span class="col-1 pt-2 text-dark">1</span>
+                                                <div class="col p-0 pr-2">
+                                                    <input class="form-control" name="inp_atributo_variable_1_{{i}}" type="text" maxlength="3" [(ngModel)]="item.variable_1">
+                                                </div>
+                                            </div>
+                                            <div class="row mb-1">
+                                                <span class="col-1 pt-2 text-dark">2</span>
+                                                <div class="col p-0 pr-2">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="inp_atributo_variable_2_{{i}}" [(ngModel)]="item.variable_2">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-outline-info" type="button" (click)="abrirEditorJSON(i);"><i class="fas fa-file-code"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-1">
+                                                <span class="col-1 pt-2 text-dark">3</span>
+                                                <div class="col p-0 pr-2">
+                                                    <input class="form-control" name="inp_atributo_variable_3_{{i}}" type="number" [(ngModel)]="item.variable_3">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div #inp_estado class="btn-group btn-group-toggle" ngbRadioGroup name="inp_estado_{{i}}" [(ngModel)]="item.estado">
+                                                <label ngbButtonLabel class="btn-primary" *ngFor="let option of ohbOptions.p_gbgiii_option">
+                                                    <input ngbButton type="radio" [value]="option.id">
+                                                    <span [innerHTML]="option.icon"></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a href="#" *ngIf="!item.catalogo_id" (click)="$event.preventDefault(); atributoEliminar(i);" class=" text-danger text-size-10"><i class="fas fa-eraser"></i></a>
+                                            <a href="#" *ngIf="item.catalogo_id" (click)="$event.preventDefault(); atributoEliminarBD(modalConfirmar, i);" class=" text-danger text-size-10"><i class="fas fa-trash-alt"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <a href="#" (click)="$event.preventDefault(); atributoAgregar();" class="text-success text-size-15"><i class="fas fa-plus-square"></i> </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer">
+            <button (click)="guardar()" class="btn btn-success"><i class="far fa-hand-pointer"></i> Grabar</button>
+        </div>
+    </div>
+</div>
+
+<ng-template #modalConfirmar let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h5 class="modal-title" id="modal-basic-title">
+            Catalogo: <i>{{catalogoSelected.descripcion}}</i>
+        </h5>
+        <a href="#" class="close" aria-label="Close" (click)="$event.preventDefault(); d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body tis-card-sm">
+        <span *ngIf=!have_referencia>¿Está seguro que desea eliminar este registro?</span>
+        <div *ngIf=have_referencia>
+            <span>No se puede eliminar, este registro esta refenrenciado ({{referenciasList.length}}) en las siguientes tablas:</span>
+            <br>
+            <br>
+            <table class="table table-striped table-hover bg-white" style="max-height: 370px; overflow-y: scroll; display: block;">
+                <thead>
+                    <tr>
+                        <th scope="col" width="10%">Esquema</th>
+                        <th scope="col" width="20%">Tabla</th>
+                        <th scope="col" width="20%">Columna</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let referenciaItem of referenciasList">
+                        <td>{{referenciaItem.esquema}}</td>
+                        <td>{{referenciaItem.tabla}}</td>
+                        <td>{{referenciaItem.columna}} (FK)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button *ngIf=!have_referencia type="button" class="btn btn-outline-success" (click)="gesEliminarSeguro()">Eliminar</button>
+        <button type="button" class="btn btn-outline-danger" (click)="c('Close')">{{!have_referencia ? "Cancelar" : "Cerrar"}}</button>
+    </div>
+</ng-template>
+
+<ng-template #modalEditor let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 *ngIf="editor_descripcion != ''" class="modal-title"><i class="far fa-file-code mx-1"></i>Editor JSON - {{editor_descripcion}}</h4>
+        <h4 *ngIf="editor_descripcion == ''" class="modal-title"><i class="far fa-file-code mx-1"></i>Childs</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div id="jsoneditor" style="width: 100%; height: 400px;"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" (click)="c('cancelar')"><i class="fas fa-times"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-success" (click)="c('guardar')"><i class="far fa-save"></i> Guardar</button>
+    </div>
+</ng-template>

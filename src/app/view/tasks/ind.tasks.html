@@ -1,0 +1,39 @@
+<div class="container-fluid">
+  <div class="tableContent">
+    <table class="table table-striped table-hover bg-white">
+        <thead>
+            <tr>
+                  <th>
+                      <span>Tarea</span>
+                  </th>
+                  <th>
+                      <span>Estado</span>
+                  </th>
+                  <th>
+                      <span>Proceso</span>
+                  </th>
+                  <th>
+                      <span>Información</span>
+                  </th>
+                  <th>
+                      <span>Opciones</span>
+                  </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let task of taks; let i = index">
+                  <td>{{task.taskName}}</td>
+                  <td>{{task.stateName}}</td>
+                  <td>{{task.processName}}</td>
+                  <td>{{task.stateName}}</td>
+                  <td>
+                      <button class="btn btn-outline-info"><i class="fas fa-link"></i> </button>&nbsp;
+                      <button class="btn btn-outline-info"><i class="fas fa-unlink"></i> </button>&nbsp;
+                      <button class="btn btn-outline-info"><i class="far fa-hand-pointer"></i> </button>&nbsp;
+                      <button class="btn btn-outline-info"><i class="fas fa-exchange-alt"></i> </button>
+                  </td>
+            </tr>
+        </tbody>
+    </table>
+  </div> 
+</div>

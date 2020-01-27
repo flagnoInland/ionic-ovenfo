@@ -1,0 +1,18 @@
+<div class="tis-listContent mb-3 noImpresion" *ngFor='let row of item.config.rows'>
+    <ul class="list-inline pt-2 pb-2 tis-lineDivide">
+        <li class="list-inline-item pt-2 ml-3">
+            <bue-editor [design]="row.selectedHead" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+        </li>
+        <li class="list-inline-item float-right mr-3 tis-dis-ifle">
+            <bue-editor [design]="row.selectedBody" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+        </li>
+    </ul>
+    <ul class="list-inline" style="min-height: 3rem;" *ngIf="item.config.paginacionHabilitar">
+        <li class="list-inline-item ml-3">
+            <oh-filter [(filter)]="filter" [showLight]="item.config.paginacionFiltro"></oh-filter>
+        </li>
+        <li class="list-inline-item float-right mr-3 tis-dis-ifle">
+            <bue-editor [design]="row.selectedFooter" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+        </li>
+    </ul>
+</div>

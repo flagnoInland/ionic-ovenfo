@@ -1,0 +1,16 @@
+<div class="container-fluid noImpresion">
+  <ngb-accordion #acc="ngbAccordion" activeIds="panDate_0">
+    <ngb-panel *ngFor="let term of item; let i = index" id="panDate_{{i}}">
+      <ng-template ngbPanelTitle>
+        <i class="fas fa-plus-circle"></i> {{term.menu_descripcion}}
+      </ng-template>
+      <ng-template ngbPanelContent>
+        <div class="row">
+          <div class="col">
+            <p class="card-text" [innerHTML]="term.descripcion | ohSafeHtml"></p>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+</div>

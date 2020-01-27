@@ -1,0 +1,138 @@
+<div class="tis-listContent mb-3 noImpresion">
+    <ul class="list-inline pt-2 pb-2 tis-lineDivide">
+        <li class="list-inline-item pt-2 ml-3">
+            <h5>Menú</h5>
+        </li>
+        <li class="list-inline-item float-right mr-3 tis-dis-ifle">
+            <div ngbDropdown class="d-inline-block mr-2">
+                <button class="btn btn-outline-primary" id="drop_unidades" ngbDropdownToggle><i [class]="proyecto.icono"></i> {{proyecto.titulo}}</button>
+                <div ngbDropdownMenu aria-labelledby="drop_unidades">
+                    <button ngbDropdownItem class="dropdown-item" *ngFor="let menu of arbol.hijos" (click)="subProyectoSeleccionar(menu.menu_id)"><i [class]="menu.icono"></i> {{menu.titulo}}</button>
+                </div>
+            </div>
+            <button [routerLink]="['new']" type="button" class="btn btn-primary" placement="top" ngbTooltip="Nuevo"><i class="fas fa-folder-plus"></i> Nuevo</button>
+        </li>
+    </ul>
+</div>
+<div class="container-fluid">
+    <ngb-alert *ngIf="!bcs.data.usuariobui" [dismissible]="false">
+        No cuentas con usuario de Builder
+    </ngb-alert>
+    <sha-treeMenu [hijos]="arbol.hijos" (eventosItem)="eventosItem($event)" [proyecto_id]="proyecto_id"></sha-treeMenu>
+</div>
+<ng-template #modalConfElim let-c="close" let-d="dismiss">
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Registros asociados</h4>
+		<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body tis-card-sm">
+        <h5>¿Confirma eliminar los registros asociados?</h5>
+		<div *ngIf="elminiarConf.roles.length">
+            <h6>Menú y Roles asociados</h6>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let rol of elminiarConf.roles">{{rol.nombre}}</li>
+            </ul>
+        </div><br>
+		<div *ngIf="elminiarConf.reportes.length">
+            <h6>Menú y Reportes asociados</h6>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let reporte of elminiarConf.reportes">{{reporte.nombre}}</li>
+            </ul>
+        </div><br>
+		<div *ngIf="elminiarConf.terminos.length">
+            <h6>Menú y Términos asociados</h6>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let termino of elminiarConf.terminos">{{termino.nombre}}</li>
+            </ul>
+        </div><br>
+		<div *ngIf="elminiarConf.faqs.length">
+            <h6>Menú y FAQs asociados</h6>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let faq of elminiarConf.faqs">{{faq.nombre}}</li>
+            </ul>
+        </div><br>
+		<div *ngIf="elminiarConf.procesos.length">
+            <h6>Procesos asociados</h6>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let proceso of elminiarConf.procesos">{{proceso.nombre}}</li>
+            </ul>
+        </div><br>
+		<div *ngIf="elminiarConf.tareas.length">
+            <h6>Tareas asociados</h6>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let tarea of elminiarConf.tareas">{{tarea.nombre}}</li>
+            </ul>
+        </div>
+        <div *ngIf="ohBuilderTemp.menu.tienePlantilla">
+            <h5>Fuentes</h5>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="confirmarEliminarPlantilla"
+                    name="confirmarEliminarPlantilla" [(ngModel)]="plantillaConfirmarEliminar" >
+                <label class="custom-control-label" for="confirmarEliminarPlantilla"> <strong>¿Eliminar archivos fuente?</strong></label>
+            </div>
+        </div>
+	</div>
+	<div class="modal-footer">
+        <button type="button" class="btn btn-outline-success" (click)="c('Confirmar')">Confirmar</button>
+        <button type="button" class="btn btn-outline-danger" (click)="c('Cancelar')">Cancelar</button>
+	</div>
+</ng-template>
+<ng-template #modalVistaPrevia let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Informacion del Menú: {{menu_seleccionado.titulo}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <ngb-tabset activeId="tab-0" type="tabs" justify="start" orientation="horizontal">
+            <ngb-tab [disabled]="false" id="tab-0">
+                <ng-template ngbTabTitle>
+                    <span class="mr-1">
+                        <i class="fab fa-elementor"></i>
+                    </span>
+                    <span>Información</span>
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" [(ngModel)]="menu_seleccionado.titulo" #popContent_Titulo id="popContent_Titulo">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" [ohCopyText]="popContent_Titulo" type="button"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i [ngClass]="menu_seleccionado.icono"></i></div>
+                        </div>
+                        <input type="text" class="form-control" [(ngModel)]="menu_seleccionado.icono" #popContent_Icono id="popContent_Icono">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" [ohCopyText]="popContent_Icono" type="button"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" [(ngModel)]="menu_seleccionado.plantilla" #popContent_Plantilla id="popContent_Plantilla">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" [ohCopyText]="popContent_Plantilla" type="button"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab [disabled]="false" id="tab-1">
+                <ng-template ngbTabTitle>
+                    <span class="mr-1">
+                        <i title="" class="fas fa-code"></i>
+                    </span>
+                    <span>SQL Insert</span>
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <oh-previewCode [codeText]="vistaPreviaSQL_insert"></oh-previewCode>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cerrar</button>
+    </div>
+</ng-template>

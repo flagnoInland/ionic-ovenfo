@@ -1,0 +1,84 @@
+<div id="tisContent" class="ind-body-maxContent">
+	<div class="ohCore-body-content ml-3 mr-3">
+		<div class="card ind-login-card">
+			<div class="card-block text-center">
+				<p class="text-white h3 pb-3">Login principal</p>
+				<div class="img_logo_01_svg" [ngClass]="{'mt-2 mb-3': sizeW == 1,'mt-2 mb-4': sizeW == 2,'mt-0 mb-5': sizeW == 3}"></div>
+				<h4 *ngIf="sizeW == 1 || sizeW == 2" class="card-title text-left text-white mb-2 mt-2">Bienvenido,
+					<span class="h5 font-weight-normal">Iniciar Sesión</span>
+				</h4>
+				<h3 *ngIf="sizeW == 3" class="card-title text-left text-white mb-4 mt-5">Bienvenido,
+					<span class="h5 font-weight-normal">Iniciar Sesión</span>
+				</h3>
+				<form (ngSubmit)="login()">
+					<div class="form-group">
+						<input name="user" type="email" [(ngModel)]="user.user" class="form-control" [ngClass]="{'form-control-sm': sizeW == 1,'': sizeW == 2,'form-control-lg': sizeW == 3}" placeholder="Usuario" [ngClass]="{'is-invalid': user.user == ''}" autocomplete="username email" required>
+					</div>
+					<div class="form-group" style="position:  relative;">
+						<input name="password" type="password" [(ngModel)]="user.password" class="form-control" [ngClass]="{'form-control-sm': sizeW == 1,'': sizeW == 2,'form-control-lg': sizeW == 3}" placeholder="Contraseña" [ngClass]="{'is-invalid': user.password == ''}" autocomplete="new-password" required>
+						<ng-template #tipContent let-greeting="greeting">
+							<div style="text-align: left">
+								Recuerda que tu contraseña debe contener por lo menos:
+								<ul>
+									<li>8 Caracteres</li>
+									<li>1 número</li>
+									<li>1 caracter minúscula</li>
+									<li>1 caracter mayúscula</li>
+									<li>1 caracter especial (! - _ @ # $ % ^ & *)</li>
+								</ul>
+							</div>
+						</ng-template>
+						<a href="#" style="position: absolute; top: 0.4rem; right: -1.3rem;" placement="left" [ngbTooltip]="tipContent"><i class="far fa-question-circle"></i></a>
+					</div>
+					<button type="submit" class="btn btn-block mt-3 btn-primary" [ngClass]="{'btn-sm': sizeW == 1,'': sizeW == 2,'btn-lg': sizeW == 3}" [disabled]="!user.user || !user.password || user.user == '' || user.password == ''">Ingresar</button>
+					<ul class="list-inline" class="pb-5 pl-0" [ngClass]="{'mt-2': sizeW == 1,'mt-3': sizeW == 2 || sizeW == 3}">
+						<li class="list-inline-item float-left text-primary">
+							<a href="#" (click)="openRestorePassword(modalRestorePassword); $event.preventDefault();">¿Olvidaste tu contraseña?</a>
+						</li>
+						<li class="list-inline-item float-right tis-dis-ifle">
+							<a [routerLink]="['/Register']">Regístrate</a>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<ng-template #modalRestorePassword let-c="close" let-d="dismiss">
+	<div class="modal-header">
+	  <h4 class="modal-title" id="modal-basic-title">Recuperar contraseña</h4>
+	  <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+		<span aria-hidden="true">&times;</span>
+	  </button>
+	</div>
+	<div class="modal-body">
+		<p>Ingrese su correo (Usuario) para enviar un correo de restablecimiento de contraseña</p>
+		<form #frmPassword="ngForm" class="form-enable" (ngSubmit)="restore(frmPassword)">
+			<div class="form-group row">
+				<label class="col-form-label col-sm-4">
+					<span>Correo</span>
+				</label>
+				<div class="col-sm-8">
+					<input #inpEmail="ngModel" name="inpEmail" class="form-control" [(ngModel)]="restoreObj.emailRestore" type="email" email required="true" minlength="10" maxlength="100">
+					<div *ngIf="inpEmail.invalid && (inpEmail.dirty || inpEmail.touched)" class="alert alert-danger alert-form">
+							<ul>
+							<li *ngIf="inpEmail.errors.required">El campo es requerido.</li>
+							<li *ngIf="inpEmail.errors.minlength">El campo debe tener como mínimo 2 caracteres.</li>
+							<li *ngIf="inpEmail.errors.maxlength">El campo debe tener como mínimo 100 caracteres.</li>
+							<li *ngIf="inpEmail.errors.email">Ingrese un correo corrécto.</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</form>
+		<p class="mt-2" *ngIf="restoreObj.alertMsj.length>0">
+			<ngb-alert type="warning" [dismissible]="false">
+				<strong><i class="fas fa-exclamation-triangle"></i></strong> {{restoreObj.alertMsj}}
+			</ngb-alert>
+		</p>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-primary mr-1" (click)="restore(c)">Restaurar</button>
+		<button type="button" class="btn btn-secondary" (click)="c('cancel')">Cancelar</button>
+	</div>
+</ng-template>

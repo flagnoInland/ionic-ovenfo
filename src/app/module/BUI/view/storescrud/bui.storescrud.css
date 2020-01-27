@@ -1,0 +1,29 @@
+tbody {
+    font-weight: 700;
+}
+
+.bg-pk {
+    background-color: #eee;
+}
+
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before {
+    background-color: #fd7b2b;
+}
+
+pre.hljs {
+    font-size: 12px !important;
+}
+
+.join-not-use {
+    color: #23272b !important;
+}
+
+.join-use {
+    color: #fd7b2b !important;
+}
+
+.short {
+    max-height: 3rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}

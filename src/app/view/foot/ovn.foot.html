@@ -1,0 +1,16 @@
+<nav class="navbar fixed-bottom navbar-expand ind-footNav" style="height: 30px">
+    <div class="navbar-text m-auto ind-footText text-light vistaC">
+        <img src="https://containerservices.inlandservices.com/source/img/logo-02.png" class="ind-footImg" style="margin-top: -5px;">
+        <i class="fa fa-copyright" aria-hidden="true"></i> Derechos reservados {{currentDate | date:'yyyy'}} - Versión {{version}}
+        <i *ngIf="coreService.data.connection == 1" class="ind-footConex fas fa-signal text-success" title="Conexión establecida"></i>
+        <i *ngIf="coreService.data.connection == 2" class="ind-footConex fas fa-signal text-warning" title="Estableciendo conexión"></i>
+        <i *ngIf="coreService.data.connection == 3" class="ind-footConex fas fa-signal text-danger" title="Sin conexión"></i>
+    </div>
+    <div class="navbar-text m-auto text-light vistaAB ind-footSmall ind-footText">
+        <img src="https://containerservices.inlandservices.com/source/img/logo-02.png" class="ind-footImg">
+        <i class="fa fa-copyright" aria-hidden="true"></i> {{currentDate | date:'yyyy'}} - v{{version}}
+        <i *ngIf="coreService.data.connection == 1" class="ind-footConex fas fa-signal text-success" title="Conexión establecida"></i>
+        <i *ngIf="coreService.data.connection == 2" class="ind-footConex fas fa-signal text-warning" title="Estableciendo conexión"></i>
+        <i *ngIf="coreService.data.connection == 3" class="ind-footConex fas fa-signal text-danger" title="Sin conexión"></i>
+    </div>
+</nav>

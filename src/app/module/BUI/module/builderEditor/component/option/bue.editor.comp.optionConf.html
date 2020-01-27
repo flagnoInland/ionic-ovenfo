@@ -1,0 +1,50 @@
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label>Id</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Tipo</label><br>
+                <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="item.config.type">
+                    <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" value="simple"> Simple
+                    </label>
+                    <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" value=""> Enmarcado
+                    </label>
+                    <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" value="small"> Lineal
+                    </label>
+                    <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" value="box"> Recuadro
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-4" *ngIf="item.config.type!='box'">
+            <div class="form-group">
+                <label>Descripción</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.desc" placeholder="Descripción">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Valor</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" [ngClass]="{'btn-outline-primary' : !item.config.value.esEnlace, 'btn-primary' : item.config.value.esEnlace}" (click)="$event.preventDefault(); buscarValueBind()"><i class="fas fa-assistive-listening-systems" aria-hidden="true"></i></span>
+                </div>
+                <input #inp_value="ngModel" name="inp_value" type="text" class="form-control form-control-sm" [(ngModel)]="item.config.value.valor" placeholder="Valor" [required]="item.config.required">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label><i class="fas fa-code"></i> Evento cambiar</label>
+                <input type="text" class="form-control form-control-sm border border-info" [(ngModel)]="item.config.onChange" placeholder="Evento cambiar">
+            </div>
+        </div> 
+    </div>
+</div>

@@ -1,0 +1,266 @@
+<div class="container-fluid">
+    <ngb-tabset>
+        <ngb-tab id="tabPrincipal">
+            <ng-template ngbTabTitle><i class="far fa-address-book"></i> Datos principales</ng-template>
+            <ng-template ngbTabContent>
+                <div class="container-fluid tis-cards-mt-2 pt-3" style="background: white; padding-top: 0.5rem;">
+                    <form #frmRegistrar="ngForm" class="form-enable" (ngSubmit)="registrar(frmRegistrar)">
+                        <div class="card">
+                            <div class="card-header"><i class="fas fa-user-alt"></i> Editar Usuario</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-2 text-center">
+                                        <i *ngIf="!usuario.datos.adjunto_id" class="far fa-user-circle fa-6x"></i>
+                                        <img *ngIf="usuario.datos.adjunto_id" [src]="usuario.fotoBase64" class="leftMenuPhoto rounded-circle" /><br>
+                                        <input [hidden]="true" type="file" class="form-control" #inp_foto (change)="fotoSubir($event)"
+                                            [accept]="'.jpg,.jpge,.png'">
+                                        <a [hidden]="usuario.datos.adjunto_id" href="#" (click)="$event.preventDefault(); inp_foto.click()"
+                                            class="mt-2"><i class="fas fa-camera-retro fa-2x"></i></a>
+                                        <a [hidden]="!usuario.datos.adjunto_id" href="#" (click)="$event.preventDefault(); fotoEliminar()"
+                                            class="mt-2 text-danger"><i class="fas fa-eraser fa-2x"></i></a>
+                                    </div>
+                                    <div class="col-sm-10">
+                                        <div class="form-row">
+                                            <div class="form-group col-6 col-sm-6 col-md-6 col-lg-4">
+                                                <label>Correo</label>
+                                                <input #inp_correo="ngModel" name="inp_correo" type="email" class="form-control" [(ngModel)]="usuario.datos.correo" [ohInputFormat]="'upper'" minlength="2" (input)="correoCambiar()" maxlength="100" required="true">
+                                                <div *ngIf="inp_correo.invalid && (inp_correo.dirty || inp_correo.touched)" class="alert alert-danger alert-form">
+                                                    <ul>
+                                                        <li *ngIf="inp_correo.errors.required">El campo es requerido.</li>
+                                                        <li *ngIf="inp_correo.errors.minlength">El campo debe tener como mínimo 2 caracteres.</li>
+                                                        <li *ngIf="inp_correo.errors.maxlength">El campo debe tener como máximo 100 caracteres.</li>
+                                                    </ul>
+                                                </div>
+                                                <ngb-alert *ngIf="!validar.correo.indicador_buscando && validar.correo.lista.length>0" [dismissible]="false" type="warning" class="mt-2" style="padding: .50rem 0.75rem;">El Correo ya se encuentra repetido.</ngb-alert>
+                                            </div>
+                                            <div class="form-group col-6 col-sm-6 col-md-6 col-lg-4">
+                                                <label>Id / Usuario</label>
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-prepend">
+                                                        <button class="btn btn-outline-secondary" type="button" id="button-addon1" (click)="editarId = !editarId">Editar</button>
+                                                    </div>
+                                                    <input #inp_id="ngModel" name="inp_id" type="text" class="form-control" [(ngModel)]="usuario.datos.id" minlength="2" maxlength="100" required="true" (input)="validarTipo('id')" [disabled]="!editarId">
+                                                </div>
+                                                <div *ngIf="inp_id.invalid && (inp_id.dirty || inp_id.touched)" class="alert alert-danger alert-form">
+                                                    <ul>
+                                                        <li *ngIf="inp_id.errors.required">El campo es requerido.</li>
+                                                        <li *ngIf="inp_correo.errors.minlength">El campo debe tener como mínimo 2 caracteres.</li>
+                                                        <li *ngIf="inp_correo.errors.maxlength">El campo debe tener como máximo 100 caracteres.</li>
+                                                    </ul>
+                                                </div>
+                                                <ngb-alert *ngIf="!validar.correo.indicador_buscando && validar.id.lista.length>0" [dismissible]="false" type="danger" class="mt-2" style="padding: .50rem 0.75rem;">El Id existe, ingrese otro.</ngb-alert>
+                                            </div>
+                                            <div class="form-group col-6 col-sm-6 col-md-6 col-lg-4">
+                                                <label>Nombres</label>
+                                                <input #inp_nombres="ngModel" name="inp_nombres" class="form-control"
+                                                    [(ngModel)]="usuario.datos.nombres" [ohInputFormat]="'upper'" type="text"
+                                                    required="true" minlength="2" maxlength="100">
+                                                <div *ngIf="inp_nombres.invalid && (inp_nombres.dirty || inp_nombres.touched)"
+                                                    class="alert alert-danger alert-form">
+                                                    <ul>
+                                                        <li *ngIf="inp_nombres.errors.required">El campo es requerido.</li>
+                                                        <li *ngIf="inp_nombres.errors.minlength">El campo debe tener
+                                                            como
+                                                            mínimo 2 caracteres.</li>
+                                                        <li *ngIf="inp_nombres.errors.maxlength">El campo debe tener
+                                                            como
+                                                            máximo 100 caracteres.</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-6 col-sm-6 col-md-6 col-lg-4">
+                                                <label>Apellido paterno</label>
+                                                <input #inp_apellido_paterno="ngModel" name="inp_apellido_paterno"
+                                                    class="form-control" [(ngModel)]="usuario.datos.apellido_paterno"
+                                                    [ohInputFormat]="'upper'" type="text" required="true" minlength="2"
+                                                    maxlength="100">
+                                                <div *ngIf="inp_apellido_paterno.invalid && (inp_apellido_paterno.dirty || inp_apellido_paterno.touched)"
+                                                    class="alert alert-danger alert-form">
+                                                    <ul>
+                                                        <li *ngIf="inp_apellido_paterno.errors.required">El campo es
+                                                            requerido.</li>
+                                                        <li *ngIf="inp_apellido_paterno.errors.minlength">El campo debe
+                                                            tener como
+                                                            mínimo 2 caracteres.</li>
+                                                        <li *ngIf="inp_apellido_paterno.errors.maxlength">El campo debe
+                                                            tener como
+                                                            máximo 100 caracteres.</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-6 col-sm-6 col-md-6 col-lg-4">
+                                                <label>Apellido materno</label>
+                                                <input #inp_apellido_materno="ngModel" name="inp_apellido_materno"
+                                                    class="form-control" [(ngModel)]="usuario.datos.apellido_materno"
+                                                    [ohInputFormat]="'upper'" type="text" required="true" minlength="2"
+                                                    maxlength="100">
+                                                <div *ngIf="inp_apellido_materno.invalid && (inp_apellido_materno.dirty || inp_apellido_materno.touched)"
+                                                    class="alert alert-danger alert-form">
+                                                    <ul>
+                                                        <li *ngIf="inp_apellido_materno.errors.required">El campo es
+                                                            requerido.</li>
+                                                        <li *ngIf="inp_apellido_materno.errors.minlength">El campo debe
+                                                            tener como
+                                                            mínimo 2 caracteres.</li>
+                                                        <li *ngIf="inp_apellido_materno.errors.maxlength">El campo debe
+                                                            tener como
+                                                            máximo 100 caracteres.</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-6 col-sm-6 col-md-6 col-lg-4">
+                                                <label>Estado</label>
+                                                <select #inp_estado="ngModel" name="inp_estado" class="form-control"
+                                                    [(ngModel)]="usuario.datos.estado" required="true">
+                                                    <option *ngFor="let estado of acs.data.catalogo.usuario_estado" [value]="estado.variable_3">{{estado.descripcion}}</option>
+                                                </select>
+                                                <div *ngIf="inp_estado.invalid && (inp_estado.dirty || inp_estado.touched)"
+                                                    class="alert alert-danger alert-form">
+                                                    <ul>
+                                                        <li *ngIf="inp_estado.errors.required">El campo es requerido.</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-2">
+                            <div class="card-header"><i class="fas fa-warehouse"></i> Empresa(s)</div>
+                            <div class="card-body">
+                                <adm-companySearch [(empresas)]="empresas" [(empresas_xml)]="usuario.empresas" [(empresa_id)]="usuario.datos.empresa_id" [mapearDefecto]="true"></adm-companySearch>
+                            </div>
+                        </div>
+                        <div class="card bg-light botoneraCard">
+                            <div class="card-body">
+                                <button type="submit" class="btn btn-success mr-1" [disabled]="frmRegistrar.invalid"><i class="far fa-save"></i> Grabar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab id="tabEnvioCorreo">
+            <ng-template ngbTabTitle><i class="far fa-envelope-open"></i> Envio de correos</ng-template>
+            <ng-template ngbTabContent>
+                <div class="container-fluid pt-3 pb-3" style="background: white; padding-top: 0.5rem;">
+                    <div class="alert alert-info mt-2" role="alert">
+                        Selecciona el envio de correos a permitir
+                    </div>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col">Activar</th>
+                                <th scope="col">Formato de correo</th>
+                                <th scope="col">Editado por usuario</th>
+                                <th scope="col">Enviar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let email of email_config; let i = index">
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="emailActivar_{{i}}"
+                                            name="emailActivar_{{i}}" [(ngModel)]="email.activo">
+                                        <label class="custom-control-label" for="emailActivar_{{i}}">&nbsp;</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    {{email.titulo}}
+                                </td>
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="emailHabilitado_{{i}}"
+                                            name="emailHabilitado_{{i}}" [(ngModel)]="email.estado" [disabled]="!email.activo">
+                                        <label class="custom-control-label" for="emailHabilitado_{{i}}">&nbsp;</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="emailEstado_{{i}}"
+                                            name="emailEstado_{{i}}" [(ngModel)]="email.habilitado" [disabled]="!email.activo">
+                                        <label class="custom-control-label" for="emailEstado_{{i}}">&nbsp;</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" (click)="emailActualizar()" class="btn btn-primary mr-1"><i class="fas fa-sync"></i>
+                        Actualizar</button>
+                </div>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab id="tabCambiarClave">
+            <ng-template ngbTabTitle><i class="fas fa-unlock"></i> Cambiar clave</ng-template>
+            <ng-template ngbTabContent>
+                <div class="container-fluid pt-3 pb-3" style="background: white; padding-top: 0.5rem;">
+                    <form #frmCambiarClave="ngForm" class="form-enable" (ngSubmit)="claveCambiar(frmCambiarClave)">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Usuario</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled="disabled" class="form-control" value="{{usuario.datos.nombres+' '+usuario.datos.apellido_paterno+' '+usuario.datos.apellido_materno}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Caducidad de clave</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled="disabled" class="form-control" value="{{usuario.datos.caducidad_clave}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Nueva contraseña</label>
+                            <div class="col-sm-8">
+                                <input id="inp_cl_clave" name="inp_cl_clave" #inp_cl_clave="ngModel" [(ngModel)]="usuario.cambioclave.clave" type="password" class="form-control"
+                                    placeholder="Nueva contraseña" autocomplete="new-password" required pattern="^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!\-_@#$%^&*])[\w!\-_@#$%^&*]{8,}$"
+                                    ohValidateEqual="inp_cl_claveRepetir" reverse="true">
+                                <div *ngIf="inp_cl_clave.invalid && (inp_cl_clave.dirty || inp_cl_clave.touched)" class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_cl_clave.errors.required">Ingrese una clave correcta.</li>
+                                        <li *ngIf="inp_cl_clave.errors.validateEqualNc == false">La clave ingresada no debe ser igual a
+                                            la anterior.</li>
+                                        <li *ngIf="inp_cl_clave.errors.pattern">La clave debe contener por lo menos
+                                            <ul>
+                                                <li>8 caracteres</li>
+                                                <li>1 número</li>
+                                                <li>1 caracter minúscula</li>
+                                                <li>1 caracter mayúscula</li>
+                                                <li>1 caracter especial (! - _ @ # $ % ^ & *)</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Repetir contraseña</label>
+                            <div class="col-sm-8">
+                                <input id="inp_cl_claveRepetir" name="inp_cl_claveRepetir" #inp_cl_claveRepetir="ngModel" [(ngModel)]="usuario.cambioclave.claveRepetir"
+                                    type="password" class="form-control" placeholder="Repetir contraseña" autocomplete="new-password"
+                                    required minlength="6" ohValidateEqual="inp_cl_clave" reverse="false">
+                                <div *ngIf="inp_cl_claveRepetir.invalid && (inp_cl_claveRepetir.dirty || inp_cl_claveRepetir.touched)" class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_cl_claveRepetir.errors.required">Ingrese una clave correcta.</li>
+                                        <li *ngIf="inp_cl_claveRepetir.errors.minlength">La clave debe tener como mínimo 6 caracteres.</li>
+                                        <li *ngIf="!inp_cl_claveRepetir.errors.validateEqual">Debes repetir la misma clave.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mr-1" [disabled]="frmCambiarClave.invalid"><i class="fas fa-key"></i> Actualizar</button>
+                    </form>
+                </div>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab id="tabAcesos">
+            <ng-template ngbTabTitle><i class="fas fa-user-lock"></i> Roles</ng-template>
+            <ng-template ngbTabContent>
+                <div class="container-fluid tis-cards-mt-2 pt-3 pb-3" style="background: white; padding-top: 0.5rem;">
+                    <adm-rolSelect [usuario_id]="usuario.datos.usuario_id" [(roles_xml)]="roles"></adm-rolSelect>
+                    <button type="button" (click)="rolRegistrar();" class="btn btn-success mr-1 mt-2" [disabled]="roles.length == 0"><i class="fas fa-sync"></i> Grabar</button>
+                </div>
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
+</div>

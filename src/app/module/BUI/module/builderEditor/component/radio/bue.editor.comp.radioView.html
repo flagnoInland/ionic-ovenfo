@@ -1,0 +1,12 @@
+<div *ngIf="item.config.tipoEnlace=='enlace'">
+    <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_tipo" [(ngModel)]="item.config.value.valor">
+        <label ngbButtonLabel class="btn-primary" *ngFor='let row of getListBind()'>
+            <input ngbButton type="radio" [value]="row.id"> {{row.value}}
+        </label>
+    </div>
+</div>
+<div *ngIf="item.config.tipoEnlace=='opcion'" class="btn-group btn-group-toggle" ngbRadioGroup name="inp_tipo" [(ngModel)]="item.config.value.valor">
+    <label ngbButtonLabel *ngFor='let row of item.config.options' [class]="(row.color && row.color.length>0)?'btn '+row.color:'btn btn-primary'">
+        <input ngbButton type="radio" [value]="row.id"> {{row.value}}
+    </label>
+</div>

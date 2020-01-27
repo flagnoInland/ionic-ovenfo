@@ -1,0 +1,10 @@
+<ng-template [ngIf]="list.length == 0">
+    <input #inputItem="ngModel" type="text" class="form-control" [(ngModel)]="selected" name="selected" placeholder="Sin registros" readonly="true" [required]="required">
+</ng-template>
+<ng-template [ngIf]="list.length != 0">
+    <select #selectItem="ngModel" class="form-control" [(ngModel)]="selected" name="selected" required="true" (change)="changeOption($event)" [disabled]="disabled" [required]="required">
+        <ng-template ngFor let-opcion [ngForOf]="list" let-i="index" [ngForTrackBy]="trackByFn">
+            <option [ngValue]="opcion">{{opcion.nombre}} ({{opcion.direccion}})</option>
+        </ng-template>
+    </select>
+</ng-template>

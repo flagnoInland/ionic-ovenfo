@@ -1,0 +1,12 @@
+<div style="cursor: default">
+  <ngb-accordion [closeOthers]="!item.config.multiple" activeIds="{{item.config.iSel}}">
+      <ngb-panel *ngFor='let row of item.config.rows; let i = index' id="acc-{{i}}">
+        <ng-template ngbPanelTitle>
+          <bue-editor [design]="row.selectedHead" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          <bue-editor [design]="row.selectedBody" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+        </ng-template>
+      </ngb-panel>
+  </ngb-accordion>
+</div>

@@ -1,0 +1,103 @@
+<form #frmVieEdit="ngForm" class="form-enable">
+    <div class="container-fluid mt-2">
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header"><i class="fas fa-cog text-info"></i> Principal</div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="scheme" class="col-sm-4 col-form-label">Nombre</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="inpName" [(ngModel)]="design.config.name" placeholder="Nombre" [disabled]="true">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="scheme" class="col-sm-4 col-form-label">Ruta Plantilla</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="inpPlan" [(ngModel)]="design.config.template" placeholder="Ruta Plantilla" [disabled]="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header"><i class="fas fa-wrench"></i> Configuración</div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="scheme" class="col-sm-3 col-form-label">Opciones</label>
+                            <div class="col-sm-9">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="inp_bordertop" name="inp_bordertop" [(ngModel)]="design.config.confOnTop">
+                                    <label class="custom-control-label" for="inp_bordertop">Quitar borde superior</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="inp_mouseover" name="inp_mouseover" [(ngModel)]="design.config.confAlertOut">
+                                    <label class="custom-control-label" for="inp_mouseover">Evitar salir de la página mostrando alerta</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="inp_selector" name="inp_selector" [(ngModel)]="design.config.confSelector">
+                                    <label class="custom-control-label" for="inp_selector">Habilitar selector <span *ngIf="design.config.confSelector" class="text-muted">(<span class="font-weight-bold">{{design.config.preFijoPlantilla}}-{{design.config.template}}</span>)</span></label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="inp_css" name="inp_css" [(ngModel)]="design.config.confCSS">
+                                    <label class="custom-control-label" for="inp_css">Adjuntar hoja CSS</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-2">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-exclamation-triangle text-info"></i> Observaciones (<span class="font-weight-bold">{{design.observaciones.length}}</span>) <a class="ml-2" href="#" (click)="validar(); $event.preventDefault();"><i class="fas fa-sync"></i></a>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Componente</th>
+                                    <th>Id Interno</th>
+                                    <th>Nivel</th>
+                                    <th>Descripción</th>
+                                    <th>Solución</th>
+                                    <th>Opciones</th>
+                                </tr>
+                            </thead>
+                           <tbody>
+                                <tr *ngFor="let item of design.observaciones; let i = index">
+                                    <th><i [class]="item.icono"></i> {{item.componente}}</th>
+                                    <th>{{item.item._id}}</th>
+                                    <th>
+                                        <span *ngIf="item.nivel == '0'" class="badge badge-pill badge-danger">Error</span>
+                                        <span *ngIf="item.nivel == '1'" class="badge badge-pill badge-warning">Aviso</span>
+                                    </th>
+                                    <th>{{item.descripcion}}</th>
+                                    <th>{{item.solucion}}</th>
+                                    <th>
+                                        <a *ngIf="item.opcion.tipo == 'locate'" href="#" (click)="$event.preventDefault(); relinkear(item);">Ubicar</a>
+                                        <a *ngIf="item.opcion.tipo == 'autogenerate'" href="#" (click)="$event.preventDefault(); autogenerar(item.item);">Autogenerar</a>
+                                    </th>
+                                </tr>
+                           </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card bg-light botoneraCard">
+                    <div class="card-body">
+                        <button type="button" class="btn btn-primary mr-2" [disabled]="frmVieEdit.invalid || design.observaciones.length>0" (click)="build(frmVieEdit, true)"><i class="far fa-save"></i> Grabar</button>
+                        <button type="button" class="btn btn-outline-primary mr-2" [disabled]="frmVieEdit.invalid || design.observaciones.length>0" (click)="build(frmVieEdit, false)"><i class="fas fa-save"></i> Guardar</button>
+                        <button type="button" class="btn btn-outline-secondary" (click)="frmVieEdit.resetForm({}); reset();"><i class="fas fa-eraser"></i> Limpiar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

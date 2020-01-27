@@ -1,0 +1,12 @@
+<ul class="oh_steps">
+    <li *ngFor="let item of list; let i = index" [class]="item.status">
+        <span *ngIf="item.status != 'complete'" class="step">
+           <span > {{i+1}} </span>
+        </span>
+        <span *ngIf="item.status == 'complete'" class="step">
+                <img style="border-radius: 50%!important;margin-top: -4px;" class="img_complete" [src]="item.img" alt="">
+        </span>
+
+        <span class="title">{{item.value}}</span>
+    </li>
+</ul>

@@ -1,0 +1,246 @@
+<div class="container-fluid">
+  <ngb-tabset (tabChange)="cambioTab($event)">
+    <ngb-tab id="tabDatos">
+      <ng-template ngbTabTitle><i class="fas fa-id-card"></i> Datos principales</ng-template>
+      <ng-template ngbTabContent>
+          <div class="card">
+              <form #frmEdit="ngForm" class="form-enable" (ngSubmit)="updateUser(frmEdit)">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-2 text-center">
+                      <i *ngIf="!dateUpdate.photoId" class="far fa-user-circle fa-6x"></i>
+                      <img *ngIf="dateUpdate.photoId" [src]="dateUpdate.photoBase64" class="leftMenuPhoto rounded-circle"/><br>
+                      <input [hidden]="true" type="file" class="form-control" #inputPhoto (change)="uploadPhoto($event)" [accept]="'.jpg,.jpge,.png'">
+                      <a [hidden]="dateUpdate.photoId" href="#" (click)="$event.preventDefault(); inputPhoto.click()" class="mt-2"><i class="fas fa-camera-retro fa-2x"></i></a>
+                      <a [hidden]="!dateUpdate.photoId" href="#" (click)="$event.preventDefault(); deletePhoto()" class="mt-2 text-danger"><i class="fas fa-eraser fa-2x"></i></a>
+                  </div>
+                  <div class="col-sm-10">
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4">
+                          <span>Usuario</span>
+                        </label>
+                        <div class="col-sm-8">
+                          {{dateUpdate.email}}
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4">
+                          <span>Correo</span>
+                        </label>
+                        <div class="col-sm-8">
+                          <input #inpEmail="ngModel" name="inpEmail" class="form-control" [(ngModel)]="dateUpdate.email" type="email" disabled>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4">
+                          <span>Nombres</span>
+                        </label>
+                        <div class="col-sm-8">
+                          <input #inpName="ngModel" name="inpName" class="form-control" [(ngModel)]="dateUpdate.name" [ohInputFormat]="'upper'" type="text" required="true" minlength="2" maxlength="100">
+                          <div *ngIf="inpName.invalid && (inpName.dirty || inpName.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                              <li *ngIf="inpName.errors.required">El campo es requerido.</li>
+                              <li *ngIf="inpName.errors.minlength">El campo debe tener como mínimo 2 caracteres.</li>
+                              <li *ngIf="inpName.errors.maxlength">El campo debe tener como máximo 100 caracteres.</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4">
+                          <span>Apellido paterno</span>
+                        </label>
+                        <div class="col-sm-8">
+                          <input #inpLastName="ngModel" name="inpLastName" class="form-control" [(ngModel)]="dateUpdate.lastName" [ohInputFormat]="'upper'" type="text" required="true" minlength="2" maxlength="100">
+                          <div *ngIf="inpLastName.invalid && (inpLastName.dirty || inpLastName.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                              <li *ngIf="inpLastName.errors.required">El campo es requerido.</li>
+                              <li *ngIf="inpLastName.errors.minlength">El campo debe tener como mínimo 2 caracteres.</li>
+                              <li *ngIf="inpLastName.errors.maxlength">El campo debe tener como máximo 100 caracteres.</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4">
+                          <span>Apellido materno</span>
+                        </label>
+                        <div class="col-sm-8">
+                          <input #inpMiddleName="ngModel" name="inpMiddleName" class="form-control" [(ngModel)]="dateUpdate.middleName" [ohInputFormat]="'upper'" type="text" required="true" minlength="2" maxlength="100">
+                          <div *ngIf="inpMiddleName.invalid && (inpMiddleName.dirty || inpMiddleName.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                              <li *ngIf="inpMiddleName.errors.required">El campo es requerido.</li>
+                              <li *ngIf="inpMiddleName.errors.minlength">El campo debe tener como mínimo 2 caracteres.</li>
+                              <li *ngIf="inpMiddleName.errors.maxlength">El campo debe tener como máximo 100 caracteres.</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4">
+                          <span>Empresa (Razón Social)</span>
+                        </label>
+                        <div class="col-sm-8">
+                          <input #inpCompany="ngModel" name="inpCompany" class="form-control" [(ngModel)]="dateUpdate.company" [ohInputFormat]="'upper'" type="text" [disabled]="disableCompany"
+                            required="true">
+                          <div *ngIf="inpCompany.invalid && (inpCompany.dirty || inpCompany.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                              <li *ngIf="inpCompany.errors.required">El campo es requerido.</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-form-label col-sm-4">
+                          <span>RUC</span>
+                        </label>
+                        <div class="col-sm-8">
+                          <input #inpRuc="ngModel" name="inpRuc" class="form-control" [(ngModel)]="dateUpdate.RUC" [ohInputFormat]="'upper'" type="text" required="true" [disabled]="disableCompany">
+                          <div *ngIf="inpRuc.invalid && (inpRuc.dirty || inpRuc.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                              <li *ngIf="inpRuc.errors.required">El campo es requerido.</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+                <div class="card bg-light botoneraCard">
+                  <div class="card-body">
+                    <button type="submit" class="btn btn-primary mr-1" [disabled]="frmEdit.invalid"><i class="fas fa-sync"></i> Actualizar</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab id="tabEnvio">
+      <ng-template ngbTabTitle><i class="fas fa-envelope-open"></i> Envio de correos</ng-template>
+      <ng-template ngbTabContent>
+          <div class="card">
+            <div class="card-body">
+              <div class="alert alert-info mt-2" role="alert">
+                Marque los correos que desee recibir
+              </div>
+              <table class="table">
+                <tbody>
+                  <tr *ngFor="let email of emailConfigView; let i = index">
+                    <th scope="row">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" [(ngModel)]="emailConfigSend[i].estado" name="state_{{emailConfigSend[i].email_plantilla_id}}" id="state_{{emailConfigSend[i].email_plantilla_id}}" [disabled]="!emailConfigSend[i].habilitado">
+                        <label class="custom-control-label" for="state_{{emailConfigSend[i].email_plantilla_id}}">{{email}}</label>
+                      </div>
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="card bg-light botoneraCard">
+                <div class="card-body">
+                  <button type="button" (click)="updateEmail()" class="btn btn-primary mr-1"><i class="fas fa-sync"></i> Actualizar envio</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab id="tabUnidadNegocio">
+      <ng-template ngbTabTitle><i class="fas fa-cog"></i> Configuración</ng-template>
+      <ng-template ngbTabContent>
+          <div class="card">
+            <div class="card-body">
+              <div class="form-group row">
+                  <label class="col-form-label col-sm-2"><strong>Unidad de negocio por defecto</strong></label>
+                  <div class="col-sm-10" *ngIf="config.unidades_negocio_base">
+                      <table class="table table-sm">
+                          <thead>
+                              <tr>
+                                  <th scope="col">Unidades de negocio</th>
+                                  <th scope="col" style="width:1rem"><i title="Unidad de negocio predefinida" class="text-muted text-size-10 far fa-check-square"></i></th>
+                                  <th scope="col" style="width:1rem"><i title="Configuración" class="text-muted text-size-10 fas fa-cog"></i></th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let unidad of config.unidades_negocio_base; let i = index">
+                              <th scope="row">{{unidad.nombre}}</th>
+                              <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="unidad_negocio_{{i}}" name="unidad_negocio_{{i}}" [(ngModel)]="unidad.seleccionado"  (click)="unidadPrincipal(i)">
+                                    <label class="custom-control-label" for="unidad_negocio_{{i}}">&nbsp;</label>
+                                </div>
+                              </td>
+                              <td>
+                                <a href="#" (click)="$event.preventDefault(); abrirConfiguracionUN(unidad.unidad_negocio_id)"><i class="text-muted text-size-10 fas fa-cog text-info"></i></a>
+                              </td>
+                            </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+              <div class="form-group row">
+                  <label class="col-form-label col-sm-2"><strong>Contraste de texto</strong></label>
+                  <div class="col-sm-10">
+                      <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_tipo_contraste" [(ngModel)]="contraste">
+                          <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="1"> Normal
+                          </label>
+                          <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="0"> Alto contraste
+                          </label>
+                        </div>
+                  </div>
+              </div>
+              <div class="form-group row">
+                  <label class="col-form-label col-sm-2"><strong>Recibir Notificaciones</strong></label>
+                  <div class="col-sm-10">
+                      <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_tipo_notificacion" [(ngModel)]="notificacion" (change)="validarNotificacion()">
+                          <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="true"> Activo
+                          </label>
+                          <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="false"> Inactivo
+                          </label>
+                        </div>
+                  </div>
+              </div>
+              <div class="card bg-light botoneraCard">
+                <div class="card-body">
+                  <button type="button" (click)="actualizarConfig()" class="btn btn-primary mr-1"><i class="fas fa-sync"></i> Actualizar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>
+<ng-template #modalSubUnidad let-cl="close" let-di="dismiss">
+  <div class="modal-header d-flex align-items-center">
+      Sub unidad de {{subunidad.nombre}} por defecto
+      <button class="close d-flex text-dark m-0 p-0" (click)="di('Cross click')"><i class="fas fa-times text-size-10"></i></button>
+  </div>
+  <div class="modal-body">
+      <table class="table table-sm">
+          <thead>
+              <tr>
+                  <th scope="col">Sub Unidad de negocio</th>
+                  <th scope="col" style="width:1rem"><i title="Sub Unidad de negocio predefinida" class="text-muted text-size-10 far fa-check-square"></i></th>
+              </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let hijo of subunidad.hijos; let e = index">
+              <th scope="row">{{hijo.nombre}}</th>
+              <td>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="unidad_negocio_hijo_{{e}}" name="unidad_negocio_hijo_{{e}}" [(ngModel)]="hijo.seleccionado"  (click)="unidadHijoPrincipal(e)">
+                    <label class="custom-control-label" for="unidad_negocio_hijo_{{e}}">&nbsp;</label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+      </table>
+  </div>
+  <div class="modal-footer">
+      <button class="btn btn-outline-secondary" (click)="di('cerrar')"><i class="fas fa-times-circle"></i> Cerrar</button>
+  </div>
+</ng-template>

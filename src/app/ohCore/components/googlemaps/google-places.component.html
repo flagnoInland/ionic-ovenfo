@@ -1,0 +1,1 @@
+<input style="width:100%" [ngClass]="sombra ? 'sombra': ''" type="text" [(ngModel)]="autocompleteInput" (input)="onSearchChange($event.target.value)" #addresstext="ngModel" class="form-control" [placeholder]="placeholder" [disabled]="disabled" [required]="required">

@@ -1,0 +1,5 @@
+<div class="row">
+  <div *ngFor="let opcion of opciones; let i = index" [class]="class">
+    <oh-link [link]="opcion.url" [text]="opcion.name" [icon]="opcion.icon"></oh-link>
+  </div>
+</div>

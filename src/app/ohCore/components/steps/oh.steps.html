@@ -1,0 +1,6 @@
+<ul class="oh_steps">
+    <li *ngFor="let item of list; let i = index" [class]="item.status">
+        <span class="step">{{i+1}}</span>
+        <span class="title">{{item.value}}</span>
+    </li>
+</ul>

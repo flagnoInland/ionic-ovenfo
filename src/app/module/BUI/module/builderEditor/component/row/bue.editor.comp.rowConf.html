@@ -1,0 +1,49 @@
+<div class="container-fluid mt-2">
+        <div class="row">
+            <div class="col-2">
+                <div class="form-group">
+                    <label>Id</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id">
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="form-group">
+                    <label>Columnas</label>
+                    <table class="table table-striped table-hover table-sm bg-white">
+                        <thead>
+                            <tr>
+                                <th>Columna</th>
+                                <th>Ancho</th>
+                                <th>Ancho SM</th>
+                                <th>Ancho MD</th>
+                                <th>Ancho LG</th>
+                                <th>Ancho XL</th>
+                                <th>Iterar (*ngFor)</th>
+                                <th style="width:1rem"><a class="text-size-10 text-success" (click)="addColumn(); $event.preventDefault();" href="#"><i class="fas fa-plus-square"></i></a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor='let row of item.config.rows; let i = index'>
+                                <td>{{i+1}}</td>
+                                <td><span class="oh_editor_rangeOut">{{row.width}}</span><input type="range" class="form-control" min="-1" max="12" [(ngModel)]="row.width"></td>
+                                <td><span class="oh_editor_rangeOut">{{row.widthSM}}</span><input type="range" class="form-control" min="-1" max="12" [(ngModel)]="row.widthSM"></td>
+                                <td><span class="oh_editor_rangeOut">{{row.widthMD}}</span><input type="range" class="form-control" min="-1" max="12" [(ngModel)]="row.widthMD"></td>
+                                <td><span class="oh_editor_rangeOut">{{row.widthLG}}</span><input type="range" class="form-control" min="-1" max="12" [(ngModel)]="row.widthLG"></td>
+                                <td><span class="oh_editor_rangeOut">{{row.widthXL}}</span><input type="range" class="form-control" min="-1" max="12" [(ngModel)]="row.widthXL"></td>
+                                <td>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" [ngClass]="{'btn-outline-primary' : !row.valueNgFor.esEnlace, 'btn-primary' : row.valueNgFor.esEnlace}" (click)="$event.preventDefault(); row.valueNgFor.esEnlace = !row.valueNgFor.esEnlace"><i class="fas fa-assistive-listening-systems" aria-hidden="true"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm border-primaryAPM" [(ngModel)]="row.valueNgFor.valor" placeholder="Valor">
+                                    </div>
+                                </td>
+                                <td><a class="text-size-10 text-danger" (click)="deleteColumn(i); $event.preventDefault();" href="#"><i class="fas fa-eraser"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a class="text-size-15 text-success" (click)="addColumn(); $event.preventDefault();" href="#"><i class="fas fa-plus-square"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>

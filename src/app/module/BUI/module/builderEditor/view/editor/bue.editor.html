@@ -1,0 +1,34 @@
+<div *ngIf="design && design.content" class='oh-view-comp-row' [ngClass]="{'oh-view-readOnly' : readOnly}" [dragula]='nameDragula' id="idDetalles" [(dragulaModel)]='design.content'>
+    <div *ngFor='let select of design.content' class="oh_editor_outComp" [ngClass]="{'oh_editor_viewComp_A' : select.isMaxWidh , 'oh_editor_viewComp_B' : !select.isMaxWidh, 'oh-view-readOnly' : readOnly}" #opc (mouseenter)="mouseenter(opc)" (mouseleave)="mouseleave(opc)">
+        <div class="oh_editor_handle" #oeh (click)="openConfig(oeh, select)">
+            <div (click)="$event.preventDefault(); $event.stopPropagation();" [ngClass]="getClass(select)">
+                <bue-ec-accordionview *ngIf="select.id == 11" [item]="select"  [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-ec-accordionview>
+                <bue-ec-alertview *ngIf="select.id == 10" [item]="select"></bue-ec-alertview>
+                <bue-ec-bagdeview *ngIf="select.id == 24" [item]="select"  [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-ec-bagdeview>
+                <bue-ec-buttonview *ngIf="select.id == 5" [item]="select"></bue-ec-buttonview>
+                <bue-ec-cardview *ngIf="select.id == 21" [item]="select"  [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-ec-cardview>
+                <bue-ec-containerview *ngIf="select.id == 3" [item]="select"  [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-ec-containerview>
+                <bue-ec-datepickerview *ngIf="select.id == 14" [item]="select"></bue-ec-datepickerview>
+                <bue-ec-formview *ngIf="select.id == 15" [item]="select"  [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-ec-formview>
+                <bue-ec-formrowview *ngIf="select.id == 19" [item]="select"  [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-ec-formrowview>
+                <bue-ec-iconview *ngIf="select.id == 17" [item]="select"></bue-ec-iconview>
+                <bue-ec-keypadview *ngIf="select.id == 8" [item]="select" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-ec-keypadview>
+                <bue-ec-linkview *ngIf="select.id == 4" [item]="select"></bue-ec-linkview>
+                <bue-ec-linkboxview *ngIf="select.id == 25" [item]="select"></bue-ec-linkboxview>
+                <bue-ec-linkcontainerview *ngIf="select.id == 26" [item]="select"  [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-ec-linkcontainerview>
+                <bue-ec-listheaderview *ngIf="select.id == 22" [item]="select" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-ec-listheaderview>
+                <bue-ec-modalview *ngIf="select.id == 18" [item]="select" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-ec-modalview>
+                <bue-ec-optionview *ngIf="select.id == 20" [item]="select"></bue-ec-optionview>
+                <bue-ec-outputtextview *ngIf="select.id == 9" [item]="select" [readOnly]="readOnly"></bue-ec-outputtextview>
+                <bue-ec-paginationview *ngIf="select.id == 23" [item]="select"></bue-ec-paginationview>
+                <bue-ec-radioview *ngIf="select.id == 16" [item]="select" [bind]="bind"></bue-ec-radioview>
+                <bue-ec-rowview *ngIf="select.id == 6" [item]="select" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-ec-rowview>
+                <bue-ec-searchrowview *ngIf="select.id == 7" [item]="select"></bue-ec-searchrowview>
+                <bue-ec-selectview *ngIf="select.id == 13" [item]="select" [bind]="bind"></bue-ec-selectview>
+                <bue-ec-tabview *ngIf="select.id == 12" [item]="select" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-ec-tabview>
+                <bue-ec-tableview *ngIf="select.id == 2" [item]="select" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-ec-tableview>
+                <bue-ec-textboxview *ngIf="select.id == 1" [item]="select"></bue-ec-textboxview>
+            </div>
+        </div>
+    </div>
+</div>

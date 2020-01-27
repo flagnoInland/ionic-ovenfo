@@ -1,0 +1,36 @@
+<div class="container-fluid">
+    <div class="card bg-white">
+        <form #frmUpload="ngForm" class="form-enable" (ngSubmit)="$event.preventDefault();">
+            <div class="card-header">
+                <span>Nuevo Adjunto</span>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label class="col-form-label col-2 ">
+                        <span>Archivo</span>
+                    </label>
+                    <div class="col-10">
+                        <div class="custom-file">
+                            <input type="file" class="btn custom-file-input" #fileAttachment [required]="true" (change)="fileAttachChange($event)" [(ngModel)]="files" name="files">
+                            <label class="custom-file-label" for="fileAttachment">
+                                <i class="fas fa-paperclip"></i> {{nombreAdjunto ? nombreAdjunto : " No se adjuntó archivo..."}}
+                            </label>
+                        </div>
+                        <div *ngIf="valid_message" class="alert alert-danger alert-form" style="padding-left: 1rem;">
+                            <ul>
+                                <li *ngIf="valid_message">El campo es requerido.</li>
+                            </ul>
+                        </div>
+                        <br>
+                        <ngb-progressbar *ngIf="porcentaje > 0 && porcentaje < 100" [striped]="true" [animated]="true" [showValue]="true" type="info" [value]="porcentaje"></ngb-progressbar>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" (click)="gesadjuntoCargar(frmUpload, fileAttachment)" class="btn btn-success ml-3" [disabled]="frmUpload.invalid">
+                    <i class="fas fa-upload"></i> Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+<input type="hidden" #inp_select="ngModel" class="form-control" name="{{name}}" [(ngModel)]="empresas_xml" [required]="required">
+<ngb-tabset #tabEmpresaListar="ngbTabset">
+  <ngb-tab id="tab-busqueda">
+    <ng-template ngbTabTitle><i class="fas fa-search"></i> Búsqueda</ng-template>
+    <ng-template ngbTabContent>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Nombre de empresa" name="inp_empresaBuscar"
+                [(ngModel)]="buscarEmpresa.buscar" (keydown.enter)="empresaBuscar()">
+            <div class="input-group-append" id="button-addon4">
+                <button class="btn btn-primary" type="button"
+                    (click)="empresaBuscar();"><i class="fas fa-search"></i></button>
+                <button class="btn btn-outline-danger" type="button" [disabled]="!buscarEmpresa.buscado"
+                    (click)="empresaLimpiar();"><i class="fas fa-eraser"></i></button>
+                <button class="btn btn-outline-info" type="button" [disabled]="!buscarEmpresa.buscado || buscarEmpresa.paginaActual == 1"
+                    (click)="empresaBuscar('back');"><i class="fas fa-angle-left"></i></button>
+                <button class="btn btn-outline-info" type="button" [disabled]="!buscarEmpresa.buscado || buscarEmpresa.paginaActual == buscarEmpresa.paginaTotales"
+                    (click)="empresaBuscar('next');"><i class="fas fa-angle-right"></i></button>
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">{{buscarEmpresa.paginaActual}}/{{buscarEmpresa.paginaTotales}}</span>
+                </div>
+            </div>
+        </div>
+        <div style="max-height: 300px; overflow: auto">
+            <table class="table">
+                <tbody>
+                    <tr *ngFor="let empresa of buscarEmpresa.empresas;let i = index">
+                        <th scope="row">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="empresaOpcion_{{i}}"
+                                    name="empresaOpcion_{{i}}" [(ngModel)]="empresa.seleccionado" (click)="empresaSeleccionar(i)"
+                                    [disabled]="empresa.elegido">
+                                <label class="custom-control-label" for="empresaOpcion_{{i}}">{{empresa.razon_social}} <span class="text-muted font-italic">({{empresa.unidad_negocio_nombre}})</span>
+                                    &nbsp;<i *ngIf="empresa.estado" class="fas fa-check-circle text-success"></i>
+                                    <i *ngIf="!empresa.estado" class="fas fa-times-circle text-danger"></i>
+                                </label>
+                            </div>
+                        </th>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab id="tab-seleccionados">
+    <ng-template ngbTabTitle><i class="fas fa-search-plus"></i> Seleccionados (<span *ngIf="empresas">{{empresas.length}}</span>)
+        <span class="text-danger" *ngIf="required && ((empresas_xml && empresas_xml.length == 0) || !empresas_xml)"><i class="fas fa-exclamation-triangle"></i></span>
+        <span class="text-success" *ngIf="required && empresas_xml && empresas_xml.length > 0"><i class="fas fa-check-circle"></i></span>
+    </ng-template>
+    <ng-template ngbTabContent>
+        <div style="max-height: 20rem; overflow-y: scroll;">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">Empresa</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Unidad de Negocio</th>
+                        <th scope="col" style="width:1rem" *ngIf="mapearDefecto"><i title="Principal" class="text-muted text-size-10 far fa-check-square"></i></th>
+                        <th scope="col" style="width:1rem"><i title="Eliminar" class="text-muted text-size-10 fas fa-eraser"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let empresa of empresas; let i = index">
+                        <th scope="row">{{empresa.documento_tipo}} {{empresa.documento}} - {{empresa.razon_social}}</th>
+                        <td>
+                            <span *ngIf="empresa.estado" class="badge badge-pill badge-outline-success">
+                                <i class="far fa-thumbs-up"></i> Activo</span>
+                            <span *ngIf="!empresa.estado" class="badge badge-pill badge-outline-danger">
+                                <i class="fas fa-exclamation-triangle"></i> Inactivo</span>
+                        </td>
+                        <td>
+                            {{empresa.unidad_negocio_nombre}}
+                        </td>
+                        <td *ngIf="mapearDefecto">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="empresaPrincipal_{{i}}"
+                                    name="empresaPrincipal_{{i}}" [(ngModel)]="empresa.principal" (change)="empresaPrincipal(i)">
+                                <label class="custom-control-label" for="empresaPrincipal_{{i}}">&nbsp;</label>
+                            </div>
+                        </td>
+                        <td>
+                            <a (click)="empresaQuitar(i); $event.preventDefault();" href="#" class="text-size-10 text-danger "><i class="fas fa-eraser"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>

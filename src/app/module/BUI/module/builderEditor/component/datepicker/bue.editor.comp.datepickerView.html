@@ -1,0 +1,13 @@
+<div class="oh_editor_default">
+	<ngb-datepicker *ngIf="item.config.type=='simple'" [(ngModel)]="item.config.value.valor" [displayMonths]="item.config.months" [navigation]="item.config.navigation" [showWeekNumbers]="item.config.showWeekNumbers" [required]="item.config.required"></ngb-datepicker>
+    <div *ngIf="item.config.type=='text'" class="input-group">
+		<input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="item.config.value.valor" ngbDatepicker #d="ngbDatepicker" [displayMonths]="item.config.months" [navigation]="item.config.navigation" [showWeekNumbers]="item.config.showWeekNumbers" [required]="item.config.required">
+		<div class="input-group-append">
+			<button class="btn btn-outline-secondary" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt" aria-hidden="true"></i></button>
+		</div>
+	</div>
+	<span *ngIf="item.config.type=='range'">
+		[<span *ngIf="validDate(item.config.value.valor)">{{item.config.value.valor | date: cse.config.formatDate}}</span> - <span *ngIf="validDate(item.config.value.valorHasta)">{{item.config.value.valorHasta | date: cse.config.formatDate}}</span>]<br>
+		<oh-dateranges  [(from)]="item.config.value.valor" [(to)]="item.config.value.valorHasta" [required]="item.config.required"></oh-dateranges>
+	</span>
+</div>

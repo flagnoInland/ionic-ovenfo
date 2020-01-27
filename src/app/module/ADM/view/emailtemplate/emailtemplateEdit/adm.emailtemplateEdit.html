@@ -1,0 +1,138 @@
+<div class="container-fluid tis-cards-mt-2">
+    <form #frmRegister="ngForm" class="form-enable">
+        <div class="card">
+            <div class="card-header">
+                <i class="fa fa-archive" aria-hidden="true"></i> Datos de Formato
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="formatoTitulo">Título</label>
+                            <div class="input-group mb-2 mr-sm-2">
+                                <input #formatoTitulo="ngModel" name="formatoTitulo" type="text" class="form-control"
+                                    [(ngModel)]="formatoEdit.titulo" placeholder="Título" required="true">
+                                <div *ngIf="formatoTitulo.invalid && (formatoTitulo.dirty || formatoTitulo.touched)"
+                                    class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="formatoTitulo.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="formatoDestinatario">Destinatario</label>
+                            <div class="input-group mb-2 mr-sm-2">
+                                <input #formatoDestinatario="ngModel" name="formatoDestinatario" type="text"
+                                    class="form-control" [(ngModel)]="formatoEdit.destinatario"
+                                    placeholder="Destinatario">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="formatoCopia">Copia</label>
+                            <div class="input-group mb-2 mr-sm-2">
+                                <input #formatoCopia="ngModel" name="formatoCopia" type="text" class="form-control"
+                                    [(ngModel)]="formatoEdit.copia" placeholder="Copia">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="formatoCopiaOculta">Copia Oculta</label>
+                            <div class="input-group mb-2 mr-sm-2">
+                                <input #formatoCopiaOculta="ngModel" name="formatoCopiaOculta" type="text"
+                                    class="form-control" [(ngModel)]="formatoEdit.copia_oculta"
+                                    placeholder="Copia Oculta">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="formatoEstado">Estado</label>
+                            <div class="input-group mb-2 mr-sm-2">
+                                <select class="form-control" [(ngModel)]="formatoEdit.estado" name="formatoEstado"
+                                    [value]="formatoEdit.estado">
+                                    <option *ngFor="let option of formatoEdit.estados_options" [value]="option.value">
+                                        {{option.label}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-7">
+                        <label for="formatoDescripcion">Descripción</label>
+                        <angular-tinymce formTinymce #formatoDescripcion name="formatoDescripcion"
+                            [(ngModel)]='formatoEdit.descripcion' [settings]="descrip_config" required="true"
+                            (keyup)="checkVariables()"></angular-tinymce>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label for="formatoPlantillaPadre">Plantilla Padre</label>
+                            <div class="input-group mb-2 mr-sm-2">
+                                <select class="form-control" [(ngModel)]="formatoEdit.plantilla_padre"
+                                    name="formatoPlantillaPadre" [value]="formatoEdit.plantilla_padre">
+                                    <option *ngFor="let option of formatoEdit.plantillas_padre"
+                                        [value]="option.email_plantilla_id">{{option.titulo}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="formatoAtributos">Atributos</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-success" type="button" (click)="addAtributo()">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control" placeholder="variable" name="atributo"
+                                    [(ngModel)]="atributo" (keydown.enter)="addAtributo()">
+                            </div>
+                            <ul class="list-group">
+                                <li *ngFor="let atributoItem of formatoEdit.atributos; let i = index"
+                                    [ngClass]="formatoEdit.atributos_clase[i]">
+                                    $({{atributoItem}})
+                                    <button class="btn btn-sm btn-dark float-right ml-2" type="button"
+                                        (click)="writeAtributo(atributoItem)">
+                                        <i class="fas fa-i-cursor"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger float-right" type="button"
+                                        (click)="removeAtributo(atributoItem)">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-7">
+                        <label for="formatoContenido">Contenido</label>
+                        <angular-tinymce formTinymce #formatoContenido name="formatoContenido"
+                            [(ngModel)]='formatoEdit.contenido' [settings]="content_config" required="true"
+                            (keyup)="checkVariables()"></angular-tinymce>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" (click)="registrar()" [disabled]="frmRegister.invalid" class="btn btn-success mr-3"
+                    [disabled]="formatoEdit.invalid">
+                    <i class="far fa-hand-pointer"></i> Grabar
+                </button>
+                <button type="button" (click)="verFormato(modalVerFormato);" class="btn btn-info mr-3">
+                    <i class="fas fa-eye"></i> Visualizar
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- Visualizar -->
+<ng-template #modalVerFormato let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h5 class="modal-title" id="modal-basic-title">
+            Formato: <i>{{formatoEdit.titulo}}</i>
+        </h5>
+        <a href="#" class="close" aria-label="Close" (click)="$event.preventDefault(); d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body">
+        <!-- style="background-color: #004165;" -->
+        <div [innerHTML]="formatoEdit.cotenido_visualizar"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="c('Close')">Cerrar</button>
+    </div>
+</ng-template>

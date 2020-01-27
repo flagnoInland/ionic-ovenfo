@@ -1,0 +1,72 @@
+<div class="tis-listContent mb-3 noImpresion">
+    <ul class="list-inline pt-2 pb-2 tis-lineDivide">
+        <li class="list-inline-item pt-2 ml-3">
+            <h5>FAQs</h5>
+        </li>
+        <li class="list-inline-item float-right mr-3 tis-dis-ifle">
+            <button [routerLink]="['new']" type="button" class="btn btn-primary" placement="top" ngbTooltip="Nuevo"><i
+                    class="fas fa-folder-plus"></i> Nuevo</button>
+        </li>
+    </ul>
+	<oh-filterTab [save]="'adm_faq_list'" [(filter)]="filter" [template]="filterWindow" [length]="dateList.length" [obj_pagin]="pagin" (list)="list()"></oh-filterTab>
+</div>
+<div class="container-fluid noImpresion">
+    <div class="tableContent">
+        <table class="table table-striped table-hover bg-white">
+            <thead>
+                <tr>
+                    <th scope="col" style="width:1rem"><i class="text-muted text-size-10  fas fa-edit"></i></th>
+                    <th scope="col">Código</th>
+                    <th scope="col">Proyecto</th>
+                    <th scope="col">Unidad de Negocio</th>
+                    <th scope="col">Versión</th>
+                    <th scope="col">Fecha de Registro</th>
+                    <th scope="col">Usuario de Registro</th>
+                    <th scope="col">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of dateList; let i = index">
+                    <td>
+                        <a (click)="editar(i)" [routerLink]="['edit', item.faq_id]"
+                            class="text-size-10 text-success "><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{item.faq_id}}</td>
+                    <td><div [innerHTML]="item.menu_descripcion | ohSafeHtml"></div></td>
+                    <td>{{item.nombre}}</td>
+                    <td>{{item.version}}</td>
+                    <td>{{item.fecha_registro | date: cse.config.formatDateTime}}</td>
+                    <td><oh-thumbnail [id]="item.usuario_registro_id" [name]="item.usuario_registro_nombres" [lastName]="item.usuario_registro_apellidos"></oh-thumbnail></td>
+                    <td>
+                        <span *ngIf="item.estado == '0'" class="badge badge-pill badge-outline-warning">
+                            <i class="fas fa-exclamation-triangle"></i> Inactivo</span>
+                        <span *ngIf="item.estado == '1'" class="badge badge-pill badge-outline-success">
+                            <i class="far fa-thumbs-up"></i> Activo</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<ng-template #filterWindow let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">
+            <i aria-hidden="true" class="fa fa-filter"></i> Filtrar
+        </h4>
+        <a href="#" class="close" aria-label="Close" (click)="$event.preventDefault(); d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body">
+        <form>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="c('cancel')">
+            <i aria-hidden="true" class="fa fa-close"></i> Cancelar
+        </button>
+        <button type="submit" class="btn btn-outline-primary" (click)="c('doFilter')">
+            <i aria-hidden="true" class="fa fa-filter"></i> Filtrar
+        </button>
+    </div>
+</ng-template>

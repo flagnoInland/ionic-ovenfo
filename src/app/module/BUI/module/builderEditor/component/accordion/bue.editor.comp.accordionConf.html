@@ -1,0 +1,50 @@
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label>Id</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id">
+            </div>
+            <div class="form-group">
+                <label>Múltiple</label><br>
+                <div class="input-group">
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="item.config.multiple" (change)="changeIsMultiple()">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="true"> Si
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="false"> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label>Modals</label>
+                <table class="table table-striped table-hover table-sm bg-white">
+                    <thead>
+                        <tr>
+                            <th>Fila</th>
+                            <th>¿Abierto?</th>
+                            <th style="width:1rem"><a class="text-size-10 text-success" (click)="addRow(); $event.preventDefault();" href="#"><i class="fas fa-plus-square"></i></a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let row of item.config.rows; let i = index'>
+                            <td>{{i+1}}</td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="inp_opened_{{i}}" name="inp_opened_{{i}}" [(ngModel)]="row.opened" (change)="markOpened(i)">
+                                    <label class="custom-control-label" for="inp_opened_{{i}}">&nbsp;</label>
+                                </div>
+                            </td>
+                            <td><a class="text-size-10 text-danger" (click)="deleteRow(i); $event.preventDefault();" href="#"><i class="fas fa-eraser"></i></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a class="text-size-15 text-success" (click)="addRow(); $event.preventDefault();" href="#"><i class="fas fa-plus-square"></i></a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+<div class="oh_editor_default">
+	<select *ngIf="item.config.tipoEnlace=='enlace'" class="form-control" [ngModel]="item.config.value.valor" [disabled]="item.config.disabled" [required]="item.config.required">
+		<option *ngFor='let row of getListBind()' [value]="row.id">{{row.value}}</option>
+	</select>
+	<select *ngIf="item.config.tipoEnlace=='opcion'" class="form-control" [ngModel]="item.config.value.valor" [disabled]="item.config.disabled" [required]="item.config.required">
+		<option *ngFor='let row of item.config.options' [value]="row.id">{{row.value}}</option>
+	</select>
+</div>

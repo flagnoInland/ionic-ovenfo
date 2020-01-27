@@ -1,0 +1,49 @@
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-6">
+            <div class="alert alert-secondary" role="alert">
+                <small class="form-text text-muted">
+                    <span class="font-weight-bold">Variables</span> : ´cl´ = Cerrar, ´di´ = Descartar<br>
+                    <span class="font-weight-bold">Métodos</span> :<br>
+                    Abrir {{item.config.id}}Abrir();
+                </small>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label>Id, <mark>Estandar <span class="font-italic font-weight-bold">modal<span class="text-primary">Consulta</span></span></mark></label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" (input)="item.config.id.length > 0 && nuevoForBind(item.config.id)" placeholder="Id">
+                </div>
+            </div>
+            <div class="col-12">
+                    <div class="form-group">
+                        <label>Tamaño</label><br>
+                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="item.config.tamano">
+                            <label ngbButtonLabel class="btn-primary">
+                                <input ngbButton type="radio" value="sm"> Pequeño
+                            </label>
+                            <label ngbButtonLabel class="btn-primary">
+                                <input ngbButton type="radio" value="lg"> Largo
+                            </label>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label>Configuraciones</label><br>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="inp_centrar" name="inp_centrar" [(ngModel)]="item.config.centrado" (change)="item.config.id.length > 0 && nuevoForBind(item.config.id)">
+                    <label class="custom-control-label" for="inp_centrar">Centrar</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="inp_escape" name="inp_escape" [(ngModel)]="item.config.escape" (change)="item.config.id.length > 0 && nuevoForBind(item.config.id)">
+                    <label class="custom-control-label" for="inp_escape">Tecla 'escape' activo</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="inp_backdrop" name="inp_backdrop" [(ngModel)]="item.config.backdrop" (change)="item.config.id.length > 0 && nuevoForBind(item.config.id)">
+                    <label class="custom-control-label" for="inp_backdrop">Cerrar fuera de area</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

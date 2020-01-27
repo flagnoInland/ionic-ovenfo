@@ -1,0 +1,95 @@
+.box-sidebar {
+    position: fixed;
+    height: 100%;
+    width: 250px;
+    z-index: 2;
+    background-color: #004165;
+    overflow: auto;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+}
+
+@media print {
+    .box-sidebar {
+        display: none;
+    }
+}
+
+.box-sidebar hr {
+    border-color: #40718C;
+}
+
+.titulo-sidebar {
+    text-transform: uppercase;
+    line-height: normal;
+    color: white;
+    text-align: center;
+    margin: 0px;
+}
+
+.sub-titulo_sidebar {
+    color: #3CB5CD;
+    text-align: center;
+    margin: 0px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+}
+
+.menu-titulo {
+    background-color: #001526;
+    color: white;
+}
+
+.menu-apm li a {
+    color: white;
+    opacity: 0.5;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+}
+
+.menu-apm li a.active {
+    color: white;
+    opacity: 1;
+    background-color: #205978;
+}
+
+.menu-bagde {
+    position: absolute;
+    right: 0.5rem;
+    top: -0.8rem;
+    font-size: 1rem;
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+.menu-apm i {
+    padding-top: .3rem;
+}
+
+.select-company {
+    padding: 0.2rem;
+    /*bottom: 2rem;
+    position: absolute;*/
+    width: 100%;
+}
+.select-company select {
+    background-color: inherit!important;
+    border: 1px solid #056c90;
+    color: #acc6d1;
+    -webkit-appearance: menulist;
+    height: 1.6rem;
+    padding: 0.1rem 1rem;
+}
+
+.select-company select option {
+    background: rgb(39, 83, 108);
+}

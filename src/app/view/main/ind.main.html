@@ -1,0 +1,12 @@
+<div class="container-fluid">
+	<p>
+		<ngb-alert [hidden]="!(daysChange <= 3 && daysChangeFV)" (close)="daysChangeFV = false">
+			Su contraseña caducará en <strong>{{daysChange}}</strong> día(s), <a href="#" [routerLink]="['/Be/PasswordChange']">Click Aquí</a> para cambiarlo.
+		</ngb-alert>
+	</p>
+	<div class="row">
+		<div class="col-6 col-sm-4 col-md-3" *ngFor="let item of cse.data.roles | ohFilterField: 'type' : 1">
+			<oh-link [link]="null" [text]="item.name" [icon]="item.icon" (onChange)="loadModule(item)"></oh-link>
+		</div>
+	</div>
+</div>

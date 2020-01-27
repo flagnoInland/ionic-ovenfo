@@ -1,0 +1,56 @@
+.oh_filter_row {
+	display: inline-block;
+}
+
+.oh_filter_btnContentClose {
+	position:  relative; 
+	margin-left: .5rem;
+}
+
+.oh_filter_btnContent {
+	position:  relative; 
+	margin-left: .5rem;
+}
+
+.oh_filter_btnClose {
+	padding:  5px; 
+	position: absolute; 
+	right: 0px; 
+	top: .15rem;
+}
+
+.oh_filter_contentAsterisk {
+	position: relative;
+}
+.oh_filter_asterisk {
+	position: absolute;
+	font-size: 0.6rem;
+	color: #b70202;
+	top: -5px;
+	right:  -5px;
+}
+
+.oh_filter_viewX {
+	display: inline-block;
+}
+.oh_filter_viewNoX {
+	display: none;
+}
+
+@media screen and (max-width: 576px) {
+	.oh_filter_viewA {
+	    display: inline-block;
+	}
+	.oh_filter_viewBC {
+	    display: none;
+	}
+}
+
+@media screen and (min-width: 576px) { 
+	.oh_filter_viewA {
+	    display: none;
+	}
+	.oh_filter_viewBC {
+	    display: inline-block;
+	}
+}

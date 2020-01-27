@@ -1,0 +1,92 @@
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-2">
+            <div class="row">
+                <div class="form-group">
+                    <label>Id</label>
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id">
+                </div>
+                <div class="form-group">
+                    <label>Configuraciones</label><br>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="inp_showTitle" name="inp_showTitle" [(ngModel)]="item.config.showTitle">
+                        <label class="custom-control-label" for="inp_showTitle">Mostrar título</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="inp_striped" name="inp_striped" [(ngModel)]="item.config.striped">
+                        <label class="custom-control-label" for="inp_striped">Filas intercolor</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="inp_hover" name="inp_hover" [(ngModel)]="item.config.hover">
+                        <label class="custom-control-label" for="inp_hover">Resaltar al pasar</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="inp_bordered" name="inp_bordered" [(ngModel)]="item.config.bordered">
+                        <label class="custom-control-label" for="inp_bordered">Con bordes</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="inp_small" name="inp_small" [(ngModel)]="item.config.small">
+                        <label class="custom-control-label" for="inp_small">Tabla pequeña</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-10">
+            <div class="form-group">
+                <label>Iterar (*ngFor)</label>
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm border-primaryAPM" [(ngModel)]="item.config.for.item" placeholder="item" style="width: 10%;">
+                    <input type="text" class="form-control form-control-sm border-primaryAPM" [(ngModel)]="item.config.for.value" placeholder="Iterar" style="width: 70%;">
+                    <input type="text" class="form-control form-control-sm border-primaryAPM" [(ngModel)]="item.config.for.index" placeholder="Index" style="width: 10%;">
+                    <div class="input-group-append">
+                        <span class="input-group-text btn-primary" (click)="$event.preventDefault(); buscarForBind()"><i class="fas fa-assistive-listening-systems" aria-hidden="true"></i></span>
+                        <span class="input-group-text btn-outline-success" (click)="$event.preventDefault(); nuevoForBind();"><i class="fas fa-plus"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Columnas</label>
+                <table class="table table-striped table-hover table-sm bg-white">
+                    <thead>
+                        <tr>
+                            <th style="width:1rem"><a class="text-size-10 text-success" (click)="addRow(); $event.preventDefault();" href="#"><i class="fas fa-plus-square"></i></a></th>
+                            <th>Columna</th>
+                            <th style="min-width: 6rem;">Medida</th>
+                            <th style="min-width: 7rem;">Tipo tamaño</th>
+                            <th>Tamaño</th>
+                            <th>Cabecera fondo</th>
+                            <th>Cabecera Alineo</th>
+                            <th>Detalle Fondo</th>
+                            <th>Detalle Alineo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let row of item.config.rows; let i = index'>
+                            <td><a class="text-size-10 text-danger" (click)="deleteRow(i); $event.preventDefault();" href="#"><i class="fas fa-eraser"></i></a></td>
+                            <td>{{i+1}}</td>
+                            <td><select class="form-control input-sm" [(ngModel)]="row.medida">
+                                    <option *ngFor="let item of medida" [value]="item.tipo">{{item.nombre}}</option>
+                                </select></td>
+                            <td><select class="form-control input-sm" [(ngModel)]="row.tipoWidth">
+                                    <option *ngFor="let item of tipoWidth" [value]="item.tipo">{{item.nombre}}</option>
+                                </select></td>
+                            <td><input class="form-control input-sm" [(ngModel)]="row.width" placeholder="Tamaño" type="number"></td>
+                            <td><select class="form-control input-sm" [(ngModel)]="row.cabeFondo">
+                                    <option *ngFor="let item of fondo" [value]="item.clase">{{item.nombre}}</option>
+                                </select></td>
+                            <td><select class="form-control input-sm" [(ngModel)]="row.cabeAlineo">
+                                    <option *ngFor="let item of alineo" [value]="item.clase">{{item.nombre}}</option>
+                                </select></td>
+                            <td><select class="form-control input-sm" [(ngModel)]="row.detaFondo">
+                                    <option *ngFor="let item of fondo" [value]="item.clase">{{item.nombre}}</option>
+                                </select></td>
+                            <td><select class="form-control input-sm" [(ngModel)]="row.detaAlineo">
+                                    <option *ngFor="let item of alineo" [value]="item.clase">{{item.nombre}}</option>
+                                </select></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a class="text-size-15 text-success" (click)="addRow(); $event.preventDefault();" href="#"><i class="fas fa-plus-square"></i></a>
+            </div>
+        </div>
+    </div>

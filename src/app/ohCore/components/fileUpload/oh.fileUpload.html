@@ -1,0 +1,60 @@
+<div class="tableContent">
+    <table class="table table-striped table-hover bg-white" style="margin-bottom: 0rem;">
+        <thead>
+            <tr>
+                <th>
+                    <span>Archivo  <span class="text-muted font-italic">({{archivos.length}}/{{cantidadMaxima}})</span> <a class="text-info ml-2" *ngIf="formatos.length>0" [ngbPopover]="tipFormatos" triggers="mouseenter:mouseleave" placement="bottom"
+                        popoverTitle="Formatos soportados"><i class="fas fa-info-circle"></i></a></span>
+                </th>
+                <th>
+                    <span>Tamaño <span class="text-muted font-italic">(Peso máximo {{pesoMaximo}} KB)</span></span>
+                </th>
+                <th *ngIf="tipos.length>0">Tipo</th>
+                <th>Descripción</th>
+                <th style="width: 1rem" *ngIf="vista == 'editor'">
+                    <i title="" class="fas fa-trash-alt text-muted text-size-10"></i>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let archivo of archivos; let e = index">
+                <td>
+                    <span *ngIf="archivo.porcentaje | async as porcentaje">
+                        <a *ngIf="porcentaje==100" href="#" (click)="$event.preventDefault(); descargar(e)">{{archivo.nombre}}</a>
+                        <ngb-progressbar *ngIf="porcentaje<100" type="warning" [value]="porcentaje" [striped]="true" [animated]="true"><i>{{porcentaje}}%</i></ngb-progressbar>
+                    </span>
+                </td>
+                <td style="width: 20%">
+                    {{archivo.tamano}} KB
+                </td>
+                <td *ngIf="_adjuntos && _adjuntos[e] && tipos.length>0 && tipo_id && tipo_value">
+                    <select class="form-control" [(ngModel)]="_adjuntos[e].tipo" name="inp_tipo_adjunto_{{e}}" >
+                        <option *ngFor="let tipo of tipos" [value]="tipo[tipo_id]">{{tipo[tipo_value]}}</option>
+                    </select>
+                </td>
+                <td style="width: 20%">
+                    <input *ngIf="_adjuntos && _adjuntos[e]" class="form-control" name="inp_descripción" [(ngModel)]="_adjuntos[e].descripcion" type="text" [disabled]="vista != 'editor'">
+                </td>
+                <td *ngIf="vista == 'editor'">
+                    <span *ngIf="archivo.porcentaje | async as porcentaje">
+                        <a *ngIf="porcentaje == 100" href="#" (click)="$event.preventDefault(); eliminar(e)" class="text-danger text-size-10"><i class="fas fa-trash-alt"></i></a>
+                        <a *ngIf="porcentaje<100" href="#" (click)="$event.preventDefault(); cancelar(e)" class="text-danger text-size-10"><i class="fas fa-window-close"></i></a>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <ng-template #tipFormatos>
+        <table class="table table-striped table-bordered table-hover bg-white" style="margin: 0px">
+            <tbody>
+                <tr *ngFor="let formato of formatos.split(',')">
+                    <td>{{formato}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-template>
+    <input [hidden]="true" #inp_archivo type="file" (change)="cargar($event)" [accept]="formatos" [multiple]="multiple">
+    <button *ngIf="vista == 'editor' && archivos.length != cantidadMaxima" (click)="inp_archivo.click()" [disabled]="disabled" class="text-size-15" [ngClass]="disabled ? 'text-muted' : 'text-success'" style="border: none;background: #FFFFFF;padding: 0px;display: flex;margin-top: 12px;">
+        <i class="fas fa-plus-square"></i>
+    </button>
+</div>

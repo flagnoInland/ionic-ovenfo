@@ -1,0 +1,31 @@
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label>Id</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Tipo</label><br>
+                <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="item.config.tipo">
+                    <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" value="normal"> Normal
+                    </label>
+                    <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" value="pildora"> Píldora
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Color</label>
+                <select class="form-control" [(ngModel)]="item.config.color" required>
+                    <option *ngFor="let item of color" [value]="item.valor">{{item.nombre}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

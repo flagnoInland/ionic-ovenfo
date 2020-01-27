@@ -1,0 +1,6 @@
+<oh-option *ngIf="item.config.type != 'simple'" [type]="item.config.type" [text]="item.config.desc" [(option)]="item.config.value"></oh-option>
+<div *ngIf="item.config.type == 'simple'" class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" id="UNSeleccionar_{{item.config.id}}"
+        name="UNSeleccionar_{{item.config.id}}" [(ngModel)]="item.config.value">
+    <label class="custom-control-label" for="UNSeleccionar_{{item.config.id}}">{{(item.config.desc && item.config.desc.length>0?item.config.desc:'&nbsp;')}}</label>
+</div>

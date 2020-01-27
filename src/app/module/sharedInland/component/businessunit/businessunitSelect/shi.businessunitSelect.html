@@ -1,0 +1,30 @@
+<input type="hidden" #inp_select="ngModel" class="form-control" name="{{name}}" [(ngModel)]="_unidades_valid" [required]="required">
+<div style="max-height: 20rem; overflow-y: auto;">
+    <table class="table table-sm mb-0">
+        <thead>
+            <tr>
+                <th scope="col">Unidad de Negocio
+                    <span class="text-danger" *ngIf="required && ((unidades_xml && unidades_xml.length == 0) || !unidades_xml)"><i class="fas fa-exclamation-triangle"></i></span>
+                    <span class="text-success" *ngIf="required && unidades_xml && unidades_xml.length > 0"><i class="fas fa-check-circle"></i></span>
+                </th>
+                <th scope="col">Estado</th>
+                <th scope="col" style="width:1rem"><i title="Seleccionar" class="text-muted text-size-10 far fa-check-square"></i></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of unidades; let i = index">
+                <th scope="row">{{item.nombre}}</th>
+                <td>
+                    <span *ngIf="item.estado == '1'" class="badge badge-pill badge-outline-success"><i class="far fa-thumbs-up"></i> Activo</span>
+                    <span *ngIf="item.estado != '1'" class="badge badge-pill badge-outline-danger"><i class="fas fa-exclamation-triangle"></i> Inactivo</span>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="inp_unidad_{{i}}" name="inp_unidad_{{i}}" [(ngModel)]="item.seleccionado" (change)="seleccionar(i)">
+                        <label class="custom-control-label" for="inp_unidad_{{i}}">&nbsp;</label>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

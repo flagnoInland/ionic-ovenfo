@@ -1,0 +1,32 @@
+<ul class="list-group">
+    <ng-container *ngFor="let item of hijos; let i = index">
+        <li class="list-group-item" style="border: 0px; padding: 0.5rem 0rem 0.1rem 1.25rem; background-color: transparent;" *ngIf="proyecto_id == null || (proyecto_id != null && proyecto_id == item.menu_id && item.menu_padre_id == null)">
+            <div class="p-2" style="position: relative;     -webkit-box-shadow: 0px 0px 3px 0px #d4d4d4;
+            -moz-box-shadow: 0px 0px 3px 0px #d4d4d4;
+            box-shadow: 0px 0px 5px 0px #d4d4d4;    border-radius: 5px;
+            border-color: #d4d4d4!important;
+            border: 1px solid #dee2e6!important;
+            background: white;">
+                <i *ngIf="item.hijos.length==0" class="text-muted far fa-square"></i>
+                <a *ngIf="item.hijos.length>0" href="#" (click)="$event.preventDefault(); item.hide = !item.hide;"><i [ngClass]="{'fa-caret-square-down' : item.hide, 'fa-caret-square-up' : !item.hide}" class="text-info far"></i></a>
+                &nbsp;
+                <span [ngClass]="{'text-primary' : item.menu_padre_id == null, 'text-dark' : item.menu_padre_id != null}"><a href="#" (click)="$event.preventDefault(); getInserts(item);"><i [class]="item.icono"></i></a>&nbsp;{{item.menu_id}} {{item.titulo}} 
+                    <span class="text-size-10 text-muted mr-2">(/{{item.plantilla}}<span class="text-warning" *ngIf="item.tiene_id">/:id</span>)</span>
+                </span>
+                <div class="text-size-15" style="position: absolute;top: 0.1rem;right: 0.5rem;">
+                    <span *ngIf="item.plantillaMenu" class="text-size-10 text-muted mr-2">{{item.plantillaMenu.folder}}</span>
+                    <a (click)="$event.preventDefault(); editar(item.menu_id);" href="#" class="text-primary mr-2"><i class="fas fa-pen-square"></i></a>
+                    <a (click)="$event.preventDefault(); subir(item.menu_id);" *ngIf="i != 0" href="#" class="text-info mr-2"><i class="fas fa-caret-square-up"></i></a>
+                    <span *ngIf="i == 0" class="text-muted mr-2"><i class="fas fa-caret-square-up"></i></span>
+                    <a (click)="$event.preventDefault(); bajar(item.menu_id);" *ngIf="i != hijos.length-1" href="#" class="text-info mr-2"><i class="fas fa-caret-square-down"></i></a>
+                    <span *ngIf="i == hijos.length-1" class="text-muted mr-2"><i class="fas fa-caret-square-down"></i></span>
+                    <a (click)="$event.preventDefault(); eliminar(item.menu_id);" *ngIf="item.hijos.length==0" href="#" class="text-danger mr-2"><i class="fas fa-minus-square"></i></a>
+                    <span *ngIf="item.hijos.length>0" class="text-muted mr-2"><i class="fas fa-minus-square"></i></span>
+                    <a *ngIf="item.plantillaMenu" (click)="$event.preventDefault(); plantilla(item.menu_id);" href="#" class="text-primary"><i class="fab fa-wpforms"></i></a>
+                    <span *ngIf="!item.plantillaMenu" class="text-muted"><i class="fab fa-wpforms"></i></span>
+                </div>
+            </div>
+            <sha-treeMenu [ngbCollapse]="!item.hide" [hijos]="item.hijos" (eventosItem)="eventosItemCall($event)" [proyecto_id]="obtenerProyectoHijo(item)"></sha-treeMenu>
+        </li>
+    </ng-container>
+</ul>

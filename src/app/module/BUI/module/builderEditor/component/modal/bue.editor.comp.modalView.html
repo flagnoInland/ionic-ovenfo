@@ -1,0 +1,14 @@
+<div [class]="(readOnly)?'p-1':''">
+    <div class="modal-content" *ngFor='let row of item.config.rows'>
+        <div class="modal-header">
+            <h4 class="modal-title"><bue-editor [design]="row.selectedHead" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor></h4>
+            <button aria-label="Close" class="close" type="button"><span aria-hidden="true">×</span></button>
+        </div>
+        <div class="modal-body">
+            <bue-editor [design]="row.selectedBody" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+        </div>
+        <div class="modal-footer">
+            <bue-editor [design]="row.selectedFooter" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+        </div>
+    </div>
+</div>

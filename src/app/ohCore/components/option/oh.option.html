@@ -1,0 +1,19 @@
+<div class="card oh_option_card" [hidden]="type!=''">
+  <div class="card-body d-flex" [ngClass]="{'bg-light' : option}">
+    <a class="text-info" *ngIf="description" [ngbTooltip]="description" triggers="click:blur"><i class="fas fa-info-circle"></i></a>&nbsp;{{text}} 
+    <div (click)="changeValue()" class="text-info oh_option_contain">
+    	<i class="far fa-2x" [ngClass]="{'fa-square': !option, 'fa-check-square': option}" aria-hidden="true"></i>
+    </div>
+  </div>
+</div>
+<div class="card oh_option_card-sm" [hidden]="type!='small'">
+  <div class="card-body d-flex" [ngClass]="{'bg-light' : option}">
+    <span class="oh_option_message-sm"><a class="text-info" *ngIf="description" [ngbTooltip]="description" placement="right" triggers="click:blur"><i class="fas fa-info-circle"></i></a>&nbsp;{{text}}</span>
+    <div (click)="changeValue()" class="text-info oh_option_contain-sm">
+    	<i class="far fa-2x" [ngClass]="{'fa-square': !option, 'fa-check-square': option}" aria-hidden="true"></i>
+    </div>
+  </div>
+</div>
+<div (click)="changeValue()" class="text-info oh_option_box" [hidden]="type!='box'">
+	<i class="far fa-2x" [ngClass]="{'fa-square': !option, 'fa-check-square': option}" aria-hidden="true"></i>
+</div>

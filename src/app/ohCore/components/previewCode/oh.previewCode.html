@@ -1,0 +1,5 @@
+<div style="position: relative;">
+    <button type="button" class="btn btn-sm btn-light mx-2" [ohCopyText]="text_copy" style="position: absolute; right: 0px; top: 7px;"><i class="far fa-copy"></i></button>
+    <textarea #text_copy [innerHTML]="codeText" style="height: 0px;position: absolute;z-index: -5;"></textarea>
+    <textarea [ohHighlight]="codeText" [options]="{}" [lang]="lang"></textarea>
+</div>

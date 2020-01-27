@@ -1,0 +1,9 @@
+<div #content [ngClass]="{'oh_resizer_vContent' : orientation == 'vertical', 'oh_resizer_hContent' : orientation == 'horizontal'}">
+  <div #sideA [ngClass]="{'oh_resizer_vSideA' : orientation == 'vertical', 'oh_resizer_hSideA' : orientation == 'horizontal'}"> 
+    <ng-template [ngTemplateOutlet]="contentOne.templateRef"></ng-template>
+  </div>
+  <div (mousedown)="resize($event)" [ngClass]="{'oh_resizer_vBar' : orientation == 'vertical', 'oh_resizer_hBar' : orientation == 'horizontal'}"></div>
+  <div #sideB [ngClass]="{'oh_resizer_vSideB' : orientation == 'vertical', 'oh_resizer_hSideB' : orientation == 'horizontal'}">
+    <ng-template [ngTemplateOutlet]="contentTwo.templateRef"></ng-template>
+  </div>
+</div>

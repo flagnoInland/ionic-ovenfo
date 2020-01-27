@@ -1,0 +1,29 @@
+<a (click)="abrirCamara(); $event.preventDefault();" *ngIf="vista=='lista'" href="#" class="text-size-10 text-primary"><i class="fas fa-camera"></i></a>
+<div class="oh_viewPhotos" *ngIf="vista=='lista' || vista=='vistaPrevia'">
+    <div class="oh_viewLane flex-row" #lanePhoto>
+        <ng-template [ngIf]="typeView=='lista'">
+            <ng-template ngFor let-foto [ngForOf]="_fotos" let-i="index" let-odd="odd">
+                <div class="oh_viewContentPhoto">
+                    <ng-template [ngIf]="photo">
+                        <img src="{{foto.url}}" class="oh_viewPhoto" [ngClass]="{'oh_viewPhotoOnCharge' : !foto.cargado}" />
+                    </ng-template>
+                    <ng-template [ngIf]="!foto.cargado">
+                        <div class="oh_charning"></div>
+                    </ng-template>
+                    <ng-template [ngIf]="foto.cargado">
+                        <span class="text-danger oh_viewDelete" (click)="fotoEliminar(i)"><i class="fas fa-times-circle"></i></span>
+                    </ng-template>
+                </div>
+            </ng-template>
+        </ng-template>
+        <ng-template [ngIf]="vista=='vistaPrevia'">
+            <ng-template ngFor let-foto [ngForOf]="_fotos" let-i="index" let-odd="odd">
+                <div class="oh_viewContentPhoto">
+                    <ng-template [ngIf]="foto.url">
+                        <a href="#" (click)="$event.preventDefault(); vistaPrevia(foto)"><img src="data:image/jpeg;base64,{{foto.url}}" class="oh_viewPhoto" /></a>
+                    </ng-template>
+                </div>
+            </ng-template>
+        </ng-template>
+    </div>
+</div>

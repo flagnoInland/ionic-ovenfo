@@ -1,0 +1,210 @@
+<div class="container-fluid tis-cards-mt-2">
+    <div class="form-row">
+        <div class="form-group col-6 col-sm-6 col-md-6">
+            <label>
+                <span><strong>Proyecto Web</strong></span>
+            </label>
+            <select #inp_origen_id_web class="form-control" name="origen_id_web" [(ngModel)]="origen_id_web" (change)="origenWebCambiar()">
+                <option *ngFor="let origen of bcs.data.origenes | ohFilterField: 'tipo' : 1" [value]="origen.origen_id">{{origen.sub_tipo_nombre}} - {{origen.url_proyecto}}</option>
+            </select>
+        </div>
+        <div class="form-group col-6 col-sm-6 col-md-6">
+            <label>
+                <span><strong>Sub Proyecto Web</strong></span>
+            </label>
+            <select #inp_sub_proyecto_id_web class="form-control" name="inp_sub_proyecto_id_web" [(ngModel)]="web_sub_proyecto_web" style="font-family: monospace;" (change)="subProyectoWebCambiar()">
+                <option *ngFor="let sub_proyecto of bcs.data.sub_proyectos_web" [value]="sub_proyecto.sub_proyecto_id">{{sub_proyecto.nombre}}</option>
+            </select>
+        </div>
+    </div>
+    <form #frmRegister="ngForm" class="form-enable" (ngSubmit)="register()">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-edit"></i> Menú</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                <label>Menu Padre<span style="right: 0.7rem; position: absolute;">Ruta Plantilla</span></label>
+                                <input #inp_menu_padre_id="ngModel" name="inp_menu_padre_id" type="hidden" [(ngModel)]="item.menu_padre_id" required="true">
+                                <div style="border: 1px solid grey; height: 196px; width: 100%; overflow: auto;">
+                                    <sha-treeSelector [item]="arbol" (eventosItem)="eventosItem($event)" [proyecto_id]="proyecto_id" [disabled]="menu_desabilitado"></sha-treeSelector>
+                                </div>
+                                <div *ngIf="inp_menu_padre_id.invalid && (inp_menu_padre_id.dirty || inp_menu_padre_id.touched)" class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_menu_padre_id.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group col-12">
+                                <label>Roles</label>
+                                <sha-rolSearch [(roles_list)]="roles" [(roles_xml)]="item.roles_xml"></sha-rolSearch>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="form-row">
+                            <div class="form-group col-4">
+                                <label>Título</label>
+                                <input #inp_titulo="ngModel" name="inp_titulo" type="text" class="form-control" [(ngModel)]="item.titulo" required="true">
+                                <div *ngIf="inp_titulo.invalid && (inp_titulo.dirty || inp_titulo.touched)" class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_titulo.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group col-4">
+                                <label *ngIf="item.menu_padre_id == 0">Prefijo del proyecto</label>
+                                <label *ngIf="item.menu_padre_id != 0">URL referencia</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span *ngIf="item.menu_padre_id == 0" class="input-group-text">#/Be/</span>
+                                        <span *ngIf="item.menu_padre_id != 0 && ohBuilderTemp" class="input-group-text">{{ohBuilderTemp.menu.ohbItem.plantillaGetProy}}/</span>
+                                    </div>
+                                    <input #inp_plantilla="ngModel" name="inp_plantilla" type="text" class="form-control" [(ngModel)]="item.plantilla" [maxlength]="item.plantillaML" required="true" (input)="plantillaCambiar()" [disabled]="menu_desabilitado">
+                                </div>
+                                <div *ngIf="inp_plantilla.invalid && (inp_plantilla.dirty || inp_plantilla.touched)" class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_plantilla.errors.maxlength">Ingrese una longitud máxima.</li>
+                                        <li *ngIf="inp_plantilla.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group col-4">
+                                <label>Ícono <a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank"><i class="fas fa-info-circle" placeholder="Ícono" ngbTooltip="Libreria Font Awesome, ejemplo 'fab fa-500px' de &#60;i class='fab fa-500px'&#62;&#60;/i&#62;"></i></a></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text"><i [ngClass]="item.icono"></i></div>
+                                    </div>
+                                    <input #inp_icono="ngModel" name="inp_icono" type="text" class="form-control" [(ngModel)]="item.icono" placeholder="Ícono" ohInputFormat="fontawesome" required="true">
+                                </div>
+                                <div *ngIf="inp_icono.invalid && (inp_icono.dirty || inp_icono.touched)" class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_icono.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group col-12">
+                                <label>Descripción</label>
+                                <angular-tinymce formTinymce #inp_descripcion="ngModel" formTinymce name="inp_descripcion" [(ngModel)]='item.descripcion' [settings]='cse.tinymceConfig' required="true"></angular-tinymce>
+                                <div *ngIf="inp_descripcion.invalid && (inp_descripcion.dirty || inp_descripcion.touched)" class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_descripcion.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group col-6">
+                                <label>Tiene parámetro "id"</label><br>
+                                <div class="btn-group btn-group-toggle" ngbRadioGroup name="inpTieneId" [(ngModel)]="item.tiene_id" required="true">
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" [value]="'1'"> Si
+                                    </label> 
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" [value]="'0'"> No
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-6">
+                                <label>Estado</label><br>
+                                <div class="btn-group btn-group-toggle" ngbRadioGroup name="inpEstado" [(ngModel)]="item.estado" required="true">
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" [value]="'1'"> Activo
+                                    </label> 
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" [value]="'0'"> Inactivo
+                                    </label>
+                                </div>
+                            </div>
+                            <table class="table table-sm" *ngIf="item.menu_padre_id == 0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Configuraciones</th>
+                                        <th scope="col">Valor</th>
+                                        <th scope="col" style="width:1rem"><i title="Activo" class="text-muted text-size-10 far fa-check-square"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let config of configuraciones; let i = index">
+                                        <th scope="row">{{config.descricion_larga}}</th>
+                                        <th>
+                                            <input name="inp_valor_{{i}}" type="text" class="form-control" [(ngModel)]="config.valor">
+                                        </th>
+                                        <td>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="configActivo_{{i}}" name="configActivo_{{i}}" [(ngModel)]="config.seleccionado">
+                                                <label class="custom-control-label" for="configActivo_{{i}}">&nbsp;</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card" *ngIf="item.menu_padre_id >= 0 && ohBuilderTemp">
+            <div class="card-header">
+                <div class="custom-control custom-checkbox" style="display: inline-block;">
+                    <input type="checkbox" class="custom-control-input" id="plantilla_habilitar" name="plantilla_habilitar" [(ngModel)]="ohBuilderTemp.menu.ohbItem.habilitar" [disabled]="menu_desabilitado">
+                    <label class="custom-control-label" for="plantilla_habilitar"><i class="far fa-file-alt"></i> Crear plantilla</label>
+                </div>
+            </div>
+            <div class="card-body" *ngIf="ohBuilderTemp.menu.ohbItem.habilitar">
+                <div *ngIf="!ohBuilderTemp.menu.noPlantillaMenu" class="alert alert-danger" role="alert">
+                    El menú padre que seleccionaste no cuenta con una ruta de plantilla definida!
+                </div>
+                <div *ngIf="item.menu_padre_id > 0">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">{{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{ohBuilderTemp.menu.ohbItem.preFijoPlantilla}}</span>/view/<span class="text-info">{{ohBuilderTemp.menu.ohbItem.plantillaPadre}}</span><span class="text-danger">{{ohBuilderTemp.menu.ohbItem.ruta}}</span>/</span>
+                        </div>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">{{ohBuilderTemp.menu.ohbItem.preFijoPlantilla}}.</span>
+                        </div>
+                        <input #inp_plantillaBuilder="ngModel" type="text" class="form-control" placeholder="Nombre de la plantilla" name="inp_plantillaBuilder" [(ngModel)]="ohBuilderTemp.menu.ohbItem.ruta" required="true">
+                        <div class="input-group-append">
+                            <span class="input-group-text">.ts / .html</span>
+                        </div>
+                    </div>
+                    <div *ngIf="inp_plantillaBuilder.invalid && (inp_plantillaBuilder.dirty || inp_plantillaBuilder.touched)"
+                        class="alert alert-danger alert-form">
+                        <ul>
+                            <li *ngIf="inp_plantillaBuilder.errors.required">El campo es requerido.</li>
+                        </ul>
+                    </div>
+                    <div class="alert alert-warning mt-4" role="alert">
+                        Se modificarán los siguientes archivos:<br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{ohBuilderTemp.menu.ohbItem.preFijoPlantilla}}</span>/view/<span class="text-secondary">{{ohBuilderTemp.menu.ohbItem.preFijoPlantilla}}.core.ts</span><br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{ohBuilderTemp.menu.ohbItem.preFijoPlantilla}}</span>/<span class="text-secondary">{{ohBuilderTemp.menu.ohbItem.preFijoPlantilla}}.module.ts</span><br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{ohBuilderTemp.menu.ohbItem.preFijoPlantilla}}</span>/<span class="text-secondary">{{ohBuilderTemp.menu.ohbItem.preFijoPlantilla}}.routing.ts</span>
+                    </div>
+                </div>
+                <div *ngIf="item.menu_padre_id == 0">
+                    <div class="alert alert-warning" role="alert">
+                        Se crearán los siguientes archivos:<br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{item.plantilla}}</span><br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{item.plantilla}}</span>/<span class="text-secondary text-lowercase">{{item.plantilla}}.base.ts</span><br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{item.plantilla}}</span>/<span class="text-secondary text-lowercase">{{item.plantilla}}.coreService.ts</span><br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{item.plantilla}}</span>/<span class="text-secondary text-lowercase">{{item.plantilla}}.module.ts</span><br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{item.plantilla}}</span>/<span class="text-secondary text-lowercase">{{item.plantilla}}.routing.ts</span><br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{item.plantilla}}</span>/<span class="text-secondary">service</span>/<br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{item.plantilla}}</span>/<span class="text-secondary">view</span>/<br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{item.plantilla}}</span>/<span class="text-secondary">view</span>/<span class="text-secondary text-lowercase">{{item.plantilla}}</span>.core.ts<br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{item.plantilla}}</span>/<span class="text-secondary">view</span>/<span class="text-secondary text-lowercase">{{item.plantilla}}</span>.style.css<br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{item.plantilla}}</span>/<span class="text-secondary">view</span>/main/<span class="text-secondary text-lowercase">{{item.plantilla}}.main.html</span><br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/module/<span class="text-primary text-uppercase">{{item.plantilla}}</span>/<span class="text-secondary">view</span>/main/<span class="text-secondary text-lowercase">{{item.plantilla}}.main.ts</span><br>
+                        <br>Se modificarán los siguientes archivos:<br>
+                        {{ohBuilderTemp.menu.origen_web.url_principal}}/{{ohBuilderTemp.menu.origen_web.url_core}}/<span class="text-secondary">ind.route.ts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card bg-light botoneraCard">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary mr-2" [disabled]="frmRegister.invalid"><i class="far fa-save"></i> Grabar</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="frmRegister.resetForm({});"><i class="fas fa-eraser"></i> Limpiar</button>
+            </div>
+        </div>
+    </form>
+</div>

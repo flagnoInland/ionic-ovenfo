@@ -1,0 +1,100 @@
+<ng-template [ngIf]="ubigeo.type == 'lineal'">
+    <div class="form-group row">
+        <label class="col-form-label col-12 col-md-2">
+            <span for="ubigeo1">{{textLabel}}</span>
+        </label>
+        <div class="col-12 col-md-10">
+            <div class="row">
+                <div class="col-12 col-sm-4 mb-3 mb-sm-0">
+                    <select #departamento_id="ngModel" class="form-control" [(ngModel)]="ubigeo.departamento_id" [name]="this.textLabel + 'departamento_id'" (ngModelChange)="gesubigeoListarSecond()" [required]="levelR > 0">
+                        <ng-template ngFor let-opcion [ngForOf]="ubigeo.departamentos" let-i="index" [ngForTrackBy]="trackByFn">
+                            <option [ngValue]="opcion.ubigeo_id">{{opcion.nombre}}</option>
+                        </ng-template>
+                    </select>
+                </div>
+                <div class="col-12 col-sm-4 mb-3 mb-sm-0">
+                    <select #provincia_id="ngModel" class="form-control" [(ngModel)]="ubigeo.provincia_id" name="provincia_id" (ngModelChange)="gesubigeoListarThird()" [required]="levelR > 1" [disabled]="!ubigeo.departamento_id">
+                        <ng-template ngFor let-opcion [ngForOf]="ubigeo.provincias" let-i="index" [ngForTrackBy]="trackByFn">
+                            <option [ngValue]="opcion.ubigeo_id">{{opcion.nombre}}</option>
+                        </ng-template>
+                    </select>
+                </div>
+                <div class="col-12 col-sm-4 mb-3 mb-sm-0">
+                    <select #distrito_id="ngModel" class="form-control" [(ngModel)]="ubigeo.distrito_id" name="distrito_id" (ngModelChange)="lastSelect()" [required]="levelR > 2" [disabled]="!ubigeo.provincia_id">
+                        <ng-template ngFor let-opcion [ngForOf]="ubigeo.distritos" let-i="index" [ngForTrackBy]="trackByFn">
+                            <option [ngValue]="opcion.ubigeo_id">{{opcion.nombre}}</option>
+                        </ng-template>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template [ngIf]="ubigeo.type == 'list'">
+    <div class="form-group row">
+        <label class="col-form-label col-12 col-sm-3">Departamento</label>
+        <div class="col-12 col-sm-9">
+            <select #departamento_id="ngModel" class="form-control" [(ngModel)]="ubigeo.departamento_id" name="departamento_id" (ngModelChange)="gesubigeoListarSecond()" [required]="levelR > 0">
+                <ng-template ngFor let-opcion [ngForOf]="ubigeo.departamentos" let-i="index" [ngForTrackBy]="trackByFn">
+                    <option [ngValue]="opcion.ubigeo_id">{{opcion.nombre}}</option>
+                </ng-template>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-12 col-sm-3">Provincia</label>
+        <div class="col-12 col-sm-9">
+            <select #provincia_id="ngModel" class="form-control" [(ngModel)]="ubigeo.provincia_id" name="provincia_id" (ngModelChange)="gesubigeoListarThird()" [required]="levelR > 1" [disabled]="!ubigeo.departamento_id">
+                <ng-template ngFor let-opcion [ngForOf]="ubigeo.provincias" let-i="index" [ngForTrackBy]="trackByFn">
+                    <option [ngValue]="opcion.ubigeo_id">{{opcion.nombre}}</option>
+                </ng-template>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-form-label col-12 col-sm-3">Distrito</label>
+        <div class="col-12 col-sm-9">
+            <select #distrito_id="ngModel" class="form-control" [(ngModel)]="ubigeo.distrito_id" name="distrito_id" (ngModelChange)="lastSelect()" [required]="levelR > 2" [disabled]="!ubigeo.provincia_id">
+                <ng-template ngFor let-opcion [ngForOf]="ubigeo.distritos" let-i="index" [ngForTrackBy]="trackByFn">
+                    <option [ngValue]="opcion.ubigeo_id">{{opcion.nombre}}</option>
+                </ng-template>
+            </select>
+        </div>
+    </div>
+    <ng-template [ngIf]="ubigeo.show.name">
+        <div class="form-group row">
+            <label class="col-form-label col-12 col-sm-3">Nombre del lugar</label>
+            <div class="col-12 col-sm-9">
+                <input #nombre_lugar="ngModel" class="form-control" name="nombre_lugar" [(ngModel)]="obj_ubigeo.nombre_lugar" type="text" required="true" [disabled]="!ubigeo.distrito_id">
+            </div>
+        </div>
+    </ng-template>
+    <ng-template [ngIf]="ubigeo.show.direction">
+        <div class="form-group row mb-0">
+            <label class="col-form-label col-12 col-sm-3" [ngClass]="!ubigeo.show.map && ubigeo.show.direction ? '' : 'mb-2'">Dirección</label>
+            <ng-template [ngIf]="ubigeo.show.map && ubigeo.show.direction">
+                <div class="col-12 col-sm-9">
+                    <div style="position: relative;">
+                        <AutocompleteComponent (salidaTXT)="getInput($event)" class="p-3 auto-complete" (setAddress)="getAddress($event)" adressType="geocode" required="true" sombra="true" [(inputText)]="ubigeo.desc_ini" [form]="form" [disabled]="!ubigeo.distrito_id"></AutocompleteComponent>
+                    </div>
+                    <agm-map class="map-dir" [zoom]="13" [latitude]="ubigeo.latitud" [longitude]="ubigeo.longitud" (mapClick)="onChoseLocation($event)">
+                        <agm-marker [iconUrl]="ubigeo.marker" [latitude]="ubigeo.latitud" [longitude]="ubigeo.longitud"></agm-marker>
+                    </agm-map>
+                </div>
+            </ng-template>
+            <ng-template [ngIf]="!ubigeo.show.map && ubigeo.show.direction">
+                <div class="col-12 col-sm-9">
+                    <AutocompleteComponent (salidaTXT)="getInput()" (setAddress)="getAddress($event)" adressType="geocode" required="true" [(inputText)]="ubigeo.desc_ini" [form]="form" [disabled]="!ubigeo.distrito_id"></AutocompleteComponent>
+                </div>
+            </ng-template>
+        </div>
+    </ng-template>
+    <ng-template [ngIf]="ubigeo.show.map && !ubigeo.show.direction">
+        <div class="form-group mb-0">
+            <agm-map class="map-dir" [zoom]="13" [latitude]="ubigeo.latitud" [longitude]="ubigeo.longitud" (mapClick)="onChoseLocation($event)">
+                <agm-marker [iconUrl]="ubigeo.marker" [latitude]="ubigeo.latitud" [longitude]="ubigeo.longitud"></agm-marker>
+            </agm-map>
+        </div>
+    </ng-template>
+</ng-template>

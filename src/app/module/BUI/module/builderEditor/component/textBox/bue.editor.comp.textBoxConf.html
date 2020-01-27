@@ -1,0 +1,169 @@
+<form #frmConfig="ngForm" class="form-enable">
+    <div class="container-fluid mt-2">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Id, <mark>Estandar <span class="font-italic font-weight-bold">inp_<span class="text-primary">id</span></span></mark></label>
+                    <input #inp_id="ngModel" name="inp_id" type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id" [required]="item.config.enableRules">
+                    <div *ngIf="inp_id.invalid && (inp_id.dirty || inp_id.touched)" class="alert alert-danger alert-form">
+                        <ul>
+                            <li *ngIf="inp_id.errors.required">El campo es requerido.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Valor</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" [ngClass]="{'btn-outline-primary' : !item.config.value.esEnlace, 'btn-primary' : item.config.value.esEnlace}" (click)="$event.preventDefault(); buscarValueBind()"><i class="fas fa-assistive-listening-systems" aria-hidden="true"></i></span>
+                        </div>
+                        <input #inp_value="ngModel" name="inp_value" type="text" class="form-control form-control-sm" [(ngModel)]="item.config.value.valor" placeholder="Valor" [required]="item.config.enableRules">
+                    </div>
+                    <div *ngIf="inp_value.invalid && (inp_value.dirty || inp_value.touched)" class="alert alert-danger alert-form">
+                        <ul>
+                            <li *ngIf="inp_value.errors.required">El campo es requerido.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4" *ngIf="item.config.type == 'money'">
+                <div class="form-group">
+                    <label>Moneda configuracion</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" [ngClass]="{'btn-outline-primary' : !item.config.moneyValue.esEnlace, 'btn-primary' : item.config.moneyValue.esEnlace}" (click)="$event.preventDefault(); buscarMoneyBind()"><i class="fas fa-assistive-listening-systems" aria-hidden="true"></i></span>
+                        </div>
+                        <input #inp_monedaConf="ngModel" name="inp_monedaConf" type="text" class="form-control form-control-sm" [(ngModel)]="item.config.moneyValue.valor" placeholder="Configuracion de moneda" [required]="true">
+                    </div>
+                    <div *ngIf="inp_monedaConf.invalid && (inp_monedaConf.dirty || inp_monedaConf.touched)" class="alert alert-danger alert-form">
+                        <ul>
+                            <li *ngIf="inp_monedaConf.errors.required">El campo es requerido.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Marcador</label>
+                    <input type="text" name="inp_placeholder" class="form-control form-control-sm" [(ngModel)]="item.config.placeholder" placeholder="Nombre de marcador">
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <select class="form-control" name="inp_type" [(ngModel)]="item.config.type" (change)="validRules()">
+                        <option *ngFor="let type of inputType" [value]="type.value">{{type.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Desabilitado</label>
+                    <br>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="item.config.disabled">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="true"> Si
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="false"> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Solo lectura</label>
+                    <br>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_readOnly" [(ngModel)]="item.config.readOnly">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="true"> Si
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="false"> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group" *ngIf="item.config.type != 'range'">
+                    <label>Enfocar al cargar</label>
+                    <br>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_focusOnInit" [(ngModel)]="item.config.focusOnInit">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="true"> Si
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="false"> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Habilitar Reglas</label>
+                    <br>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_enableRules" [(ngModel)]="item.config.enableRules">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="true"> Si
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="false"> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4" *ngIf="item.config.enableRules">
+                <div class="form-group">
+                    <label>Requerido</label>
+                    <br>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_required" [(ngModel)]="item.config.required">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="true"> Si
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="false"> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4" *ngIf="item.config.enableRules && !(item.config.type == 'number' || item.config.type == 'range' || item.config.type == 'money')">
+                <div class="form-group">
+                    <label>Mínima longitud</label>
+                    <input type="number" name="inp_minlength" class="form-control form-control-sm" [(ngModel)]="item.config.minlength" placeholder="Mínima longitud">
+                </div>
+            </div>
+            <div class="col-4" *ngIf="item.config.enableRules && !(item.config.type == 'number' || item.config.type == 'range' || item.config.type == 'money')">
+                <div class="form-group">
+                    <label>Máxima longitud</label>
+                    <input type="number" name="inp_maxlength" class="form-control form-control-sm" [(ngModel)]="item.config.maxlength" placeholder="Máxima longitud">
+                </div>
+            </div>
+            <div class="col-4" *ngIf="item.config.enableRules && item.config.type == 'number' || item.config.type == 'range' || item.config.type == 'money'">
+                <div class="form-group">
+                    <label>Valor Mínimo</label>
+                    <input type="number" name="inp_min" class="form-control form-control-sm" [(ngModel)]="item.config.min" placeholder="Valor Mínimo">
+                </div>
+            </div>
+            <div class="col-4" *ngIf="item.config.enableRules && item.config.type == 'number' || item.config.type == 'range'">
+                <div class="form-group">
+                    <label>Valor Máximo</label>
+                    <input type="number" name="inp_max" class="form-control form-control-sm" [(ngModel)]="item.config.max" placeholder="Valor Máximo">
+                </div>
+            </div>
+            <div class="col-4" *ngIf="item.config.enableRules && item.config.type == 'number' || item.config.type == 'range'">
+                <div class="form-group">
+                    <label>De rango</label>
+                    <input type="number" name="inp_step" class="form-control form-control-sm" [(ngModel)]="item.config.step" placeholder="De rango">
+                </div>
+            </div>
+            <div class="col-4" *ngIf="item.config.enableRules && item.config.type != 'range' && item.config.type != 'money'">
+                <div class="form-group">
+                    <label>Pattern</label>
+                    <input type="text" name="inp_pattern" class="form-control form-control-sm" [(ngModel)]="item.config.pattern" placeholder="Patrón">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

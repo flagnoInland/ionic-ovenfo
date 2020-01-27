@@ -1,0 +1,94 @@
+<form #form_nuevo="ngForm" class="form-enable p-3">
+    <div class="card bg-white">
+        <div class="card-header">
+            <span>Nuevo Ubigeo</span>
+        </div>
+        <div class="card-body">
+            <form class="form-enable">
+                <div class="form-group row">
+                    <label class="col-form-label col-3 ">
+                        <span>Unidad de negocio*</span>
+                    </label>
+                    <div class="col-9 ">
+                        <select class="form-control" [(ngModel)]="item.unidad_negocio_id" name="servicio_tipo" (change)="buscarLista()" required="true">
+                            <option *ngFor="let opcion of ccs.data.unidad_negocio" [value]="opcion.unidad_negocio_id">
+                                {{opcion.nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-3 ">
+                        <span>Id Padre</span>
+                    </label>
+                    <div class="col-9 ">
+                        <select class="form-control" [(ngModel)]="item.ubigeo_padre_id" name="ubigeo_padre_id">
+                            <option *ngFor="let opcion of items" [value]="opcion.ubigeo_id">
+                                {{opcion.ubigeo_padre_id}} - {{opcion.nombre}} - {{opcion.codigo}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-3 ">
+                        <span>Código</span>
+                    </label>
+                    <div class="col-9 ">
+                        <input #inp_codigo="ngModel" class="form-control" name="inp_codigo" [(ngModel)]="item.codigo"
+                            type="text" required="true" maxlength="20">
+
+                        <div *ngIf="inp_codigo.invalid && (inp_codigo.dirty || inp_codigo.touched)"
+                            class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_codigo.errors.required">El campo es requerido.</li>
+                                <li *ngIf="inp_codigo.errors.maxlength">El campo debe tener como máximo 100 caracteres.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-3 ">
+                        <span>Nombre</span>
+                    </label>
+                    <div class="col-9 ">
+                        <input #inp_nombre="ngModel" class="form-control" name="inp_nombre" [(ngModel)]="item.nombre"
+                            type="text" required="true" maxlength="20">
+
+                        <div *ngIf="inp_nombre.invalid && (inp_nombre.dirty || inp_nombre.touched)"
+                            class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_nombre.errors.required">El campo es requerido.</li>
+                                <li *ngIf="inp_nombre.errors.maxlength">El campo debe tener como máximo 100 caracteres.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3">
+                        Estado
+                    </label>
+                    <div class="col-sm-9">
+                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_estado" #inp_estado="ngModel"
+                            [(ngModel)]="item.estado">
+                            <label ngbButtonLabel class="btn-outline-success">
+                                <input ngbButton type="radio" [value]="'1'"> Activo
+                            </label>
+                            <label ngbButtonLabel class="btn-outline-danger">
+                                <input ngbButton type="radio" [value]="'0'"> Inactivo
+                            </label>
+                        </div>
+                        <div *ngIf="inp_estado.invalid && (inp_estado.dirty || inp_estado.touched)"
+                            class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_estado.errors.required">El campo es requerido.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer">
+            <button (click)="registrar()" [disabled]="form_nuevo.invalid" class="btn btn-success"><i class="far fa-hand-pointer"></i> Editar</button>
+        </div>
+    </div>
+</form>

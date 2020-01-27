@@ -1,0 +1,49 @@
+<nav class="bg-white separador-abajo box-header link-second" style="position: absolute">
+    <ul class="nav float-left" style="margin-bottom: 0px;">
+        <li class="nav-item mr-2">
+            <button class="btn btn-outline-tis-secondary" type="button" (click)="changeMenu()">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </button>
+        </li>
+        <li #liBreadC class="nav-item" style="overflow: auto;" ohScrollMove>
+            <ol class="breadcrumb" style="width: max-content; margin-bottom: 0.4rem; width: -moz-max-content;">
+                <li aria-current="page" class="breadcrumb-item active" *ngIf="coreService.data.user.systems?.length>1 || openUoOption">
+                    <a [hidden]="urlTree.list.length==0" [routerLink]="['/'+baseBe+'/Main']"><i aria-hidden="true" class="fa fa-home"></i> Principal</a>
+                    <span [hidden]="urlTree.list.length!=0"><i  aria-hidden="true" class="fa fa-home"></i> Principal</span>
+                </li>
+                <li aria-current="page" class="breadcrumb-item active" *ngFor="let item of urlTree.list | ohReverse; let ind = index">
+                    <a [hidden]="!(ind!=urlTree.list.length-1 && urlTree.list.length!=1)" [routerLink]="[item.urlTree]"><i aria-hidden="true" [ngClass]="item.icon"></i> {{item.name}}</a>
+                    <span [hidden]="!(ind==urlTree.list.length-1)"><i  aria-hidden="true" [ngClass]="item.icon"></i> {{item.name}}</span>
+                </li>
+            </ol>
+        </li>
+    </ul>
+    <ul class="nav justify-content-end float-right">
+        <li class="py-2 pr-2">
+            <a *ngIf="coreService.data.adds.length==0" class="vistaC tis-notify tis-notify-btnDis"><i class="fas fa-envelope"></i></a>
+            <a *ngIf="coreService.data.adds.length>0" class="vistaC tis-notify tis-notify-btn" (click)="openNews(); $event.preventDefault();" href="#">
+                <i class="fas fa-envelope"></i><span *ngIf="coreService.data.addsNoRead>0" class="badge badge-pill badge menu-bagde">{{coreService.data.addsNoRead}}</span>
+            </a>
+            <a *ngIf="coreService.data.adds.length==0" class="vistaAB tis-notify tis-notify-btnDisSmall"><i class="fas fa-envelope"></i></a>
+            <a *ngIf="coreService.data.adds.length>0" class="vistaAB tis-notify tis-notify-btnSmall" (click)="openNews(); $event.preventDefault();" href="#">
+                <i class="fas fa-envelope"></i><span *ngIf="coreService.data.addsNoRead>0" class="badge badge-pill badge menu-bagde">{{coreService.data.addsNoRead}}</span>
+            </a>
+            <a href="#" (click)="logOut(); $event.preventDefault();">
+                <span class="vistaC">Salir &nbsp;</span>
+                <i class="fas fa-sign-in-alt"></i>
+            </a>
+        </li>
+    </ul>
+</nav>
+<div style="height: 60px;width: 100%;"></div>
+<ng-template #dialogAdds let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Notificaciones</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <ind-adds (onUpdate)="onUpdate()" [openedIndex]="openedIndex"></ind-adds>
+    </div>
+</ng-template>

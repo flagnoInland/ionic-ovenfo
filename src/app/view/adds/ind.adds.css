@@ -1,0 +1,48 @@
+
+.tis-adds-ul {
+    margin-bottom: 0;
+}
+
+.tis-adds-li {
+    border-bottom: 1px solid #808080;
+	padding-bottom:  0.5rem;
+    padding-top : 1rem;
+    cursor: pointer;
+}
+
+.tis-adds-liNoRead {
+    background-color: #fff6cc;
+}
+
+.tis-adds-li:hover {
+    background-color: #e1f0ff;
+}
+
+.tis-adds-icon {
+    display: inline-block;
+    font-size: 1.5rem;
+    padding: 0.3rem;
+    padding-top: 0rem;
+    margin-left: 0.5rem;
+}
+
+.tis-adds-body {
+    margin-right: 0.5rem;
+}
+
+.tis-adds-date {
+    position: absolute;
+    right: 1rem;
+}
+
+.tis-adds-header {
+    font-size: 1.2rem;
+}
+
+.tis-adds-arrowBack {
+    position: absolute; 
+    font-size: 1.5rem;     
+    right: 0.7rem;      
+    top: 0.5rem;
+    cursor: pointer;
+}

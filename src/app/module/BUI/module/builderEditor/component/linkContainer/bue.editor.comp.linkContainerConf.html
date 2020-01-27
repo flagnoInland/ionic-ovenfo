@@ -1,0 +1,30 @@
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label>Id</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Enlace</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.url" placeholder="Link">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Ruteo</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.router" placeholder="Ruteo">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Vínculo</label>
+                <select class="form-control" [(ngModel)]="item.config.target" required>
+                    <option *ngFor="let target of targets" [value]="target.type">{{target.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

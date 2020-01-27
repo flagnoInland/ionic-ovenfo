@@ -1,0 +1,37 @@
+<div *ngIf="showLight" class="btn-group">
+    <button class="btn btn-outline-info btn-sm oh_filter_contentAsterisk" type="button" (click)="openFilter()">
+		<i aria-hidden="true" class="fa fa-filter"></i>
+		<span class="oh_filter_viewA oh_filter_asterisk"><i *ngIf="currentSize>0" aria-hidden="true" class="fas fa-asterisk"></i></span>
+	</button>
+    <button class="btn btn-outline-info btn-sm" type="button" (click)="refresh()"><i aria-hidden="true" class="fas fa-redo"></i></button>
+    <span class="oh_filter_viewBC" *ngFor="let item of filter.fields | ohListObject">
+		<div *ngIf="isVisible(item.object)" class="btn btn-outline-info btn-sm" [ngClass]="{'oh_filter_btnContent' : !item.object.closeFilter, 'oh_filter_btnContentClose' : item.object.closeFilter}" [attr.disabled]="item.object.disabledFilter == true ? 'disabled' : null">{{item.object.label?(item.object.label+': '):''}}
+			<span [hidden]="!(!item.object.type || (item.object.type && item.object.type==''))">
+				{{(item.object.descValue)?item.object.descValue:item.object.value}}
+			</span>
+    <span [hidden]="item.object.type!='fechaRango'">[{{item.object.initValue | date: 'dd/MM/yyyy'}}-{{item.object.endValue | date: 'dd/MM/yyyy'}}]</span> <i [hidden]="!item.object.closeFilter" (click)="filterErase(item.key, $event)" aria-hidden="true"
+        class="fas fa-eraser c-pointer text-danger oh_filter_btnClose"></i>
+    <span [hidden]="item.object.type!='decimalRango'">[{{item.object.initValue}}-{{item.object.endValue}}]</span> <i [hidden]="!item.object.closeFilter" (click)="filterErase(item.key, $event)" aria-hidden="true" class="fas fa-eraser c-pointer text-danger oh_filter_btnClose"></i>
+    <span [hidden]="item.object.type!='fecha_tiempo'">[{{item.object.value}}]</span> <i [hidden]="!item.object.closeFilter" (click)="filterErase(item.key, $event)" aria-hidden="true" class="fas fa-eraser c-pointer text-danger oh_filter_btnClose"></i>
+</div>
+</span>
+</div>
+<div *ngIf="!showLight" class="card bg-light botoneraCard ng-star-inserted">
+    <div class="card-body">
+        <div class="oh_filter_row">
+            <button class="btn btn-info btn-sm mr-1" type="button" (click)="openFilter()"><i aria-hidden="true" class="fa fa-filter"></i></button>
+            <button class="btn btn-info btn-sm" type="button" (click)="refresh()"><i aria-hidden="true" class="fas fa-redo"></i></button>
+            <span class="oh_filter_viewBC" *ngFor="let item of filter.fields | ohListObject">
+			<div *ngIf="isVisible(item.object)" class="btn btn-outline-info btn-sm" [ngClass]="{'oh_filter_btnContent' : !item.object.closeFilter, 'oh_filter_btnContentClose' : item.object.closeFilter}" [attr.disabled]="item.object.disabledFilter == true ? 'disabled' : null">{{item.object.label?(item.object.label+': '):''}}
+				<span [hidden]="!(!item.object.type || (item.object.type && item.object.type==''))">
+					{{(item.object.descValue)?item.object.descValue:item.object.value}}
+				</span>
+            <span [hidden]="item.object.type!='fechaRango'">[{{item.object.initValue | date: 'dd/MM/yyyy'}}-{{item.object.endValue | date: 'dd/MM/yyyy'}}]</span> <i [hidden]="!item.object.closeFilter" (click)="filterErase(item.key, $event)" aria-hidden="true"
+                class="fas fa-eraser c-pointer text-danger oh_filter_btnClose"></i>
+            <span [hidden]="item.object.type!='decimalRango'">[{{item.object.initValue}}-{{item.object.endValue}}]</span> <i [hidden]="!item.object.closeFilter" (click)="filterErase(item.key, $event)" aria-hidden="true" class="fas fa-eraser c-pointer text-danger oh_filter_btnClose"></i>
+            <span [hidden]="item.object.type!='fecha_tiempo'">[{{item.object.value}}]</span> <i [hidden]="!item.object.closeFilter" (click)="filterErase(item.key, $event)" aria-hidden="true" class="fas fa-eraser c-pointer text-danger oh_filter_btnClose"></i>
+        </div>
+        </span>
+    </div>
+</div>
+</div>

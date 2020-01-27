@@ -1,0 +1,38 @@
+<div [hidden]="!isOpened" class="oh_content">
+    <video #videoCamera class="oh_video" autoplay height="pixels"></video>
+    <button type="button" class="btn btn-warning oh_cam_btnReturn" (click)="close()"><i class="fas fa-reply" aria-hidden="true"></i></button>
+    <div class="oh_buttonsContent">
+        <!-- zoom -->
+        <ng-template [ngIf]="enableZooms">
+            <input type="range" min="1" style="max-width:100px" max="4" class="form-control" [(ngModel)]="zoom" (change)="changeZoom()">
+        </ng-template>
+        <!-- cargar archivo -->
+        <input [hidden]="true" #inp_archivo type="file" (change)="cargar($event)" accept="image/*" multiple="true">
+        <button type="button" class="btn btn-light oh_cam_btnTake mr-2" (click)="$event.preventDefault(); inp_archivo.click()" [disabled]="photos.length >= _size"><i class="fas fa-images"></i></button>
+        <!-- tomar foto -->
+        <button type="button" class="btn btn-light oh_cam_btnTake mr-2" (click)="capture()" [disabled]="photos.length >= _size"><i class="fas fa-camera" aria-hidden="true"></i></button>
+        <!-- flash -->
+        <ng-template [ngIf]="enableFlash">
+            <button type="button" class="btn oh_cam_btnTake" [ngClass]="{'btn-light' : !isOpenedFlash, 'btn-warning' : isOpenedFlash}" (click)="openFlash()"><i class="fas fa-bolt"></i></button>
+        </ng-template>
+    </div>
+    <ng-template [ngIf]="cameras.length < 1">
+        <!-- toogle camera -->
+        <button type="button" class="btn btn-warning oh_cam_btnChamge" (click)="change()" [hidden]="!enableSwitch"><i class="fas fa-retweet" aria-hidden="true"></i></button>
+    </ng-template>
+    <div class="oh_viewPhotos">
+        <div class="oh_viewLane d-flex flex-row" #lanePhoto>
+            <ng-template ngFor let-photo [ngForOf]="photos" let-i="index" let-odd="odd" [ngForTrackBy]="trackById">
+                <div class="oh_viewContentPhoto d-flex align-items-center">
+                    <img src="{{photo}}" (click)="preview(i)" class="oh_viewPhoto" />
+                    <span _ngcontent-c5="" *ngIf="canDelete" class="badge badge-pill badge-danger oh_viewDelete" (click)="deletePhoto(i)">X</span>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+    <div class="oh_preview" [hidden]="photoPreview == ''">
+        <img #imgPreview src="{{photoPreview}}" class="oh_previewPhoto img-responsive" />
+        <button class="btn btn-lg btn-warning oh_previewClose" type="button" (click)="closePreview()"><i aria-hidden="true" class="fas fa-reply"></i></button>
+    </div>
+    <canvas style="display: none;" #captured></canvas>
+</div>

@@ -1,0 +1,10 @@
+<div class="row">
+    <div *ngFor='let row of item.config.rows; let i = index' [class]="getClase(row)" (mouseenter)="row.verDetalle = true" (mouseleave)="row.verDetalle = false">
+        <div *ngIf="row.verDetalle && !readOnly" style="position: absolute; top: -0.4rem; ">
+            <a class="text-info text-size-10 mr-2" href="#" (click)="$event.preventDefault(); moveLeft(i);"><i class="fas fa-arrow-alt-circle-left"></i></a>
+            <a class="text-danger text-size-10 mr-2" href="#" (click)="$event.preventDefault(); delete(i);"><i class="fas fa-eraser"></i></a>
+            <a class="text-info text-size-10" href="#" (click)="$event.preventDefault(); moveRight(i);"><i class="fas fa-arrow-alt-circle-right"></i></a>
+        </div>
+        <bue-editor [design]="row.selectedBody" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+    </div>
+</div>

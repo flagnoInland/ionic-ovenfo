@@ -1,0 +1,67 @@
+<form #form_nuevo="ngForm" class="form-enable p-3" (ngSubmit)="tmscambioventaForm()">
+    <div class="card bg-white">
+        <div class="card-header">Tipo de Cambio</div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Unidad de Negocio:</label>
+                <div class="col-sm-9">
+                    <select class="form-control" [(ngModel)]="item.unidad_negocio_id" name="unidad_negocio" required="true">
+                        <option *ngFor="let opcion of acs.data.unidad_negocio" [value]="opcion.unidad_negocio_id">{{opcion.nombre}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 pr-lg-0 col-form-label">Fecha:</label>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input class="form-control" placeholder="yyyy-mm-dd" name="fecha_hora_viaje_date" ngbDatepicker #h="ngbDatepicker" [showWeekNumbers]="false" [(ngModel)]="item.fecha" required="true" [readonly]="true">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary calendar" (click)="h.toggle()" type="button">
+                                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                                    </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Moneda Origen:</label>
+                <div class="col-sm-9">
+                    <select class="form-control" [(ngModel)]="item.moneda_primera_id" name="moneda_primera_id" required="true">
+                        <option *ngFor="let opcion of monedas"
+                            [value]="opcion.moneda_id">
+                            {{opcion.abreviatura}} - {{opcion.nombre}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Moneda Destino:</label>
+                <div class="col-sm-9">
+                    <select class="form-control" [(ngModel)]="item.moneda_segunda_id" name="moneda_segunda_id" required="true">
+                                <option *ngFor="let opcion of monedas"
+                                    [value]="opcion.moneda_id">
+                                    {{opcion.abreviatura}} - {{opcion.nombre}}</option>
+                            </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Cambio Venta:</label>
+                <div class="col-sm-9">
+                    <input [(ngModel)]="item.cambio_venta" name="cambio_venta" class="form-control" type="number" required="true">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card bg-light botoneraCard">
+        <div class="card-body">
+            <div>
+                <ng-template [ngIf]="!item.tipo_cambio_id">
+                    <button type="submit" class="btn btn-primary mr-3" [disabled]="form_nuevo.invalid"><i class="far fa-save mr-1"></i>Crear</button>
+                </ng-template>
+                <ng-template [ngIf]="item.tipo_cambio_id">
+                    <button type="submit" class="btn btn-primary mr-3" [disabled]="form_nuevo.invalid"><i class="far fa-save mr-1"></i>Actualizar</button>
+                </ng-template>
+                <button type="button" class="btn btn-outline-dark" (click)="return()">Volver</button>
+            </div>
+        </div>
+    </div>
+</form>

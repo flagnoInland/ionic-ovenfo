@@ -1,0 +1,124 @@
+<div class="container-fluid tis-cards-mt-2">
+    <form #frmRegister="ngForm" class="form-enable" (ngSubmit)="register(frmRegister)">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-plus-circle"></i> Nueva Unidad</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-4">
+                                <span>Nombre</span>
+                            </label>
+                            <div class="col-sm-8">
+                                <input #inp_nombre="ngModel" name="inp_nombre" type="text" class="form-control" [(ngModel)]="item.nombre" required="true">
+                                <div *ngIf="inp_nombre.invalid && (inp_nombre.dirty || inp_nombre.touched)" class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_nombre.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-4">
+                                <span>Estado</span>
+                            </label>
+                            <div class="col-sm-8">
+                                <div class="btn-group btn-group-toggle" ngbRadioGroup name="inpEstado" [(ngModel)]="item.estado" required="true">
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" [value]="'1'"> Activo
+                                    </label>
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" [value]="'0'"> Inactivo
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-4 ">
+                                <span>Unidad de Negocio Padre</span>
+                            </label>
+                            <div class="col-8 ">
+                                <select class="form-control" [(ngModel)]="item.unidad_negocio_padre_id" name="unidad_negocio">
+                                    <option value="">Sin unidad de negocio padre</option>
+                                    <option *ngFor="let opcion of bcs.item.unidades"
+                                        [value]="opcion.unidad_negocio_id">
+                                        {{opcion.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-4">
+                                <span>Configuraciones</span>
+                            </label>
+                            <div class="col-sm-8">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Tipo de configuración</th>
+                                            <th scope="col">Valor</th>
+                                            <th scope="col" style="width:1rem"><i title="Activo" class="text-muted text-size-10 far fa-check-square"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let config of configuraciones; let i = index">
+                                            <th scope="row">{{config.descricion_larga}}</th>
+                                            <th>
+                                                <input *ngIf="config.catalogo_id != 31247" name="inp_valor_{{i}}" type="text" class="form-control" [(ngModel)]="config.valor">
+                                                <select *ngIf="config.catalogo_id == 31247" class="form-control" [(ngModel)]="config.valor" name="tipo_un_">
+                                                    <option value="">Sin tipo</option>
+                                                    <option *ngFor="let tipo_ of ccs.data.catalogo.tipo_un" [value]="tipo_.catalogo_id">{{tipo_.descripcion}}</option>
+                                                </select>
+                                            </th>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="configActivo_{{i}}" name="configActivo_{{i}}" [(ngModel)]="config.seleccionado">
+                                                    <label class="custom-control-label" for="configActivo_{{i}}">&nbsp;</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-4">
+                                <span>Monedas</span>
+                            </label>
+                            <div class="col-sm-8">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Moneda</th>
+                                            <th scope="col">Abreviatura</th>
+                                            <th scope="col" style="width:1rem"><i title="Activo" class="text-muted text-size-10 far fa-check-square"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let moneda of monedas; let i = index">
+                                            <th scope="row">{{moneda.nombre}}</th>
+                                            <th>{{moneda.abreviatura}}</th>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="monedaActivo_{{i}}" name="monedaActivo_{{i}}" [(ngModel)]="moneda.seleccionado">
+                                                    <label class="custom-control-label" for="monedaActivo_{{i}}">&nbsp;</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card bg-light botoneraCard">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary mr-2" [disabled]="frmRegister.invalid"><i
+                        class="far fa-save"></i> Grabar</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="frmRegister.resetForm({});"><i
+                        class="fas fa-eraser"></i> Limpiar</button>
+            </div>
+        </div>
+    </form>
+</div>

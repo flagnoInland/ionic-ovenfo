@@ -1,0 +1,3 @@
+<span [class]="'badge '+((item.config.tipo=='pildora')?'badge-pill':'')+' '+item.config.color">
+    <bue-editor [design]="item.selected" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+</span>

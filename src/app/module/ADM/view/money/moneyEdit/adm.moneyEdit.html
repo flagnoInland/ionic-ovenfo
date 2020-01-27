@@ -1,0 +1,84 @@
+<form #form_nuevo="ngForm" class="form-enable p-3">
+    <div class="card bg-white">
+        <div class="card-header">
+            <span>Moneda</span>
+        </div>
+        <div class="card-body">
+                <div class="form-group row">
+                    <label class="col-form-label col-4 ">
+                        <span>Nombre</span>
+                    </label>
+                    <div class="col-8 ">
+                        <input [(ngModel)]="item.nombre" name="nombre" class="form-control" type="text">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-form-label col-4 ">
+                        <span>Abreviatura</span>
+                    </label>
+                    <div class="col-8 ">
+                        <input [(ngModel)]="item.abreviatura" name="abreviatura" class="form-control" type="text">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-4 ">
+                        <span>Simbolo</span>
+                    </label>
+                    <div class="col-8 ">
+                        <input [(ngModel)]="item.simbolo" name="simbolo" class="form-control" type="text">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-4 ">
+                        <span>Estado</span>
+                    </label>
+                    <div class="col-8 ">
+                        <select [(ngModel)]="item.estado" name="estado" class="form-control">
+                            <option *ngFor="let opcion of acs.data.catalogo.estado" [value]="opcion.id">{{opcion.descripcion}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-4 ">
+                        <span>Separador miles</span>
+                    </label>
+                    <div class="col-8 ">
+                        <input [(ngModel)]="item.separador_miles" name="separador_miles" class="form-control" type="text">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-4 ">
+                        <span>Separador decimales</span>
+                    </label>
+                    <div class="col-8 ">
+                        <input [(ngModel)]="item.separador_decimales" name="separador_decimales" class="form-control" type="text">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-4 ">
+                        <span>Precision</span>
+                    </label>
+                    <div class="col-8 ">
+                        <input [(ngModel)]="item.precision" name="precision" class="form-control" type="text">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-4 ">
+                        <span>ICU</span>
+                    </label>
+                    <div class="col-8 ">
+                        <input [(ngModel)]="item.ICU" name="ICU" class="form-control" type="text">
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div class="card bg-light botoneraCard">
+        <div class="card-body">
+            <div>
+                <button (click)="registrar()" class="btn btn-primary mr-3" [disabled]="form_nuevo.invalid"><i class="far fa-save"></i> Grabar</button>
+                <button *ngIf="item.moneda_id" (click)="clearAll()" class="btn btn-outline-secondary"><i class="fas fa-eraser"></i> Limpiar</button>
+            </div>
+        </div>
+    </div>
+</form>

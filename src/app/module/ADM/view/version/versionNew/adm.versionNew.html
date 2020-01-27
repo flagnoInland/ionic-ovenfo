@@ -1,0 +1,125 @@
+<div class="container-fluid tis-cards-mt-2">
+	<form #frmRegister="ngForm" class="form-enable" (ngSubmit)="doProcess()">
+		<div class="card">
+			<div class="card-header">
+				<i class="fa fa-archive" aria-hidden="true"></i> Datos de versionado</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-12 col-sm-12">
+						<div class="form-group row">
+							<label class="col-form-label col-sm-4">
+								<span>Versión (ejm: v1.0.0)</span>
+							</label>
+							<div class="col-sm-8">
+								<input #inpVersion="ngModel" name="inpVersion" class="form-control" [(ngModel)]="objVersion.version" type="text" required="true">
+								<div *ngIf="inpVersion.invalid && (inpVersion.dirty || inpVersion.touched)" class="alert alert-danger alert-form">
+									<ul>
+										<li *ngIf="inpVersion.errors.required">El campo es requerido.</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-sm-12">
+						<div class="form-group row">
+							<label class="col-form-label col-sm-4">
+								<span>Descripción</span>
+							</label>
+							<div class="col-sm-8">
+								<angular-tinymce formTinymce #inpDescripcion="ngModel" name="inpDescripcion" [(ngModel)]='objVersion.descripcion' [settings]='descripConfig' required="true"></angular-tinymce>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 col-sm-4">
+						<div class="form-group row">
+							<label class="col-form-label col-sm-12">
+								<span>Fecha de inicio</span>
+							</label>
+							<div class="col-sm-12">
+								<ngb-datepicker #inpFechaInicio name="inpFechaInicio" [(ngModel)]="objVersion.fecha_inicio" required="true"></ngb-datepicker>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-sm-4">
+						<div class="form-group row">
+							<label class="col-form-label col-sm-12">
+								<span>Fecha de Fin</span>
+							</label>
+							<div class="col-sm-12">
+								<ngb-datepicker #inpFechaFin name="inpFechaFin" [(ngModel)]="objVersion.fecha_fin"></ngb-datepicker>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-sm-4">
+						<div class="form-group row">
+							<label class="col-form-label col-sm-12">
+								<span>Fecha de despliegue</span>
+							</label>
+							<div class="col-sm-12">
+								<ngb-datepicker #inpFechaDespliegue name="inpFechaDespliegue" [(ngModel)]="objVersion.fecha_despliegue"></ngb-datepicker>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-6 col-sm-12">
+						<div class="form-group row">
+							<label class="col-form-label col-sm-4">
+								<span>Nivel</span>
+							</label>
+							<div class="col-sm-8">
+								<div class="btn-group btn-group-toggle" ngbRadioGroup name="inpNivel" [(ngModel)]="objVersion.nivel" required="true">
+									<label ngbButtonLabel class="btn-primary">
+										<input ngbButton type="radio" [value]="'2'"> Aviso visible
+									</label>
+									<label ngbButtonLabel class="btn-primary">
+										<input ngbButton type="radio" [value]="'1'"> Aviso oculto
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-form-label col-sm-4">
+						<span>Estado</span>
+					</label>
+					<div class="col-sm-8">
+						<div class="btn-group btn-group-toggle" ngbRadioGroup name="inpEstado" [(ngModel)]="objVersion.estado" required="true">
+							<label ngbButtonLabel class="btn-primary">
+								<input ngbButton type="radio" [value]="'1'"> Producción
+							</label> 
+							<label ngbButtonLabel class="btn-primary">
+								<input ngbButton type="radio" [value]="'0'"> Pendiente
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-form-label col-sm-4">
+						<span>Notificación instantanea</span>
+					</label>
+					<div class="col-sm-8">
+						<oh-option [type]="'box'" [(option)]="objVersion.instanteNotification"></oh-option>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-form-label col-sm-4">
+						<span>Forzar actualizacion</span>
+					</label>
+					<div class="col-sm-8">
+						<oh-option [type]="'box'" [(option)]="objVersion.forceUpdate"></oh-option>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card bg-light botoneraCard">
+			<div class="card-body">
+				<button type="submit" class="btn btn-primary mr-2" [disabled]="frmRegister.invalid"><i class="far fa-save"></i> Grabar</button>
+				<button type="button" class="btn btn-outline-secondary" (click)="frmRegister.resetForm({}); "><i class="fas fa-eraser"></i> Limpiar</button>
+			</div>
+		</div>
+	</form>
+</div>

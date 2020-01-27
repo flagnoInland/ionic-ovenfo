@@ -1,0 +1,82 @@
+<div class="container-fluid tis-cards-mt-2">
+    <form #frmRegister="ngForm" class="form-enable">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-plus-circle"></i> Editar Términos y Condiciones</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 col-sm-12">
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-4">
+                                Proyecto
+                            </label>
+                            <div class="col-sm-8">
+                                <select #inp_menu_id="ngModel" name="inp_menu_id" class="form-control" [(ngModel)]="item.menu_id" [disabled]="item.termino_id">
+                                    <option *ngFor="let proyecto of acs.data.proyectos" [value]="proyecto.menu_id">{{proyecto.titulo}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-12">
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-4">
+                                Versión
+                            </label>
+                            <div class="col-sm-8">
+                                <input #inp_version="ngModel" name="inp_version" type="text" class="form-control"
+                                    [(ngModel)]="item.version" required="true">
+                                <div *ngIf="inp_version.invalid && (inp_version.dirty || inp_version.touched)"
+                                    class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_version.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-12">
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-4">
+                                Descripción
+                            </label>
+                            <div class="col-sm-8">
+                                <angular-tinymce formTinymce #inp_descripcion="ngModel" name="inp_descripcion"
+                                    [(ngModel)]='item.descripcion' [settings]='descripConfig' required="true">
+                                </angular-tinymce>
+                                <div *ngIf="inp_descripcion.invalid && (inp_descripcion.dirty || inp_descripcion.touched)"
+                                    class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_descripcion.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-12">
+                        <div class="form-group row">
+                            <label class="col-form-label col-sm-4">
+                                <span>Estado</span>
+                            </label>
+                            <div class="col-sm-8">
+                                <div class="btn-group btn-group-toggle" ngbRadioGroup name="inpEstado"
+                                    [(ngModel)]="item.estado" required="true">
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" [value]="'1'"> Activo
+                                    </label>
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" [value]="'0'"> Inactivo
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card bg-light botoneraCard">
+            <div class="card-body">
+                <button type="button" (click)="registrar()" class="btn btn-primary mr-2" [disabled]="frmRegister.invalid"><i class="far fa-save"></i> Grabar</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="frmRegister.resetForm({}); clean()"><i  class="fas fa-eraser"></i> Limpiar</button>
+            </div>
+        </div>
+    </form>
+</div>

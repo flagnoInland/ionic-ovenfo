@@ -1,0 +1,13 @@
+<!--<span class="mt-1 mr-3">{{item.config.enlacelistaTamano}} de {{item.config.enlaceTotal}}<span class="vistaBC tis-dis-iblk">&nbsp;registros</span></span>-->
+<div class="tis-pagin">
+    <ngb-pagination *ngIf="item.config.total"
+        [collectionSize]="item.config.total.valor" 
+        [(page)]="item.config.pagina.valor" 
+        [pageSize]="item.config.itemxPagina.valor"
+        [maxSize]="item.config.nroPaginaciones.valor"
+        [directionLinks]="item.config.habilitarDireccionales"
+        [boundaryLinks]="item.config.habilitarLimites"
+        [rotate]="item.config.habilitarRotacion" 
+        [ellipses]="item.config.habilitarElipse"
+    ></ngb-pagination>
+</div>

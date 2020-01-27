@@ -1,0 +1,186 @@
+<div class="tis-listContent mb-3 noImpresion">
+    <ul class="list-inline pt-2 pb-2 tis-lineDivide">
+        <li class="list-inline-item pt-2 ml-3">
+            <h5>Monedas</h5>
+        </li>
+        <li class="list-inline-item float-right mr-3 tis-dis-ifle">
+            <button class="btn btn-primary" [routerLink]="['new']"><i class="fas fa-plus"></i> Nuevo</button>
+        </li>
+    </ul>
+	<oh-filterTab [save]="'adm_money_list'" [(filter)]="filter" [template]="filterWindow" [length]="items.length" [obj_pagin]="pagin" (list)="gesmonedaListar()"></oh-filterTab>
+</div>
+<div class="container-fluid">
+    <div class="tableContent">
+        <table class="table table-striped table-hover bg-white">
+            <thead>
+                <tr>
+                    <th scope="col" style="width:1rem"><i title="Editar" class="text-muted text-size-10 fas fas fa-edit"></i></th>
+                    <th scope="col" style="width:1rem"><i title="Eliminar" class="text-muted text-size-10 fas fa-eraser"></i></th>
+                    <th>
+                        <span>Id</span>
+                    </th>
+                    <th>
+                        <span>Nombre</span>
+                    </th>
+                    <th>
+                        <span>Abreviatura</span>
+                    </th>
+                    <th>
+                        <span>Simbolo</span>
+                    </th>
+                    <th>
+                        <span>Separador miles</span>
+                    </th>
+                    <th>
+                        <span>Separador decimales</span>
+                    </th>
+                    <th>
+                        <span>Precision</span>
+                    </th>
+                    <th>
+                        <span>ICU</span>
+                    </th>
+                    <th scope="col">Fecha de Registro</th>
+                    <th scope="col">Usuario de Registro</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of items">
+                    <td>
+                        <a class="text-size-10 text-success" [routerLink]="['edit',item.moneda_id]"><i class="fas fas fa-edit"></i></a>
+                    </td>
+                    <td>
+                        <a (click)="gesEliminarSeguro(modalConfirmar, item); $event.preventDefault();" href="#" class=" text-danger text-size-10"><i class="fas fa-eraser"></i> </a>
+                    </td>
+                    <td>
+                        {{item.moneda_id}}
+                    </td>
+                    <td>
+                        {{item.nombre}}
+                    </td>
+                    <td>
+                        {{item.abreviatura}}
+                    </td>
+                    <td>
+                        {{item.simbolo}}
+                    </td>
+                    <td>
+                        {{item.separador_miles}}
+                    </td>
+                    <td>
+                        {{item.separador_decimales}}
+                    </td>
+                    <td>
+                        {{item.precision}}
+                    </td>
+                    <td>
+                        {{item.ICU}}
+                    </td>
+                    <td>{{item.fecha_registro | date: cse.config.formatDateTime}}</td>
+                    <td><oh-thumbnail [id]="item.usuario_registro_id" [name]="item.usuario_registro_nombres" [lastName]="item.usuario_registro_apellidos"></oh-thumbnail></td>
+                    <td><span class="badge badge-pill" [ngClass]="acs.data.estado[item.estado].badge"><i [class]="acs.data.estado[item.estado].icon"></i> {{acs.data.estado[item.estado].descripcion}}</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!----------------------------------------------------------------->
+<ng-template #filterWindow let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">
+            <i aria-hidden="true" class="fa fa-filter"></i> Filtrar</h4>
+        <button type="button" class="close" aria-label="Close" (click)="c('Close')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Estado</label>
+                <div class="col-sm-9">
+                    <div class="btn-group btn-group-toggle" style="display: block;" ngbRadioGroup name="radioStates"
+                        [(ngModel)]="filter.field.estado.value">
+                        <label ngbButtonLabel class="btn-outline-primary" title="Todos">
+                            <input ngbButton type="radio" [value]="null"> Todos
+                        </label>
+                        <label ngbButtonLabel class="btn-outline-success" title="Pendiente">
+                            <input ngbButton type="radio" [value]="20253"> <i class="fas fa-toggle-on"></i> &nbsp;<span
+                                class="vistaBC">Activo</span>
+                        </label>
+                        <label ngbButtonLabel class="btn-outline-danger" title="Confirmado">
+                            <input ngbButton type="radio" [value]="20254"> <i class="fas fa-toggle-off"></i> &nbsp;<span
+                                class="vistaBC">Inactivo</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Nombre</label>
+                <div class="col-sm-9">
+                    <input name="nombre" class="form-control" [(ngModel)]="filter.field.nombre.value" type="text">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Abreviatura</label>
+                <div class="col-sm-9">
+                    <input name="abreviatura" class="form-control" [(ngModel)]="filter.field.abreviatura.value"
+                        type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="c('cancel')">
+            <i aria-hidden="true" class="fa fa-close"></i> Cancelar</button>
+        <button type="submit" class="btn btn-outline-primary" (click)="c('doFilter')">
+            <i aria-hidden="true" class="fa fa-filter"></i> Filtrar</button>
+    </div>
+</ng-template>
+<ng-template #modalConfirmar let-c="close"  let-d="dismiss">
+
+    <div class="modal-header">
+
+        <h5 class="modal-title"  id="modal-basic-title">
+            Moneda <i></i>
+        </h5>
+        <a href="#"  class="close"  aria-label="Close"  (click)="$event.preventDefault(); d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body tis-card-sm">
+        <span *ngIf=!have_referencia>¿Está seguro que desea eliminar esta Moneda?</span>
+        <div *ngIf=have_referencia>
+            <span>No se puede eliminar, este registro esta refenrenciado ({{referenciasList.length}}) en las siguientes
+                tablas:</span>
+            <br>
+            <br>
+            <table class="table table-striped table-hover bg-white"
+                 style="max-height: 370px; overflow-y: scroll; display: block;">
+                <thead>
+                    <tr>
+                        <th scope="col"  width="10%">Esquema</th>
+                        <th scope="col"  width="20%">Tabla</th>
+                        <th scope="col"  width="20%">Columna</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let referenciaItem of referenciasList">
+                        <td>{{referenciaItem.esquema}}</td>
+                        <td>{{referenciaItem.tabla}}</td>
+                        <td>{{referenciaItem.columna}} (FK)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+
+        <button *ngIf=!have_referencia type="button"  class="btn
+                btn-outline-success"  (click)="gesEliminarSeguro()">Eliminar</button>
+
+        <button type="button"  class="btn
+                btn-outline-danger"  (click)="c('Close')">{{!have_referencia ? "Cancelar" : "Cerrar"}}</button>
+    </div>
+</ng-template>

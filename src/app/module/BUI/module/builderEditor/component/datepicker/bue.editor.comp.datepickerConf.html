@@ -1,0 +1,148 @@
+<form #frmConfig="ngForm" class="form-enable">
+    <div class="container-fluid mt-2">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Id, <mark>Estandar <span class="font-italic font-weight-bold">inp_<span class="text-primary">id</span></span></mark></label>
+                    <input #inp_id="ngModel" name="inp_id" type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id" [required]="item.config.enableRules">
+                    <div *ngIf="inp_id.invalid && (inp_id.dirty || inp_id.touched)" class="alert alert-danger alert-form">
+                        <ul>
+                            <li *ngIf="inp_id.errors.required">El campo es requerido.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Tipo</label><br>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="item.config.type">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" value="simple"> Simple
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" value="text"> Texto
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" value="range"> Rango
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Valor <span *ngIf="item.config.type=='range'">desde</span></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" [ngClass]="{'btn-outline-primary' : !item.config.value.esEnlace, 'btn-primary' : item.config.value.esEnlace}" (click)="$event.preventDefault(); item.config.value.esEnlace = !item.config.value.esEnlace"><i class="fas fa-assistive-listening-systems" aria-hidden="true"></i></span>
+                        </div>
+                        <input [hidden]="!item.config.value.esEnlace" #inp_dpt="ngModel" name="inp_dpt" class="form-control form-control-sm border-primaryAPM" [(ngModel)]="item.config.value.valor" placeholder="Valor" [required]="item.config.enableRules" type="text">
+                        <input [hidden]="item.config.value.esEnlace" #inp_dpc="ngModel" name="inp_dpc" class="form-control" placeholder="yyyy-mm-dd" [(ngModel)]="item.config.value.valor" ngbDatepicker #inp_ndp="ngbDatepicker" [required]="item.config.enableRules">
+                        <div [hidden]="item.config.value.esEnlace" class="input-group-append">
+                            <button class="btn btn-outline-secondary" (click)="inp_ndp.toggle()" type="button"><i class="far fa-calendar-alt" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                    <div *ngIf="item.config.value.esEnlace && inp_dpt.invalid && (inp_dpt.dirty || inp_dpt.touched)" class="alert alert-danger alert-form">
+                        <ul><li *ngIf="inp_dpt.errors.required">El campo es requerido.</li></ul>
+                    </div>
+                    <div *ngIf="!item.config.value.esEnlace && inp_dpc.invalid && (inp_dpc.dirty || inp_dpc.touched)" class="alert alert-danger alert-form">
+                        <ul><li *ngIf="inp_dpc.errors.required">El campo es requerido.</li></ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4" *ngIf="item.config.type=='range'">
+                <div class="form-group">
+                    <label>Valor hasta</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" [ngClass]="{'btn-outline-primary' : !item.config.value.esEnlaceHasta, 'btn-primary' : item.config.value.esEnlaceHasta}" (click)="$event.preventDefault(); item.config.value.esEnlaceHasta = !item.config.value.esEnlaceHasta"><i class="fas fa-assistive-listening-systems" aria-hidden="true"></i></span>
+                        </div>
+                        <input [hidden]="!item.config.value.esEnlaceHasta" type="text" #inp_dpht="ngModel" name="inp_dpht" class="form-control form-control-sm border-primaryAPM" [(ngModel)]="item.config.value.valorHasta" placeholder="Hasta" [required]="item.config.enableRules">
+                        <input [hidden]="item.config.value.esEnlaceHasta" #inp_dphc="ngModel" class="form-control" placeholder="yyyy-mm-dd" name="inp_dphc" [(ngModel)]="item.config.value.valorHasta" ngbDatepicker #inp_ndph="ngbDatepicker" [required]="item.config.enableRules">
+                        <div  [hidden]="item.config.value.esEnlaceHasta" class="input-group-append">
+                            <button class="btn btn-outline-secondary" (click)="inp_ndph.toggle()" type="button"><i class="far fa-calendar-alt" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="item.config.value.esEnlace && inp_dpht.invalid && (inp_dpht.dirty || inp_dpht.touched)" class="alert alert-danger alert-form">
+                    <ul><li *ngIf="inp_dpht.errors.required">El campo es requerido.</li></ul>
+                </div>
+                <div *ngIf="!item.config.value.esEnlace && inp_dphc.invalid && (inp_dphc.dirty || inp_dphc.touched)" class="alert alert-danger alert-form">
+                    <ul><li *ngIf="inp_dphc.errors.required">El campo es requerido.</li></ul>
+                </div>
+            </div>
+            <div class="col-4" *ngIf="item.config.type!='range'">
+                <div class="form-group">
+                    <label>Cantidad de Cuadros</label><br>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_months" [(ngModel)]="item.config.months">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="1"> 1
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="2"> 2
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="3"> 3
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4" *ngIf="item.config.type!='range'">
+                <div class="form-group">
+                    <label>Navegación</label><br>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_navigation" [(ngModel)]="item.config.navigation">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" value="none"> Ninguno
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" value="select"> Cambiar 
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" value="arrows"> Visible
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4" *ngIf="item.config.type!='range'">
+                <div class="form-group">
+                    <label>Mostrar Semanas</label><br>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_showWeekNumbers" [(ngModel)]="item.config.showWeekNumbers">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="true"> Si
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="false"> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label>Habilitar Reglas</label>
+                    <br>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_enableRules" [(ngModel)]="item.config.enableRules">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="true"> Si
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="false"> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4" *ngIf="item.config.enableRules">
+                <div class="form-group">
+                    <label>Requerido</label>
+                    <br>
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_required" [(ngModel)]="item.config.required">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="true"> Si
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="false"> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,22 @@
+.oh_editor_bindList {
+	max-height: 200px; 
+	overflow: scroll;
+}
+
+.oh_editor_bindAdd {
+	right: 0.8rem;
+    top: 0.4rem;
+    position:  absolute;
+    font-size: 1.5rem;
+}
+
+.oh_editor_bindAddSpl {
+    font-size: 1.5rem;
+}
+
+.oh_editor_bindOpc {
+	right: 0.55rem;
+    top: 0.4rem;
+    position:  absolute;
+    font-size: 1.5rem;
+}

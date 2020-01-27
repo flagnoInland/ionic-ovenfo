@@ -1,0 +1,50 @@
+.oh_loader_A {
+    position: fixed;
+    top: 0px;
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.5);
+}
+
+.oh_loader_AA {
+	-webkit-box-shadow: 0 3px 3px rgba(0,0,0,0.175);
+	box-shadow: 0 3px 3px rgba(0,0,0,0.175);
+	padding: 10px 10px;
+	background-color: #fff;
+	max-width: 400px;
+}
+
+@media screen and (max-width: 576px) {
+	.oh_loader_AA {
+		max-width: 350px;
+	}
+}
+
+.oh_loader_AAA {
+	position: relative;
+	text-align: center;
+}
+
+.oh_loader_AAAA {
+	padding: 20px 40px;
+}
+
+.oh_loader_AAAB {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+
+.oh_carga_Bor {
+	padding: 15px;
+    background: -webkit-linear-gradient(yellow,red);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: tomato;
+}
+
+/* Personalizacion boostrap */
+.content {
+    height: 100%;
+}

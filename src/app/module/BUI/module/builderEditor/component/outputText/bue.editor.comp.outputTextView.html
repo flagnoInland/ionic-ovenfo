@@ -1,0 +1,9 @@
+<span [class]="item.config.colorTexto+' '+item.config.tamanoTexto+' '+((readOnly && item.vistaResponsiva)?item.vistaResponsiva:'')">
+    <span [class]="((item.config.type!='span')?item.config.type:'')+' '+((item.config.transformacion)?item.config.transformacion:'')+' '+((item.config.grosor)?item.config.grosor:'')+' '+((item.config.esItalica)?'font-italic':'')+' '+((item.config.esFuenteCodigo)?'text-monospace':'')">
+        <span *ngIf="!item.config.value.esEnlace && item.config.formato == 'texto'">{{item.config.value.valor}}</span>
+        <span *ngIf="item.config.value.esEnlace && item.config.formato == 'texto'">salida</span>
+        <span *ngIf="item.config.formato == 'fecha'">01/01/2000</span>
+        <span *ngIf="item.config.formato == 'fechaHora'">01/01/2000 00:00:00</span>
+        <span *ngIf="item.config.formato == 'moneda'">$ 12.345</span>
+    </span>
+</span>

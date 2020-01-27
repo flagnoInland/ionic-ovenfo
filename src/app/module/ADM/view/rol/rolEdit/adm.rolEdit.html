@@ -1,0 +1,74 @@
+<div class="container-fluid tis-cards-mt-2">
+    <form #frmRegister="ngForm" class="form-enable" (ngSubmit)="editar(frmRegister)">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-plus-circle"></i> <span *ngIf="item.rol_id">Editar</span><span *ngIf="!item.rol_id">Nuevo</span> menú</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                <label>Nombre</label>
+                                <input #inp_nombre="ngModel" name="inp_nombre" type="text" class="form-control" [(ngModel)]="item.nombre" required="true">
+                                <div *ngIf="inp_nombre.invalid && (inp_nombre.dirty || inp_nombre.touched)" class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_nombre.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group col-12">
+                                <label>Id</label>
+                                <input #inp_id="ngModel" name="inp_id" type="text" class="form-control" [(ngModel)]="item.id" maxlength="20">
+                                <div *ngIf="inp_id.invalid && (inp_id.dirty || inp_id.touched)" class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_id.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group col-12">
+                                <label>Estado</label><br>
+                                <div class="btn-group btn-group-toggle" ngbRadioGroup name="inpEstado" [(ngModel)]="item.estado" required="true">
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" [value]="'1'"> Activo
+                                    </label>
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" [value]="'0'"> Inactivo
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                <label>Unidades asociadas</label>
+                                <shi-businessunitSelect [(unidades_list)]="unidades" [(unidades_xml)]="unidades_xml"></shi-businessunitSelect>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                <label>Menu Padre</label>
+                                <input #inp_menu_padre_id="ngModel" name="inp_menu_padre_id" type="hidden" [(ngModel)]="item.menus_id" required="true">
+                                <div style="border: 1px solid grey; height: 400px; width: 100%; overflow: auto;">
+                                    <sha-treeMultiple [hijos]="arbol.hijos" (eventosItem)="eventosItem($event)"></sha-treeMultiple>
+                                </div>
+                                <div *ngIf="inp_menu_padre_id.invalid && (inp_menu_padre_id.dirty || inp_menu_padre_id.touched)" class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_menu_padre_id.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card bg-light botoneraCard">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary mr-2" [disabled]="frmRegister.invalid"><i class="far fa-save"></i> Grabar</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="frmRegister.resetForm({});"><i class="fas fa-eraser"></i> Limpiar</button>
+            </div>
+        </div>
+    </form>
+</div>

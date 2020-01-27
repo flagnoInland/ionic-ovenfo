@@ -1,0 +1,193 @@
+<div class="tis-listContent mb-3 noImpresion">
+    <ul class="list-inline pt-2 pb-2 tis-lineDivide">
+        <li class="list-inline-item pt-2 ml-3">
+            <h5>Reportes</h5>
+        </li>
+        <li class="list-inline-item float-right mr-3 tis-dis-ifle">
+            <button [routerLink]="['new']" type="button" class="btn btn-primary mr-1" placement="top"
+                ngbTooltip="Nuevo reporte"><i class="fas fa-user-plus"></i>Nuevo</button>
+        </li>
+    </ul>
+    <ul class="list-inline" style="min-height: 3rem;">
+        <li class="list-inline-item ml-3">
+            <oh-filter [(filter)]="filter" [(template)]="objFilter" [showLight]="true"></oh-filter>
+        </li>
+        <li class="list-inline-item float-right mr-3 tis-dis-ifle">
+            <span class="mt-1 mr-3">{{reportes.length}} de {{pagin_total}}<span
+                    class="vistaBC tis-dis-iblk">&nbsp;registros</span></span>
+            <div class="tis-pagin">
+                <ngb-pagination [collectionSize]="pagin_total" [(page)]="pagin_page" [maxSize]="pagin_size"
+                    (pageChange)="list()"></ngb-pagination>
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="container-fluid noImpresion">
+    <div class="tableContent">
+        <table class="table table-striped table-hover bg-white">
+            <thead>
+                <tr>
+                    <th scope="col">Proyecto</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripcion</th>
+                    <th scope="col">Store</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col" style="width:1rem"><i title="Editar"
+                            class="text-muted text-size-10 fas fas fa-edit"></i></th>
+                    <th scope="col" style="width:1rem"><i title="Vista previa"
+                            class="text-muted text-size-10 fas fa-eye"></i></th>
+                    <th scope="col" style="width:1rem"><i title="Eliminar"
+                            class="text-muted text-size-10 fas fa-eraser"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of reportes; let i = index">
+                    <td>{{item.proyecto}}</td>
+                    <td>{{item.nombre}}</td>
+                    <td>
+                        <div [innerHTML]="item.descripcion | ohSafeHtml"></div>
+                    </td>
+                    <td>{{item.nombre_store}}</td>
+                    <td>
+                        <i *ngIf="item.estado == '1'" class="fas fa-toggle-on text-success text-size-15"
+                            title="Activo"></i>
+                        <i *ngIf="item.estado == '0'" class="fas fa-toggle-off text-danger text-size-15"
+                            title="Inactivo"></i>
+                    </td>
+                    <td>
+                        <a class="text-size-10 text-success" [routerLink]="['edit', item.reporte_id]"><i
+                                class="fas fas fa-edit"></i></a>
+                    </td>
+                    <td>
+                        <a (click)="vistaPrevia(item); $event.preventDefault();" href="#"
+                            class="text-size-10 text-info"><i class="fas fa-eye"></i></a>
+                    </td>
+                    <td>
+                        <a (click)="eliminarConfirmar(item.reporte_id); $event.preventDefault();" href="#"
+                            class="text-size-10 text-danger "><i class="fas fa-eraser"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<ng-template #filterWindow let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">
+            <i aria-hidden="true" class="fa fa-filter"></i> Filtrar</h4>
+        <button type="button" class="close" aria-label="Close" (click)="c('Close')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Estado</label>
+                <div class="col-sm-10">
+                    <div class="btn-group btn-group-toggle" style="display: block;" ngbRadioGroup name="radioStates"
+                        [(ngModel)]="filter.field.estado.value">
+                        <label ngbButtonLabel class="btn-outline-primary" title="Todos">
+                            <input ngbButton type="radio" [value]="null"> Todos
+                        </label>
+                        <label ngbButtonLabel class="btn-outline-success" title="Pendiente">
+                            <input ngbButton type="radio" [value]="1"> <i class="fas fa-toggle-on"></i> &nbsp;<span
+                                class="vistaBC">Activo</span>
+                        </label>
+                        <label ngbButtonLabel class="btn-outline-danger" title="Confirmado">
+                            <input ngbButton type="radio" [value]="0"> <i class="fas fa-toggle-off"></i> &nbsp;<span
+                                class="vistaBC">Inactivo</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Nombre</label>
+                <div class="col-sm-10">
+                    <input name="inp_nombre" class="form-control" [(ngModel)]="filter.field.nombre.value" type="text"
+                        [(placeholder)]="filter.field.nombre.label">
+                    <small>Puede usar el % para buscar</small>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Nombre de Store</label>
+                <div class="col-sm-10">
+                    <input name="inp_nombre_store" class="form-control" [(ngModel)]="filter.field.nombre_store.value"
+                        type="text" [(placeholder)]="filter.field.nombre_store.label">
+                    <small>Puede usar el % para buscar</small>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="c('cancel')">
+            <i aria-hidden="true" class="fa fa-close"></i> Cancelar</button>
+        <button type="submit" class="btn btn-outline-primary" (click)="c('doFilter')">
+            <i aria-hidden="true" class="fa fa-filter"></i> Filtrar</button>
+    </div>
+</ng-template>
+<ng-template #modalVistaPrevia let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Store de {{itemReporte.nombre}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <ngb-tabset activeId="tab-0" type="tabs" justify="start" orientation="horizontal">
+            <ngb-tab [disabled]="false" id="tab-0">
+                <ng-template ngbTabTitle>
+                    <span class="mr-1">
+                        <i title="" class="fas fa-database"></i>
+                    </span>
+                    <span>Store procedure</span>
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <div style="position: relative;">
+                        <button type="button" class="btn btn-sm btn-default mx-2" (click)="copiarStore()"
+                            style="position: absolute; right: 0px; top: 7px;"><i class="far fa-copy"></i></button>
+                        <textarea id="inp_preview_insert" [innerHTML]="itemReporte.vistaPrevia"
+                            style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                        <textarea [ohHighlight]="itemReporte.vistaPrevia" [options]="{}" [lang]="'sql'"></textarea>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab [disabled]="false" id="tab-1">
+                <ng-template ngbTabTitle>
+                    <span class="mr-1">
+                        <i title="" class="fas fa-code"></i>
+                    </span>
+                    <span>SQL Insert</span>
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <div style="position: relative;">
+                        <button type="button" class="btn btn-sm btn-default mx-2" (click)="copiarSQL()"
+                            style="position: absolute; right: 0px; top: 7px;"><i class="far fa-copy"></i></button>
+                        <textarea id="inp_preview_sql" [innerHTML]="itemReporte.vistaSQL"
+                            style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                        <textarea [ohHighlight]="itemReporte.vistaSQL" [options]="{}" [lang]="'sql'"></textarea>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab [disabled]="false" id="tab-2">
+                <ng-template ngbTabTitle>
+                    <span class="mr-1">
+                        <i title="" class="fas fa-code"></i>
+                    </span>
+                    <span>SQL Update</span>
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <div style="position: relative;">
+                        <button type="button" class="btn btn-sm btn-default mx-2" (click)="copiarSQLUpdate()"
+                            style="position: absolute; right: 0px; top: 7px;"><i class="far fa-copy"></i></button>
+                        <textarea id="inp_preview_sql_update" [innerHTML]="itemReporte.vistaSQLUpdate"
+                            style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                        <textarea [ohHighlight]="itemReporte.vistaSQLUpdate" [options]="{}" [lang]="'sql'"></textarea>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cerrar</button>
+    </div>
+</ng-template>

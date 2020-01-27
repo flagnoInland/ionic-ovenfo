@@ -1,0 +1,87 @@
+.oh_viewPhotos {
+    border: 0.3rem solid #e2e2e2;
+    padding: 0.2rem;
+    overflow: auto;
+}
+
+.oh_viewLane {
+    width: -webkit-max-content;
+    width: max-content;
+    width: -moz-max-content;
+    padding-top: 0.4rem;
+    display: flex!important; 
+}
+
+@media print {
+
+    .oh_viewLane {
+        width: 100%;
+        display: block!important;
+    }
+
+}
+
+
+.oh_viewContentPhoto {
+    position: relative;
+    display: inline-block;
+    /*max-height: 6rem;*/
+    margin-right: 0.5rem;
+    max-width: 6rem;
+}
+
+.oh_viewPhoto {
+    width: 100%;
+    border: solid 1px #b5b5b5;
+    border-radius: 0.2rem;
+}
+
+.oh_viewPhotoOnCharge {
+    opacity: 0.75;
+}
+
+.oh_viewDelete {
+    position: absolute;
+    top: -0.7rem;
+    right: -0.4rem;
+    cursor: pointer;
+    padding: 0rem 0rem 0.3rem 0.3rem;
+}
+
+.oh_dark-modal .modal-content {
+    background-color: #292b2c;
+    color: white;
+}
+
+.oh_dark-modal .close {
+    color: white;
+}
+
+.oh_text-size-10 {
+    font-size: 1.0rem;
+}
+
+.oh_btn-link-buttom {
+    position: relative;
+}
+
+.oh_btn-link-buttom .badge {
+    position: absolute;
+    top: -0.7rem;
+    right: -0.7rem;
+    font-size: 0.8rem;
+}
+
+.oh_charning {
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    border-bottom: 3px solid #39e239;
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(57, 226, 57);
+    background-image: linear-gradient(45deg,rgba(255,255,255,.40) 15%,transparent 15%,transparent 50%,rgba(255,255,255,.45) 50%,rgba(255,255,255,.45) 75%,transparent 75%);
+    animation: 1s linear infinite progress-bar-stripes;
+}

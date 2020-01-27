@@ -1,0 +1,59 @@
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label>Id</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.value" placeholder="Nombre">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Ícono (De
+                    <a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank">Font Awesome v5</a>)</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.icon" placeholder="Ícono" (keyup)="validarIcono($event)">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Enlace</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.url" placeholder="Link">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Ruteo</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.router" placeholder="Ruteo">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Vínculo</label>
+                <select class="form-control" [(ngModel)]="item.config.target" required>
+                    <option *ngFor="let target of targets" [value]="target.type">{{target.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label>Color de texto</label>
+                <select class="form-control" name="pColorTexto" [(ngModel)]="item.config.colorTexto" required>
+                    <option *ngFor="let color of colorTexto" [value]="color.class">{{color.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label>Tamaño de texto</label>
+                <select class="form-control" name="pTamanoTexto" [(ngModel)]="item.config.tamanoTexto" required>
+                    <option *ngFor="let tamano of tamanoTexto" [value]="tamano.class">{{tamano.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

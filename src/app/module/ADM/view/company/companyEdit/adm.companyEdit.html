@@ -1,0 +1,395 @@
+<div class="container-fluid">
+    <div class="card bg-white">
+        <div class="card-header">
+            <span>Empresa</span>
+        </div>
+        <div class="card-body">
+            <form #frmEmpresa="ngForm" class="form-enable">
+                <div class="form-group row">
+                    <label class="col-form-label col-3">
+                        <span>Unidad de Negocio*</span>
+                    </label>
+                    <div class="col-9">
+                        <select class="form-control" [(ngModel)]="item.unidad_negocio_id" name="unidad_negocio" required="true" (change)="unidad_negocio_selected()">
+                            <ng-template ngFor let-opcion [ngForOf]="acs.data.unidad_negocio" let-i="index" [ngForTrackBy]="trackByFn">
+                                <option [value]="opcion.unidad_negocio_id">{{opcion.nombre}}</option>
+                            </ng-template>
+                        </select>
+                    </div>
+                </div>
+                <!------------------------------------------------------------>
+                <div class="form-group row">
+                    <label class="col-form-label col-3">
+                        <span>Tipo Documento*</span>
+                    </label>
+                    <div class="col-9">
+                        <select class="form-control" [(ngModel)]="item.tipo_documento" name="tipo_documento" required="true">
+                            <ng-template ngFor let-opcion [ngForOf]="tipo_doc_un" let-i="index" [ngForTrackBy]="trackByFn">
+                                <option [value]="opcion.catalogo_id">{{opcion.descripcion}}</option>
+                            </ng-template>
+                        </select>
+                    </div>
+                </div>
+                <!------------------------------------------------------------>
+                <div class="form-group row">
+                    <label class="col-form-label col-3">
+                        <span>Documento</span>
+                    </label>
+                    <div class="col-9">
+                        <input #inp_documento="ngModel" class="form-control" name="inp_documento" [(ngModel)]="item.documento" type="text" required="true" maxlength="20">
+                        <div *ngIf="inp_documento.invalid && (inp_documento.dirty || inp_documento.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_documento.errors.required">El campo es requerido.</li>
+                                <li *ngIf="inp_documento.errors.maxlength">El campo debe tener como máximo 20 caracteres.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!------------------------------------------------------------>
+                <div class="form-group row">
+                    <label class="col-form-label col-3">
+                        <span>Razón Social</span>
+                    </label>
+                    <div class="col-9">
+                        <input #inp_razon_social="ngModel" class="form-control" name="inp_razon_social" [(ngModel)]="item.razon_social" type="text" required="true" maxlength="100">
+                        <div *ngIf="inp_razon_social.invalid && (inp_razon_social.dirty || inp_razon_social.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_razon_social.errors.required">El campo es requerido.</li>
+                                <li *ngIf="inp_razon_social.errors.maxlength">El campo debe tener como máximo 100 caracteres.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!------------------------------------------------------------>
+                <div class="form-group row">
+                    <label class="col-form-label col-3">
+                        <span>Razón Comercial</span>
+                    </label>
+                    <div class="col-9">
+                        <input #inp_razon_comercial="ngModel" class="form-control" name="inp_razon_comercial" [(ngModel)]="item.razon_comercial" type="text" required="false" maxlength="100">
+                    </div>
+                </div>
+                <!------------------------------------------------------------>
+                <div class="form-group row">
+                    <label class="col-form-label col-3">
+                        <span>Telefono</span>
+                    </label>
+                    <div class="col-9">
+                        <input #inp_telefono="ngModel" class="form-control" name="inp_telefono" [(ngModel)]="item.telefono" type="text" required="false" maxlength="200">
+                    </div>
+                </div>
+                <!------------------------------------------------------------>
+                <div class="form-group row">
+                    <label class="col-form-label col-3">
+                        <span>Correo</span>
+                    </label>
+                    <div class="col-9">
+                        <input #inp_correo="ngModel" class="form-control" name="inp_correo" [(ngModel)]="item.correo" type="text" required="false" maxlength="200">
+                    </div>
+                </div>
+                <!------------------------------------------------------------>
+                <div class="form-group row">
+                    <label class="col-form-label col-3">
+                        <span>Abreviatura</span>
+                    </label>
+                    <div class="col-9">
+                        <input #inp_abreviatura="ngModel" class="form-control" name="inp_abreviatura" [(ngModel)]="item.abreviatura" type="text" required="false" maxlength="100">
+                    </div>
+                </div>
+                <!------------------------------------------------------------>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3">
+                        Estado
+                    </label>
+                    <div class="col-sm-9">
+                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_estado" #inp_estado="ngModel" required="true" [(ngModel)]="item.estado">
+                            <label ngbButtonLabel class="btn-outline-success">
+                                <input ngbButton type="radio" [value]="'1'"> Activo
+                            </label>
+                            <label ngbButtonLabel class="btn-outline-danger">
+                                <input ngbButton type="radio" [value]="'0'"> Inactivo
+                            </label>
+                        </div>
+                        <div *ngIf="inp_estado.invalid && (inp_estado.dirty || inp_estado.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_estado.errors.required">El campo es requerido.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!------------------------------------------------------------>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3">
+                        Suspendido
+                    </label>
+                    <div class="col-sm-9">
+                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_suspendido" #inp_suspendido="ngModel" [(ngModel)]="item.suspendido">
+
+                            <label ngbButtonLabel class="btn-outline-success">
+                                <input ngbButton type="radio" [value]="'0'"> Disponible
+                            </label>
+                            <label ngbButtonLabel class="btn-outline-danger">
+                                <input ngbButton type="radio" [value]="'1'"> Suspendido
+                            </label>
+                        </div>
+                        <div *ngIf="inp_suspendido.invalid && (inp_suspendido.dirty || inp_suspendido.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_suspendido.errors.required">El campo es requerido.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-3">
+                        <span>Dirección</span>
+                    </label>
+                    <div class="col-sm-9">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover bg-white">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="width:1rem"><i title="Eliminar" class="text-muted text-size-10 far fa-times-circle"></i></th>
+                                        <th scope="col" style="width:1rem"><i title="Modificar" class="text-muted text-size-10 far fa-edit"></i></th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col" style="min-width: 150px;">Nombre</th>
+                                        <th scope="col" style="min-width: 200px;">Dirección</th>
+                                        <th scope="col">Teléfono</th>
+                                        <th scope="col">Correo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-template ngFor let-direccion [ngForOf]="direcciones" let-i="index" [ngForTrackBy]="trackByFn">
+                                        <ng-template [ngIf]="direccion.action != 'D'">
+                                            <tr>
+                                                <td>
+                                                    <ng-template [ngIf]="!direccion.used">
+                                                        <a (click)="direccionEliminar(i); $event.preventDefault();" href="#" class="text-size-10 text-danger"><i class="far fa-times-circle"></i></a>
+                                                    </ng-template>
+                                                </td>
+                                                <td>
+                                                    <a (click)="direccionEditar(i); $event.preventDefault();" href="#" class="text-size-10 text-success"><i class="far fa-edit"></i></a>
+                                                </td>
+                                                <td>{{direccion.tipo_direccion}}</td>
+                                                <td>{{direccion.nombre_lugar}}</td>
+                                                <td>{{direccion.direccion}}</td>
+                                                <td>{{direccion.telefono}}</td>
+                                                <td>{{direccion.correo}}</td>
+                                            </tr>
+                                        </ng-template>
+                                    </ng-template>
+                                </tbody>
+                            </table>
+                        </div>
+                        <a class="text-primary text-size-15" href="#" (click)="abrirModalDireccion(); $event.preventDefault();">
+                            <i class="fas fa-plus-square"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-3">
+                        <span>Contacto</span>
+                    </label>
+                    <div class="col-sm-9">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover bg-white">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="width:1rem"><i title="Eliminar" class="text-muted text-size-10 far fa-times-circle"></i></th>
+                                        <th scope="col" style="width:1rem"><i title="Modificar" class="text-muted text-size-10 far fa-edit"></i></th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Nombres</th>
+                                        <th scope="col">Ap Paterno</th>
+                                        <th scope="col">Ap Materno</th>
+                                        <th scope="col">Teléfono</th>
+                                        <th scope="col">Correo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let contacto of contactos; let i = index">
+                                        <td>
+                                            <a (click)="contactoEliminar(i); $event.preventDefault();" href="#" class="text-size-10 text-danger">
+                                                <i class="far fa-times-circle"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a (click)="contactoEditar(i); $event.preventDefault();" href="#" class="text-size-10 text-success">
+                                                <i class="far fa-edit"></i>
+                                            </a>
+                                        </td>
+                                        <td>{{contacto.tipo_contacto}}</td>
+                                        <td>{{contacto.nombres}}</td>
+                                        <td>{{contacto.apellido_paterno}}</td>
+                                        <td>{{contacto.apellido_materno}}</td>
+                                        <td>{{contacto.telefono}}</td>
+                                        <td>{{contacto.correo}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <a class="text-primary text-size-15" href="#" (click)="abrirModalContacto(); $event.preventDefault();">
+                            <i class="fas fa-plus-square"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3">Roles de empresa</label>
+                    <div class="col-sm-9">
+                        <div style="max-height: 300px; overflow: auto">
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr *ngFor="let rol of roles_empresa; let i = index">
+                                        <th scope="row">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" [(ngModel)]="rol.seleccionado" name="rolSeleccionado_{{rol.catalogo_id}}" id="rolSeleccionado_{{rol.catalogo_id}}">
+                                                <label class="custom-control-label" for="rolSeleccionado_{{rol.catalogo_id}}">{{rol.descripcion}}</label>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-3">Configuraciones</label>
+                    <div class="col-sm-9">
+                        <div style="max-height: 300px; overflow: auto">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Tipo de configuración</th>
+                                        <th scope="col">Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let config of configuraciones; let i = index">
+                                        <th scope="row">{{config.descripcion}}</th>
+                                        <th>
+                                            <input name="inp_valor_{{i}}" type="text" class="form-control" [(ngModel)]="config.valor" [disabled]="config.variable_3 == 1">
+                                        </th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer">
+            <button (click)="gesempresaEditar()" [disabled]="frmEmpresa.invalid" class="btn btn-success"><i class="far fa-hand-pointer mr-1"></i>Grabar</button>
+        </div>
+    </div>
+</div>
+<ng-template #modalContacto let-c="close" let-d="dismiss">
+    <div class="modal-header">Nuevo Contacto</div>
+    <form #frmContacto="ngForm" class="form-enable">
+        <div class="modal-body tis-card-sm">
+            <div class="form-group row">
+                <label class="col-form-label col-3">
+                    <span>Tipo de contacto</span>
+                </label>
+                <div class="col-9">
+                    <select class="form-control" [(ngModel)]="contacto.tipo_contacto_id" name="inp_tipo_contacto_id" required="true">
+                        <ng-template ngFor let-option [ngForOf]="acs.data.catalogo.tipo_contacto" [ngForTrackBy]="trackById">
+                            <option [value]="option.catalogo_id">{{option.descripcion}}</option>
+                        </ng-template>
+                    </select>
+                </div>
+            </div>
+            <!---------------------------->
+            <div class="form-group row">
+                <label class="col-form-label col-3">
+                    <span>Nombres</span>
+                </label>
+                <div class="col-9">
+                    <input #contacto_nombres="ngModel" class="form-control" name="contacto_nombres" [(ngModel)]="contacto.nombres" type="text" required="true" maxlength="100">
+                </div>
+            </div>
+            <!---------------------------->
+            <div class="form-group row">
+                <label class="col-form-label col-3">
+                    <span>Apellido Paterno</span>
+                </label>
+                <div class="col-9">
+                    <input #contacto_apPaterno="ngModel" class="form-control" name="contacto_apPaterno" [(ngModel)]="contacto.apellido_paterno" type="text" required="true" maxlength="100">
+                </div>
+            </div>
+            <!---------------------------->
+            <div class="form-group row">
+                <label class="col-form-label col-3">
+                    <span>Apellido Materno</span>
+                </label>
+                <div class="col-9">
+                    <input #contacto_apMaterno="ngModel" class="form-control" name="contacto_apMaterno" [(ngModel)]="contacto.apellido_materno" type="text" required="false" maxlength="100">
+                </div>
+            </div>
+            <!---------------------------->
+            <div class="form-group row">
+                <label class="col-form-label col-3">
+                    <span>Telefono</span>
+                </label>
+                <div class="col-9">
+                    <input #contacto_telefono="ngModel" class="form-control" name="contacto_telefono" [(ngModel)]="contacto.telefono" type="tel" required="false" maxlength="100">
+                </div>
+            </div>
+            <!---------------------------->
+            <div class="form-group row">
+                <label class="col-form-label col-3">
+                    <span>Correo</span>
+                </label>
+                <div class="col-9">
+                    <input #contacto_correo="ngModel" class="form-control" name="contacto_correo" [(ngModel)]="contacto.correo" type="email" required="false" maxlength="100">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" [disabled]="frmContacto.invalid" class="btn btn-outline-success mr-1" (click)="c('Save')">Guardar</button>
+            <button type="button" class="btn btn-outline-dark mr-1" (click)="c('Close')">Cerrar</button>
+        </div>
+    </form>
+</ng-template>
+<ng-template #modalDireccion let-c="close" let-d="dismiss">
+    <form #frmDireccion="ngForm" class="form-enable d-flex flex-column" style="overflow: hidden;">
+        <div class="modal-header">
+            <span class="h5 m-0"><i class="fas fa-map-marked-alt mr-1"></i>Dirección</span>
+            <a href="#" class="close" aria-label="Close" (click)="$event.preventDefault(); d('Cross click')"><i class="fas fa-times fa-xs"></i></a>
+        </div>
+        <div class="modal-body tis-card-sm">
+            <div class="form-group row">
+                <label class="col-form-label col-12 col-sm-3">
+                    <span>Tipo de dirección</span>
+                </label>
+                <div class="col-12 col-sm-9">
+                    <select class="form-control" [(ngModel)]="direccion.tipo_direccion_id" name="tipo_direccion_id" [value]="direccion.tipo_direccion_id" required="true">
+                        <ng-template ngFor let-option [ngForOf]="acs.data.catalogo.tipo_direccion" [ngForTrackBy]="trackById">
+                            <option [value]="option.catalogo_id">{{option.descripcion}}</option>
+                        </ng-template>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-12 col-sm-3">
+                        <span>Teléfono</span>
+                    </label>
+                <div class="col-12 col-sm-9">
+                    <input #direccion_telefono="ngModel" class="form-control" name="direccion_telefono" [(ngModel)]="direccion.telefono" type="text" required="false" maxlength="100">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-12 col-sm-3">
+                        <span>Correo</span>
+                    </label>
+                <div class="col-12 col-sm-9">
+                    <input #direccion_correo="ngModel" class="form-control" name="direccion_correo" [(ngModel)]="direccion.correo" type="text" required="false" maxlength="100">
+                </div>
+            </div>
+            <shi-ubiquitousRegister [(obj_ubigeo)]="direccion" binding_select="true" [form]="frmDireccion" type="list"></shi-ubiquitousRegister>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" [disabled]="frmDireccion.invalid" class="btn btn-outline-success mr-1" (click)="c('Save')">Guardar</button>
+            <button type="button" class="btn btn-outline-dark mr-1" (click)="c('Close')">Cerrar</button>
+        </div>
+    </form>
+</ng-template>

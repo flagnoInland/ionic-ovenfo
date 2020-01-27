@@ -1,0 +1,67 @@
+<div class="d-flex flex-wrap justify-content-between">
+    <div class="pb-2 ml-3 mr-2 d-flex flex-wrap justify-content-start flex-grow-1">
+        <div class="btn-group" style="display: inline-block">
+            <button class="btn btn-outline-info btn-sm oh_filter_contentAsterisk" type="button" (click)="openFilter()">
+                <i aria-hidden="true" class="fa fa-filter"></i>
+                <span class="oh_filter_viewA oh_filter_asterisk">
+                    <ng-template [ngIf]="currentSize > 0">
+                        <i aria-hidden="true" class="fas fa-asterisk"></i>
+                    </ng-template>
+                </span>
+            </button>
+            <button class="btn btn-outline-info btn-sm" type="button" (click)="refresh()">
+                <i aria-hidden="true" class="fas fa-redo"></i>
+            </button>
+            <ng-template [ngIf]="currentSize > 0">
+                <button class="btn btn-outline-danger btn-sm" type="button" (click)="filterEraseAll()">
+                    <i aria-hidden="true" class="fas fa-eraser"></i>
+                </button>
+            </ng-template>
+        </div>
+        <div *ngIf="filter" class="btn-group">
+            <span class="oh_filter_viewBC" *ngFor="let item of filter.fields | ohListObject">
+                <ng-template #popDetail>
+                    <table class="table table-striped table-bordered table-hover bg-white">
+                        <thead>
+                            <tr>
+                                <th>Valor</th>
+                                <th style="width: 1rem">
+                                    <i (click)="cleanItem(item.key, $event)" aria-hidden="true"
+                                        class="fas fa-eraser c-pointer text-danger"></i>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let element of item.object.value; let i = index">
+                                <td>
+                                    <span *ngIf="item.object.value_desc">{{element[item.object.value_desc]}}</span>
+            <span *ngIf="!item.object.value_desc">{{element.value}}</span>
+            </td>
+            <td>
+                <i (click)="filterEraseItem(item.object, i)" aria-hidden="true" class="fas fa-eraser c-pointer text-danger"></i>
+            </td>
+            </tr>
+            </tbody>
+            </table>
+            </ng-template>
+            <ng-template [ngIf]="isVisible(item.object)">
+                <div class="btn btn-outline-info btn-sm" [ngClass]="{'oh_filter_btnContent' : !item.object.closeFilter, 'oh_filter_btnContentClose' : item.object.closeFilter}" [attr.disabled]="item.object.disabledFilter == true ? 'disabled' : null">
+                    <span>{{item.object.label?(item.object.label+': '):''}}</span>
+                    <span [hidden]="!(!item.object.type || (item.object.type && item.object.type==''))">{{(item.object.descValue)?item.object.descValue:item.object.value}}</span>
+                    <span [hidden]="item.object.type!='list'" class="mr-1">
+                            <i [ngbPopover]="popDetail" placement="bottom" popoverTitle="Lista"
+                                class="fas fa-list-ol"></i>
+                        </span>
+                    <span [hidden]="item.object.type!='fechaRango'">[{{item.object.initValue | date: 'dd/MM/yyyy'}}-{{item.object.endValue | date: 'dd/MM/yyyy'}}]</span>
+                    <span [hidden]="item.object.type!='decimalRango'">[{{item.object.initValue}}-{{item.object.endValue}}]</span>
+                    <span [hidden]="item.object.type!='fecha_tiempo'">[{{item.object.value}}]</span>
+                    <ng-template [ngIf]="item.object.closeFilter && !item.object.disabledFilter">
+                        <i (click)="$event.preventDefault(); filterErase(item.key)" aria-hidden="true" class="fas fa-eraser c-pointer text-danger ml-1"></i>
+                    </ng-template>
+                </div>
+            </ng-template>
+            </span>
+        </div>
+    </div>
+    <pagin *ngIf="obj_pagin != null" class="d-flex flex-wrap justify-content-end ml-auto" [length]="length" [obj_pagin]="obj_pagin" (list)="list.emit(); listPagin()" (listPagin)="listPagin()"></pagin>
+</div>

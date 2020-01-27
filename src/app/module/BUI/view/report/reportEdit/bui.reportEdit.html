@@ -1,0 +1,355 @@
+<div class="container-fluid tis-cards-mt-2">
+	<form #frmRegister="ngForm" class="form-enable" (ngSubmit)="register(frmRegister)">
+		<div class="card">
+			<div class="card-header"><i class="fas fa-plus-circle"></i> Nuevo Reporte</div>
+			<div class="card-body">
+                <div class="row">
+					<div class="col-6 col-sm-12">
+						<div class="form-group row">
+							<label class="col-form-label col-sm-4">
+								Proyecto
+							</label>
+							<div class="col-sm-8">
+                                <select #inp_tipo_documento="ngModel" name="inp_tipo_documento" class="form-control" [(ngModel)]="item.menu_id" required="true">
+                                    <option *ngFor="let proyecto of bcs.item.proyectos" [value]="proyecto.menu_id">{{proyecto.titulo}}</option>
+                                </select>
+                                <div *ngIf="inp_tipo_documento.invalid && (inp_tipo_documento.dirty || inp_tipo_documento.touched)" class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_tipo_documento.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-sm-12">
+						<div class="form-group row">
+							<label class="col-form-label col-sm-4">
+								Nombre
+							</label>
+							<div class="col-sm-8">
+								<input #inp_nombre="ngModel" name="inp_nombre" type="text" class="form-control" [(ngModel)]="item.nombre" required="true">
+								<div *ngIf="inp_nombre.invalid && (inp_nombre.dirty || inp_nombre.touched)" class="alert alert-danger alert-form">
+									<ul>
+										<li *ngIf="inp_nombre.errors.required">El campo es requerido.</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-sm-12">
+						<div class="form-group row">
+							<label class="col-form-label col-sm-4">
+								Descripción
+							</label>
+							<div class="col-sm-8">
+								<angular-tinymce formTinymce #inp_descripcion="ngModel" name="inp_descripcion" [(ngModel)]='item.descripcion' [settings]='descripConfig' required="true"></angular-tinymce>
+                                <div *ngIf="inp_descripcion.invalid && (inp_descripcion.dirty || inp_descripcion.touched)" class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_descripcion.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-sm-12">
+						<div class="form-group row">
+							<label class="col-form-label col-sm-4">
+                                Estado
+							</label>
+							<div class="col-sm-8">
+                                <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_estado" #inp_estado="ngModel" [(ngModel)]="item.estado">
+                                    <label ngbButtonLabel class="btn-outline-success">
+                                        <input ngbButton type="radio" [value]="'1'"> Activo
+                                    </label>
+                                    <label ngbButtonLabel class="btn-outline-danger">
+                                        <input ngbButton type="radio" [value]="'0'"> Inactivo
+                                    </label>
+                                </div>
+                                <div *ngIf="inp_estado.invalid && (inp_estado.dirty || inp_estado.touched)" class="alert alert-danger alert-form">
+                                    <ul>
+                                        <li *ngIf="inp_estado.errors.required">El campo es requerido.</li>
+                                    </ul>
+                                </div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-sm-12">
+						<div class="form-group row">
+							<label class="col-form-label col-sm-4">
+								Nombre de Store
+							</label>
+							<div class="col-sm-8">
+								<input #inp_nombre_store="ngModel" name="inp_nombre_store" type="text" class="form-control" [(ngModel)]="item.nombre_store" required="true">
+								<div *ngIf="inp_nombre_store.invalid && (inp_nombre_store.dirty || inp_nombre_store.touched)" class="alert alert-danger alert-form">
+									<ul>
+										<li *ngIf="inp_nombre_store.errors.required">El campo es requerido.</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-sm-12">
+						<div class="form-group row">
+							<label class="col-form-label col-sm-4">
+								Parámetros
+							</label>
+							<div class="col-sm-8">
+								<table class="table table-striped table-hover bg-white">
+									<thead>
+										<tr>
+											<th scope="col">&nbsp;</th>
+											<th scope="col">Etiqueta</th>
+											<th scope="col">Parametro</th>
+											<th scope="col">Tipo</th>
+											<th scope="col">Longitud máxima</th>
+											<th scope="col">Obligatorio</th>
+											<th scope="col" style="width:1rem"><i title="Eliminar" class="text-muted text-size-10 far fa-times-circle"></i></th>
+											<th scope="col" style="width:1rem"><i title="Modificar" class="text-muted text-size-10 far fa-edit"></i></th>
+										</tr>
+									</thead>
+									<tbody dragula="OPCIONES" [(dragulaModel)]="item.parametros">
+										<tr *ngFor="let parametro of item.parametros; let i = index">
+                                            <td><a style="cursor: pointer" href="#" class="handle"><i class="fas fa-arrows-alt-v"></i></a></td>
+											<td>{{parametro.etiqueta}}</td>
+											<td>
+												<span *ngIf="parametro.tipo == '5'">
+													@pd_{{parametro.parametro}}_desde<br>
+													@pd_{{parametro.parametro}}_hasta
+												</span>
+												<span *ngIf="parametro.tipo != '5'">
+													@pd_{{parametro.parametro}}
+												</span>
+											</td>
+											<td>{{parametro.tipo_nombre}}</td>
+											<td>{{parametro.longitudMaxima}}</td>
+											<td>
+												<span *ngIf="parametro.obligatorio == '0'" class="badge badge-pill">No</span>
+												<span *ngIf="parametro.obligatorio == '1'" class="badge badge-pill">Si</span>
+											</td>
+											<td>
+												<a (click)="parametroEliminar(i); $event.preventDefault();" href="#" class="text-size-10 text-danger"><i class="far fa-times-circle"></i></a>
+											</td>
+											<td>
+												<a (click)="parametroEditar(i); $event.preventDefault();" href="#" class="text-size-10 text-success "><i class="far fa-edit"></i></a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<a class="btn btn-outline-success" (click)="parametroNuevo(); $event.preventDefault();"><i class="far fa-plus-square"></i></a>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-sm-12">
+						<div class="form-group row">
+							<label class="col-form-label col-sm-4">
+								Parámetros de sistema
+							</label>
+							<div class="col-sm-8">
+								<table class="table table-striped table-hover bg-white">
+									<thead>
+										<tr>
+											<th scope="col">Variable</th>
+											<th scope="col">Parametro</th>
+											<th scope="col" style="width:1rem"><i title="Seelccionar" class="text-muted text-size-10 far fa-check-square"></i></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let parametroFijo of parametrosFijos; let i = index">
+											<td>{{parametroFijo.etiqueta}}</td>
+											<td>@{{parametroFijo.variable}}</td>
+											<td>
+												<div class="custom-control custom-checkbox">
+													<input type="checkbox" class="custom-control-input" id="paramFijo_{{i}}"
+														name="paramFijo_{{i}}" [(ngModel)]="parametroFijo.seleccionado">
+													<label class="custom-control-label" for="paramFijo_{{i}}">&nbsp;</label>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-sm-12">
+						<div class="form-group row">
+							<label class="col-form-label col-sm-4">
+								{{rolesSeleccionados}} Roles permitidos
+							</label>
+							<div class="col-sm-8">
+								<div style="max-height: 300px; overflow: auto">
+									<table class="table">
+										<tbody>
+											<tr *ngFor="let rol of roles; let i = index">
+											<th scope="row">
+												<div class="custom-control custom-checkbox">
+												<input type="checkbox" class="custom-control-input" [(ngModel)]="rol.seleccionado" name="rolSeleccionado_{{rol.rol_id}}" id="rolSeleccionado_{{rol.rol_id}}" (onChange)="selects()">
+												<label class="custom-control-label" for="rolSeleccionado_{{rol.rol_id}}">{{rol.nombre}}</label>
+												</div>
+											</th>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card bg-light botoneraCard">
+			<div class="card-body">
+				<button type="submit" class="btn btn-primary mr-2" [disabled]="frmRegister.invalid"><i class="far fa-save"></i> Grabar</button>
+				<button type="button" class="btn btn-outline-secondary" (click)="frmRegister.resetForm({}); clean()"><i class="fas fa-eraser"></i> Limpiar</button>
+			</div>
+		</div>
+	</form>
+</div>
+<ng-template #modalParametro let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title"><i class="fas fa-code-branch"></i> Parametro</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form #frmParametro="ngForm" class="form-enable">
+        <div class="modal-body tis-card-sm">
+            <div class="row">
+                <div class="col-6 col-sm-12">
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-4">
+                            Etiqueta
+                        </label>
+                        <div class="col-sm-8">
+                            <input #inp_etiqueta="ngModel" name="inp_etiqueta" type="text" class="form-control" [(ngModel)]="itemParam.etiqueta" placeholder="Etiqueta" required="true">
+                            <div *ngIf="inp_etiqueta.invalid && (inp_etiqueta.dirty || inp_etiqueta.touched)" class="alert alert-danger alert-form">
+                                <ul>
+                                    <li *ngIf="inp_etiqueta.errors.required">El campo es requerido.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-12">
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-4">
+                            Parámetro
+                        </label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">@pd_</span>
+                                </div>
+                                <input #inp_parametro="ngModel" name="inp_parametro" type="text" class="form-control" [(ngModel)]="itemParam.parametro" [ohInputFormat]="'lower'" placeholder="Parametro" required="true">
+                                <div class="input-group-append" *ngIf="itemParam.tipo == 5">
+                                    <span class="input-group-text">_desde</span>
+                                </div>
+                            </div>
+                            <div class="input-group" *ngIf="itemParam.tipo == 5">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">@pd_</span>
+                                </div>
+                                <input name="inp_parametro_hasta" type="text" class="form-control" [(ngModel)]="itemParam.parametro" [ohInputFormat]="'lower'" placeholder="Parametro">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">_hasta</span>
+                                </div>
+                            </div>
+                            <div *ngIf="inp_parametro.invalid && (inp_parametro.dirty || inp_parametro.touched)" class="alert alert-danger alert-form">
+                                <ul>
+                                    <li *ngIf="inp_parametro.errors.required">El campo es requerido.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-12">
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-4">
+                            Tipo
+                        </label>
+                        <div class="col-sm-8">
+                            <select #inp_tipo="ngModel" name="inp_tipo" class="form-control" [(ngModel)]="itemParam.tipo" placeholder="Tipo" required="true">
+                                <option *ngFor="let tipo of tipoParam" [value]="tipo.id">{{tipo.value}}</option>
+                            </select>
+                            <div *ngIf="inp_tipo.invalid && (inp_tipo.dirty || inp_tipo.touched)" class="alert alert-danger alert-form">
+                                <ul>
+                                    <li *ngIf="inp_tipo.errors.required">El campo es requerido.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-12" *ngIf="itemParam.tipo == 7">
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-4">
+                            Tipo de búsqueda
+                        </label>
+                        <div class="col-sm-8">
+                            <input #inp_tipo_busqueda="ngModel" name="inp_tipo_busqueda" type="text" class="form-control" [(ngModel)]="itemParam.tipo_busqueda" [ohInputFormat]="'upper'" placeholder="Tipo de búsqueda" required="true">
+                            <div *ngIf="inp_tipo_busqueda.invalid && (inp_tipo_busqueda.dirty || inp_tipo_busqueda.touched)" class="alert alert-danger alert-form">
+                                <ul>
+                                    <li *ngIf="inp_tipo_busqueda.errors.required">El campo es requerido.</li>
+                                </ul>
+                            </div>
+                            <div class="alert alert-primary mt-2" role="alert">Ejemplo: <code>TCO.CLIENTE</code> - Implementar en <code>ges.reporte_busqueda_listar</code></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-12" *ngIf="itemParam.tipo == 1">
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-4">
+                            Longitud Máxima
+                        </label>
+                        <div class="col-sm-8">
+                            <input #inp_longitudMaxima="ngModel" name="inp_longitudMaxima" type="number" class="form-control" [(ngModel)]="itemParam.longitudMaxima" placeholder="Longitud máxima" required="true">
+                            <div *ngIf="inp_longitudMaxima.invalid && (inp_longitudMaxima.dirty || inp_longitudMaxima.touched)" class="alert alert-danger alert-form">
+                                <ul>
+                                    <li *ngIf="inp_longitudMaxima.errors.required">El campo es requerido.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-12" *ngIf="itemParam.tipo == 3">
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-4">
+                            Opciones
+                        </label>
+                        <div class="col-sm-8">
+                            <div *ngFor="let opcion of itemParam.opciones; let i = index">
+                                <div class="input-group">
+                                    <input type="text" name="inp_{{i}}_valor" placeholder="Valor" class="form-control" [(ngModel)]="opcion.valor" required="true">
+                                    <input type="text" name="inp_{{i}}_descripcipn" placeholder="Opcion" class="form-control" [(ngModel)]="opcion.descripcion" required="true">
+                                    <div (click)="opcionQuitar(i); $event.preventDefault();" class="input-group-append text-danger">
+                                        <span class="input-group-text"><i class="far fa-times-circle"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <a (click)="opcionAgregar(); $event.preventDefault();" href="#" class="text-size-15 text-success "><i class="fas fa-plus-circle"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-sm-12">
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-4">
+                            Obligatorio
+                        </label>
+                        <div class="col-sm-8">
+                            <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_obligatorio" #inp_obligatorio="ngModel" [(ngModel)]="itemParam.obligatorio">
+                                <label ngbButtonLabel class="btn-outline-success">
+                                    <input ngbButton type="radio" [value]="'1'"> Sí
+                                </label>
+                                <label ngbButtonLabel class="btn-outline-danger">
+                                    <input ngbButton type="radio" [value]="'0'"> No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-outline-success" [disabled]="frmParametro.invalid" (click)="c('Save')">Guardar</button>
+            <button type="button" class="btn btn-outline-dark" (click)="c('Close')">Cerrar</button>
+        </div>
+    </form>
+</ng-template>

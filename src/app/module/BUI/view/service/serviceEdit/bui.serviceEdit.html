@@ -1,0 +1,567 @@
+<div class="container-fluid tabs-contenido">
+  <div class="form-row">
+      <div class="form-group col-6">
+        <label>
+            <span><strong>Proyecto Web</strong></span>
+        </label>
+        <select #inp_origen_id_web class="form-control" name="origen_id_web" [(ngModel)]="origen_id_web" [disabled]="true">
+            <option *ngFor="let origen of bcs.data.origenes | ohFilterField: 'tipo' : 1" [value]="origen.origen_id">{{origen.sub_tipo_nombre}} - {{origen.url_proyecto}}</option>
+        </select>
+    </div>
+    <div class="form-group col-6">
+        <label>
+            <span><strong>Proyecto Rest</strong></span>
+        </label>
+        <select #inp_origen_id_rest class="form-control" name="origen_id_rest" [(ngModel)]="origen_id_rest" [disabled]="true">
+            <option *ngFor="let origen of bcs.data.origenes | ohFilterField: 'tipo' : 2" [value]="origen.origen_id">{{origen.sub_tipo_nombre}} - {{origen.url_proyecto}}</option>
+        </select>
+    </div>
+  </div>
+  <form #frmProEdit="ngForm" class="form-enable">
+    <div class="card mb-2">
+      <div class="card-header"><i class="fas fa-database"></i> Base de datos</div>
+      <div class="card-body">
+        <div class="form-group row">
+          <label for="database" class="col-sm-2 col-form-label">Servidor</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="inp_base_datos_id" #inp_base_datos_id="ngModel" [(ngModel)]="servicio.servicio_web.base_datos_id" required (change)="baseDatosCambiar()">
+              <option *ngFor="let db of bcs.data.basedatos" [value]="db.base_datos_id">{{db.nombre}} ({{db.url}}:{{db.puerto}})</option>
+            </select>
+            <div *ngIf="inp_base_datos_id.invalid && (inp_base_datos_id.dirty || inp_base_datos_id.touched)" class="alert alert-danger alert-form">
+              <ul>
+                <li *ngIf="inp_base_datos_id.errors.required">Campo requerido.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="scheme" class="col-sm-2 col-form-label">Base de datos</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="inp_esquema_id" #inp_esquema_id="ngModel" [(ngModel)]="servicio.servicio_web.esquema_id" required (change)="esquemaCambiar()">
+                <option [value]="null">Seleccione</option>
+                <option *ngFor="let sc of bcs.data.esquemas | ohFilterField: 'base_datos_id' : servicio.servicio_web.base_datos_id" [value]="sc.esquema_id">{{sc.nombre}} <small>({{sc.origen_datos}})</small></option>
+            </select>
+            <div *ngIf="inp_esquema_id.invalid && (inp_esquema_id.dirty || inp_esquema_id.touched)" class="alert alert-danger alert-form">
+              <ul>
+                <li *ngIf="inp_esquema_id.errors.required">Campo requerido.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="inp_sp_nombre" class="col-sm-2 col-form-label">Buscar Store</label>
+          <div class="col-sm-10">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Nombre de store" name="inp_sp_nombre" [(ngModel)]="sp_busqueda.sp_nombre" (keydown.enter)="spBusquedaListar()" [disabled]="!servicio.servicio_web.base_datos_id || !servicio.servicio_web.esquema_id">
+              <div class="input-group-append" id="button-addon4">
+                <button class="btn btn-primary" type="button" [disabled]="!servicio.servicio_web.base_datos_id || !servicio.servicio_web.esquema_id" (click)="spBusquedaListar();"><i class="fas fa-search"></i></button>
+                <button class="btn btn-outline-danger" type="button" [disabled]="!servicio.servicio_web.base_datos_id || !servicio.servicio_web.esquema_id || !sp_busqueda.encontrado" (click)="spBusquedaLimpiar();"><i class="fas fa-eraser"></i></button>
+                <button class="btn btn-outline-info" type="button" [disabled]="!servicio.servicio_web.base_datos_id || !servicio.servicio_web.esquema_id || !sp_busqueda.encontrado || sp_busqueda.pagina == 1" (click)="spBusquedaListarAtras();"><i class="fas fa-angle-left"></i></button>
+                <button class="btn btn-outline-info" type="button" [disabled]="!servicio.servicio_web.base_datos_id || !servicio.servicio_web.esquema_id || !sp_busqueda.encontrado || sp_busqueda.pagina == sp_busqueda.total" (click)="spBusquedaListarAdelante();"><i class="fas fa-angle-right"></i></button>
+                  <span class="input-group-text">{{sp_busqueda.pagina}}/{{sp_busqueda.total}}</span>
+                </div>
+            </div>
+            <div style="max-height: 300px; overflow: auto">
+              <table class="table">
+                <tbody>
+                  <tr *ngFor="let procedimiento of sp_busqueda.procedimientos;let i = index">
+                    <th scope="row">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="opton_{{i}}" name="option_{{i}}" [(ngModel)]="procedimiento.seleccionado" (click)="spBusquedaSeleccionar(procedimiento)" [disabled]="procedimiento.seleccionado">
+                        <label class="custom-control-label" for="opton_{{i}}">{{procedimiento.sp_esquema}}.{{procedimiento.sp_nombre}}</label>
+                      </div>
+                    </th>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-2">
+      <div class="card-header"><i class="fas fa-box-open"></i> Procedimientos Almacenados</div>
+      <div class="card-body">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col" style="width:1rem"><i class="text-muted text-size-10 far fa-circle" placement="right" ngbTooltip="Estado de cada servicio"></i></th>
+                <th scope="col" style="width: 20%">Id</th>
+                <th scope="col" style="width: 40%">Esquema.Procedimiento</th>
+                <th scope="col" style="width: 40%">Método</th>
+                <th scope="col" style="width:1rem"><i ngbTooltip="Configuración" class="text-muted text-size-10 fas fa-clipboard-check"></i></th>
+                <th scope="col" style="width:1rem"><i ngbTooltip="Entradas" class="text-muted text-size-10 fas fa-sign-in-alt"></i></th>
+                <th scope="col" style="width:1rem"><i ngbTooltip="Salidas" class="text-muted text-size-10 fas fa-sign-out-alt"></i></th>
+                <th scope="col" style="width:1rem"><i ngbTooltip="Eliminar" class="text-muted text-size-10 fas fa-eraser"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let procedimiento of servicio.procedimientos; let i = index">
+                <td>
+                    <i *ngIf="procedimiento.estado == 3" placement="right" ngbTooltip="Nuevo" class="fas fa-check-circle text-success"></i>
+                    <i *ngIf="procedimiento.estado == 0" placement="right" ngbTooltip="No existe el procedimiento, favor de revisar en BD" class="fas fa-times text-danger"></i>
+                    <i *ngIf="procedimiento.estado == 1" placement="right" ngbTooltip="Correcto" class="fas fa-check text-success"></i>
+                    <i *ngIf="procedimiento.estado == 2" placement="right" ngbTooltip="Se reemplazará el ID del store" class="fas fa-exclamation-triangle text-warning"></i>
+                </td>
+                <th scope="row">
+                  <span *ngIf="procedimiento.estado == 2">
+                      <del>{{procedimiento.sp_id}}</del>
+                      <br>{{procedimiento.sp_real_id}}
+                  </span>
+                  <span *ngIf="procedimiento.estado != 2">{{procedimiento.sp_id}}</span>
+                </th>
+                <td>
+                  {{procedimiento.sp_esquema}}.{{procedimiento.sp_nombre}}<br>
+                  <i *ngIf="procedimiento.configuraciones.disableView" ngbTooltip="No implementar servicio web" class="far fa-eye-slash text-info mr-2"></i>
+                  <i *ngIf="procedimiento.configuraciones.showLoader" ngbTooltip="Mostrar cargador" class="fas fa-spinner text-info mr-2"></i>
+                  <i *ngIf="procedimiento.configuraciones.setBody" ngbTooltip="Agregar envio de cuerpo" class="far fa-folder-open text-info mr-2"></i>
+                  <i *ngIf="procedimiento.configuraciones.enableFiles" ngbTooltip="Archivos" class="fas fa-file-upload text-info mr-2"></i>
+                  <i *ngIf="procedimiento.configuraciones.linkInternal" ngbTooltip="Ejecutar con link Interno" class="fas fa-external-link-square-alt text-info mr-2"></i>
+                  <i *ngIf="procedimiento.configuraciones.linkExternal" ngbTooltip="Ejecutar con link Externo" class="fas fa-external-link-alt text-info mr-2"></i>
+                  <i *ngIf="procedimiento.configuraciones.isSlim" ngbTooltip="Ofusca la respuesta enviando solo valores" class="fas fa-code text-primary mr-2"></i>
+                  <i *ngIf="procedimiento.configuraciones.autocommit" ngbTooltip="Habilitar autocomit" class="fas fa-check-double text-primary mr-2"></i>
+                  <i *ngIf="procedimiento.configuraciones.oauth2Enable" ngbTooltip="Habilitar Oauth2" class="fas fa-lock text-primary mr-2"></i>
+                  <i *ngIf="procedimiento.configuraciones.response" ngbTooltip="Habilitar el parámaetro de Response" class="fas fa-sign-out-alt text-primary mr-2"></i>
+                </td>
+                <th scope="row">{{ohConstructor.obtenerUtil().getMethodName(procedimiento.sp_esquema+'.'+procedimiento.sp_nombre)}}<br>
+                  <span *ngIf="procedimiento.configuraciones.prefix.length>0"><{{procedimiento.configuraciones.prefix}}></span>&nbsp;
+                  <span *ngIf="procedimiento.configuraciones.datasource.length>0">({{procedimiento.configuraciones.datasource}})</span>&nbsp;
+                  <span *ngIf="procedimiento.configuraciones.oauth2Roles.length>0">{{procedimiento.configuraciones.oauth2Roles | json}}</span>
+                </th>
+                <td>
+                    <a href="#" *ngIf="procedimiento.estado != 0" (click)="$event.preventDefault(); modalConfigAbrir(i);" ngbTooltip="Configuración" class="text-size-10 text-primary "><i class="fas fa-clipboard-check"></i></a>
+                    <a *ngIf="procedimiento.estado == 0" class="text-size-10 text-muted "><i class="fas fa-clipboard-check"></i></a>
+                </td>
+                <td>
+                    <a href="#" *ngIf="procedimiento.estado != 0" (click)="$event.preventDefault(); modalParametrosAbrir(i);" ngbTooltip="Entradas" class="text-size-10 text-success "><i class="fas fa-sign-in-alt"></i></a>
+                    <a *ngIf="procedimiento.estado == 0" class="text-size-10 text-muted "><i class="fas fa-sign-in-alt"></i></a>
+                </td>
+                <td>
+                    <a href="#" *ngIf="procedimiento.estado != 0" (click)="$event.preventDefault(); modalSalidasAbrir(i);" ngbTooltip="Salidas" class="text-size-10 text-info "><i class="fas fa-sign-out-alt"></i></a>
+                    <a *ngIf="procedimiento.estado == 0" class="text-size-10 text-muted "><i class="fas fa-sign-out-alt"></i></a>
+                </td>
+                <td>
+                    <a href="#" (click)="$event.preventDefault(); eliminar(i);" ngbTooltip="Eliminar" class="text-size-10 text-danger "><i class="fas fa-eraser"></i></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+    <div class="card mb-2">
+      <div class="card-header"><i class="fas fa-layer-group"></i> Rest</div>
+      <div class="card-body">
+          <div class="row">
+              <div class="col-5">
+                <div class="form-group row">
+                  <label for="inp_sub_proyecto_id_rest" class="col-sm-2 col-form-label">Sub Proyecto</label>
+                  <div class="col-sm-10">
+                    <select #inp_sub_proyecto_id_rest class="form-control" name="inp_sub_proyecto_id_rest" [(ngModel)]="servicio.servicio_web.rest_sub_proyecto_id" style="font-family: monospace;" (change)="subProyectoRestCambiar()">
+                        <option *ngFor="let sub_proyecto of bcs.data.sub_proyectos_rest" [value]="sub_proyecto.sub_proyecto_id">{{sub_proyecto.nombre}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inp_prefijo" class="col-sm-2 col-form-label">Prefijo <small><i class="fas fa-info text-info" triggers="click:blur" ngbTooltip="3 caracteres en mayúscula"></i></small></label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="inp_prefijo" #inp_prefijo="ngModel" [ohInputFormat]="'upper'" [(ngModel)]="servicio.servicio_web.prefijo" placeholder="Por defecto : PRE" minlength="3" maxlength="3" (input)="precargarRest();">
+                    <div *ngIf="inp_prefijo.invalid && (inp_prefijo.dirty || inp_prefijo.touched)" class="alert alert-danger alert-form">
+                      <ul>
+                        <li *ngIf="inp_prefijo.errors.minlength || inp_prefijo.errors.maxlength">La longitud debe ser de 3 caracteres</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inp_paquete" class="col-sm-2 col-form-label">Paquete <small><i class="fas fa-info text-info" triggers="click:blur" ngbTooltip="Todo en minúscula separados por puntos"></i></small></label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="inp_paquete" #inp_paquete="ngModel" [ohInputFormat]="'lower'" [(ngModel)]="servicio.servicio_web.paquete" placeholder="Paquete" required (input)="vistaPrevia();">
+                    <div *ngIf="inp_paquete.invalid && (inp_paquete.dirty || inp_paquete.touched)" class="alert alert-danger alert-form">
+                      <ul>
+                        <li *ngIf="inp_paquete.errors.required">Campo requerido.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inp_case" class="col-sm-2 col-form-label">Clase <small><i class="fas fa-info text-info" triggers="click:blur" ngbTooltip="1ra letra de palabra en Mayúscula seguido de otra palabra con la 1ra el mayúscula"></i></small></label>
+                  <div class="col-sm-10">
+                    <div class="input-group mb-3">
+                      <input type="text" class="form-control" name="inp_case" #inp_case="ngModel" [(ngModel)]="servicio.servicio_web.clase" placeholder="Clase" required (input)="vistaPrevia();">
+                      <div class="input-group-append">
+                        <span class="input-group-text">Service / ServiceImp</span>
+                      </div>
+                    </div>
+                    <div *ngIf="inp_case.invalid && (inp_case.dirty || inp_case.touched)" class="alert alert-danger alert-form">
+                      <ul>
+                        <li *ngIf="inp_case.errors.required">Campo requerido.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inp_oauth2" class="col-sm-2 col-form-label">oAuth2</label>
+                  <div class="col-sm-10">
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_oauth2" [(ngModel)]="servicio.servicio_web.indicador_oauth2" (change)="vistaPrevia();">
+                      <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" [value]="'1'"> Si
+                      </label>
+                      <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" [value]="'0'"> No
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div [hidden]="servicio.servicio_web.indicador_oauth2 == '0'" class="form-group row">
+                  <label for="inp_roles" class="col-sm-2 col-form-label">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="inp_roles_habilitar" name="inp_roles_habilitar" [(ngModel)]="servicio.roles_habilitar" (change)="validarHabilitarRol()">
+                      <label class="custom-control-label" for="inp_roles_habilitar"><i class="fas fa-users"></i> Roles</label>
+                    </div>
+                  </label>
+                  <div class="col-sm-10">
+                    <sha-rolSearch [(roles_list)]="servicio.roles_list" [(roles_array)]="servicio.roles" [show_un]="false" [name]="'inp_roles'" [disabled]="!servicio.roles_habilitar"></sha-rolSearch>
+                  </div>
+                </div>
+              </div>
+              <div class="col-7">
+                  <textarea [ohHighlight]="vista" [options]="{}" [lang]="'java'"></textarea>
+              </div>
+          </div>
+      </div>
+    </div>
+    <div class="card mb-2">
+      <div class="card-header"><i class="fas fa-pager"></i> Web</div>
+      <div class="card-body">
+        <div class="form-group row">
+          <label for="inp_sub_proyecto_id_web" class="col-sm-2 col-form-label">Sub Proyecto</label>
+          <div class="col-sm-10">
+            <select #inp_sub_proyecto_id_web class="form-control" name="inp_sub_proyecto_id_web" [(ngModel)]="servicio.servicio_web.web_sub_proyecto_id" style="font-family: monospace;" (change)="subProyectoWebCambiar()">
+                <option *ngFor="let sub_proyecto of bcs.data.sub_proyectos_web" [value]="sub_proyecto.sub_proyecto_id">{{sub_proyecto.nombre}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mb-2">
+      <div class="card-header"><i class="far fa-comment-dots"></i> Comentario</div>
+      <div class="card-body">
+        <angular-tinymce formTinymce name="inp_comentario" [(ngModel)]="servicio.servicio_web.comentario" [settings]="cse.tinymceConfig"></angular-tinymce>
+      </div>
+    </div>
+    <div class="card bg-light botoneraCard">
+      <div class="card-body">
+        <button type="button" (click)="guardar()" class="btn btn-primary mr-1" [disabled]="frmProEdit.invalid"><i class="far fa-save"></i> Grabar</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="frmProEdit.resetForm({}); limpiar();"><i class="fas fa-eraser"></i> Limpiar</button>
+      </div>
+    </div>
+  </form>
+</div>
+<ng-template #modalConfig let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">CONFIGURACION - <small>{{sp.sp_esquema}}.{{sp.sp_nombre}}</small></h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <div>
+        Cliente:<br>
+        <button type="button" (click)="sp.configuraciones.disableView = !sp.configuraciones.disableView" [ngClass]="{'btn-info' : sp.configuraciones.disableView == true, 'btn-outline-primary' : sp.configuraciones.disableView == false}" class="btn btn-outline-primary btn-sm m-1"><i class="far fa-eye-slash"></i><br>No renderizar vista</button>
+        <button type="button" (click)="sp.configuraciones.showLoader = !sp.configuraciones.showLoader" [ngClass]="{'btn-info' : sp.configuraciones.showLoader == true, 'btn-outline-primary' : sp.configuraciones.showLoader == false}"  [disabled]="sp.configuraciones.disableView" class="btn btn-outline-primary btn-sm m-1"><i class="fas fa-spinner"></i><br>Cargador</button>
+        <button type="button" (click)="sp.configuraciones.setBody = !sp.configuraciones.setBody" [ngClass]="{'btn-info' : sp.configuraciones.setBody == true, 'btn-outline-primary' : sp.configuraciones.setBody == false}" [disabled]="sp.configuraciones.disableView" class="btn btn-outline-primary btn-sm m-1"><i class="far fa-folder-open"></i><br>Agregar cuerpo</button>
+        <button type="button" (click)="sp.configuraciones.enableFiles = !sp.configuraciones.enableFiles" [ngClass]="{'btn-info' : sp.configuraciones.enableFiles == true, 'btn-outline-primary' : sp.configuraciones.enableFiles == false}" [disabled]="sp.configuraciones.disableView" class="btn btn-outline-primary btn-sm m-1"><i class="fas fa-file-upload"></i><br>Archivos</button>
+        <button type="button" (click)="sp.configuraciones.linkInternal = !sp.configuraciones.linkInternal" [ngClass]="{'btn-info' : sp.configuraciones.linkInternal == true, 'btn-outline-primary' : sp.configuraciones.linkInternal == false}" [disabled]="sp.configuraciones.disableView" class="btn btn-outline-primary btn-sm m-1"><i class="fas fa-external-link-square-alt"></i><br>Redireccion Interna</button>
+        <button type="button" (click)="sp.configuraciones.linkExternal = !sp.configuraciones.linkExternal" [ngClass]="{'btn-info' : sp.configuraciones.linkExternal == true, 'btn-outline-primary' : sp.configuraciones.linkExternal == false}" [disabled]="sp.configuraciones.disableView" class="btn btn-outline-primary btn-sm m-1"><i class="fas fa-external-link-alt"></i><br>Redireccion Externa</button><br>
+        Servidor:<br>
+        <button type="button" (click)="sp.configuraciones.isSlim = !sp.configuraciones.isSlim" [ngClass]="{'btn-primary' : sp.configuraciones.isSlim == true, 'btn-outline-primary' : sp.configuraciones.isSlim == false}" class="btn btn-sm m-1"><i class="fas fa-code"></i><br>Ofuscado</button>
+        <button type="button" (click)="sp.configuraciones.autocommit = !sp.configuraciones.autocommit" [ngClass]="{'btn-primary' : sp.configuraciones.autocommit == true, 'btn-outline-primary' : sp.configuraciones.autocommit == false}" class="btn btn-outline-primary btn-sm m-1"><i class="fas fa-check-double"></i><br>Comitear</button>
+        <button type="button" (click)="sp.configuraciones.oauth2Enable = !sp.configuraciones.oauth2Enable" [ngClass]="{'btn-primary' : sp.configuraciones.oauth2Enable == true, 'btn-outline-primary' : sp.configuraciones.oauth2Enable == false}" class="btn btn-outline-primary btn-sm m-1"><i class="fas fa-lock"></i><br>Oauth2</button>
+        <button type="button" (click)="sp.configuraciones.response = !sp.configuraciones.response" [ngClass]="{'btn-primary' : sp.configuraciones.response == true, 'btn-outline-primary' : sp.configuraciones.response == false}" class="btn btn-outline-primary btn-sm m-1"><i class="fas fa-sign-out-alt"></i><br>Response</button>
+      </div>
+      <div class="form-row">
+        <div class="col-6">
+            <div class="form-group">
+              <label><i class="fas fa-text-width"></i> Prefijo <small>(3 caracteres)</small></label>
+              <input type="text" class="form-control" [ohInputFormat]="'upper'" [(ngModel)]="sp.configuraciones.prefix" maxlength="3">
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-server"></i> Base de datos</label>
+              <select class="form-control" name="inp_base_datos_id" [(ngModel)]="sp.configuraciones.base_datos_id" (change)="sp.configuraciones.datasource = ''">
+                <option></option>
+                <option *ngFor="let db of bcs.data.basedatos" [value]="db.base_datos_id">{{db.nombre}} ({{db.url}}:{{db.puerto}})</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-database"></i> Esquema</label>
+              <select class="form-control" name="inp_esquema_id" [(ngModel)]="sp.configuraciones.datasource">
+                  <option></option>
+                  <option *ngFor="let sc of bcs.data.esquemas | ohFilterField: 'base_datos_id' : sp.configuraciones.base_datos_id" [value]="sc.origen_datos">{{sc.nombre}} <small>({{sc.origen_datos}})</small></option>
+              </select>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="inp_sp_roles" name="inp_sp_roles" [(ngModel)]="habilitarRoles">
+                <label class="custom-control-label" for="inp_sp_roles"><i class="fas fa-users"></i> Roles</label>
+              </div>
+              <sha-rolSearch [(roles_list)]="sp.configuraciones.oauth2Roles_lista" [(roles_array)]="sp.configuraciones.oauth2Roles" [name]="'inp_roles_detalle'" [disabled]="!habilitarRoles"></sha-rolSearch>
+            </div>
+        </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <div class="col-sm text-left">
+      <button type="button" class="btn btn-outline-warning" (click)="abrirInformacion()"><i class="fas fa-info-circle"></i> Información</button>
+    </div>
+    <div class="col-sm text-right">
+      <button type="button" class="btn btn-outline-dark mr-2" (click)="c('cerrar')"><i class="fas fa-times-circle"></i> Cerrar</button>
+      <button type="button" class="btn btn-outline-primary" (click)="c('guardar')"><i class="fas fa-save"></i> Guardar</button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #modalInfo let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Información</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <p><i class="fas fa-clipboard-check"></i> Configuración</p>
+      <table class="table table-sm">
+          <thead>
+              <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Campo</th>
+                  <th scope="col">Alcance</th>
+                  <th scope="col">Valor por defecto</th>
+                  <th scope="col">Descripción</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <th scope="row"><i class="fas fa-code"></i> </th>
+                  <td>Ofuscado</td>
+                  <td>Cliente / Servidor</td>
+                  <td>Activo</td>
+                  <td>Por defecto las tramas JSON retornan en formato ofuscado : [[1,"Nombre"]], al marcar esta opción retornaría con descripciones : [{{ '{' }}id:"1",name:"Nombre"{{ '}' }}]</td>
+              </tr>
+              <tr>
+                  <th scope="row"><i class="far fa-thumbs-up"></i> </th>
+                  <td>Comitear</td>
+                  <td>Servidor</td>
+                  <td>Activo</td>
+                  <td>Commitea el store luego de ejecutarte</td>
+              </tr>
+              <tr>
+                  <th scope="row"><i class="fas fa-lock"></i> </th>
+                  <td>Oauth2</td>
+                  <td>Servidor</td>
+                  <td>Activo</td>
+                  <td>Especificamos si el método del store requerirá un token de acceso</td>
+              </tr>
+              <tr>
+                  <th scope="row"><i class="far fa-eye-slash"></i> </th>
+                  <td>No renderizar vista</td>
+                  <td>Cliente</td>
+                  <td>Inactivo</td>
+                  <td>Desabilita la creación de código del lado del cliente (No se crea el método del servicio), la razón es que este Store es privado o interno no necesita ser llamado desde la WEB</td>
+              </tr>
+              <tr>
+                  <th scope="row"><i class="fas fa-spinner"></i> </th>
+                  <td>Cargador</td>
+                  <td>Cliente</td>
+                  <td>Activo</td>
+                  <td>Define si el servicio mostrará el cargador</td>
+              </tr>
+              <tr>
+                  <th scope="row"><i class="far fa-folder-open"></i> </th>
+                  <td>Agregar cuerpo</td>
+                  <td>Cliente</td>
+                  <td>Inactivo</td>
+                  <td>Habilita al servicio enviar un body (Objecto JSON con información adicional)</td>
+              </tr>
+              <tr>
+                  <th scope="row"><i class="fas fa-file-upload"></i> </th>
+                  <td>Archivos</td>
+                  <td>Cliente</td>
+                  <td>false</td>
+                  <td>Habiltila al servicio web del store el envio de archivos</td>
+              </tr>
+              <tr>
+                  <th scope="row"><i class="fas fa-text-width"></i> </th>
+                  <td>Prefijo</td>
+                  <td>Cliente - Servidor</td>
+                  <td>&nbsp;</td>
+                  <td>Es prefijo de los datos que llegan y se mapearan al estore, por defecto se registra desde el Bachero (3 caracteres)</td>
+              </tr>
+              <tr>
+                  <th scope="row"><i class="fas fa-database"></i> </th>
+                  <td>Origen de datos</td>
+                  <td>Servidor</td>
+                  <td>&nbsp;</td>
+                  <td>Seleccionamos un datasource en particular para el método del store</td>
+              </tr>
+              <tr>
+                  <th scope="row"><i class="fas fa-users"></i> </th>
+                  <td>Roles</td>
+                  <td>Servidor</td>
+                  <td>&nbsp;</td>
+                  <td>Especificamos los roles en particular para el método del store, ejm: 1, 2, 3</td>
+              </tr>
+          </tbody>
+      </table>
+      <p><i class="fas fa-grip-vertical"></i> Parámetros
+          <textarea ohHighlight [options]="{}" [lang]="'sql'">
+--@jpoParam{field : 0, rules : 'REQUIRED | INTEGER', example : '1'}</textarea>
+      </p>
+      <ul>
+          <li>REQUIRED : Campo requerido</li>
+          <li>INTEGER : Campo entero</li>
+          <li>DECIMAL : Campo decimal</li>
+          <li>MV : Un número valor mínimo</li>
+          <li>XV : Un número valor máximo</li>
+          <li>ML : Una longitud mínima</li>
+          <li>XL : Una longitud máxima</li>
+          <li>EL : Una longitud exacta</li>
+          <li>KEY : Minimo 1 digito, 1 Mayuscula, 1 minuscula, 1 caracter especial, no espacios, mínimo 8 caracteres</li>
+          <li>NAME : Nombre sin caracteres extraños</li>
+          <li>EMAIL : Email</li>
+          <li>DATE : Fecha dd/MM/yyyy o dd-MM-yyyy</li>
+          <li>DATETIME : Fecha dd/MM/yyyy hh:mm:ss o dd-MM-yyyy hh:mm:ss</li>
+          <li>BOOLEAN : Condicion True False</li>
+      </ul>
+      <p><i class="fas fa-location-arrow"></i> Salidas</p>
+      <table class="table table-sm">
+          <tbody>
+              <tr>
+                  <th scope="row">Filas</th>
+                  <td>Agregar, eliminar, filas.</td>
+              </tr>
+              <tr>
+                  <th scope="row">Columnas</th>
+                  <td>Agregar, eliminar, filas, se especificar el nombre el tipo de dato</td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c()"><i class="fas fa-times-circle"></i> Cerrar</button>
+  </div>
+</ng-template>
+<ng-template #modalEntradas let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Entradas - <small>{{sp.sp_esquema}}.{{sp.sp_nombre}}</small></h4>
+    <button type="button" class="close" aria-label="Close" (click)="d()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col">Campo</th>
+                <th scope="col">Tipo de Origen</th>
+                <th scope="col">Tipo de dato</th>
+                <th scope="col" style="width: 50%">Reglas (Comming soon)</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="sp.entradas">
+            <tr *ngFor="let entrada of sp.entradas; let i = index">
+                <td>{{entrada.campo}}</td>
+                <td>
+                    <i class="text-primary fas fa-sign-in-alt" *ngIf="entrada.tipo_campo == 'i'">&nbsp;<span *ngIf="entrada.tipo_campo == 'i'" class="badge badge-pill badge-outline-secondary">INPUT</span></i>
+                    <i class="text-secondary fas fa-sign-out-alt" *ngIf="entrada.tipo_campo == 'o'">&nbsp;<span *ngIf="entrada.tipo_campo == 'o'" class="badge badge-pill badge-outline-secondary">OUTPUT</span></i>
+                </td>
+                <td><span [class]="procedimientoClaseTipoDato(entrada.tipo_dato)">{{entrada.tipo_dato}}</span></td>
+                <td><button *ngIf="entrada.tipo_campo == 'i'" type="button" class="btn btn-outline-success btn-sm" [disabled]="true"><i class="fas fa-plus"></i></button></td>
+            </tr>
+        </tbody>
+      </table>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c()"><i class="fas fa-times-circle"></i> Cerrar</button>
+  </div>
+</ng-template>
+<ng-template #modalSalidas let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <div class="col-sm text-left">
+      <h4 class="modal-title">Salidas - <small>{{sp.sp_esquema}}.{{sp.sp_nombre}}</small></h4>
+    </div>
+    <div class="col-sm text-right">
+      <div class="input-group">
+        <input type="text" class="form-control" id="inp_salidaPlantilla" [(ngModel)]="salidaPlantilla">
+        <div class="input-group-append" id="button-addon4">
+          <button class="btn btn-outline-secondary" type="button" (click)="salidaCopiar()"><i class="far fa-copy"></i></button>
+          <button class="btn btn-outline-secondary" type="button" (click)="salidaPegar()"><i class="fas fa-paste"></i></button>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngFor="let salida of sp.salidas; let i = index" class="mb-2" style="border-left: 0.3rem solid #004165;border-radius: 0.5rem;">
+      <div class="input-group">
+        <div ngbDropdown class="d-inline-block">
+          <button class="btn" id="tipo_objeto" [ngClass]="{'btn-primary' : salida.type == 'object', 'btn-info' : salida.type == 'list'}" ngbDropdownToggle>
+            <span *ngIf="salida.type == 'object'"><strong>&#123;&nbsp;&#125;</strong></span>
+            <span *ngIf="salida.type == 'list'">[&nbsp;]</span>
+          </button>
+          <div ngbDropdownMenu aria-labelledby="tipo_objeto">
+            <button class="dropdown-item btn-primary" (click)="salida.type = 'object'"><strong>&#123;&nbsp;&#125;</strong> Item</button>
+            <button class="dropdown-item btn-info" (click)="salida.type = 'list'">[&nbsp;] Lista</button>
+          </div>
+        </div>
+        <input type="text" class="form-control"  [(ngModel)]="salida.name">
+        <div class="input-group-append">
+          <button class="btn btn-outline-success" type="button" (click)="salidaAgregarHijos(i);"><i class="fas fa-plus-circle"></i></button>
+          <button class="btn btn-outline-primary" type="button" (click)="salidaSubir(i);" [disabled]="i == 0"><i class="fas fa-caret-up"></i></button>
+          <button class="btn btn-outline-primary" type="button" (click)="salidaBajar(i);" [disabled]="i == sp.salidas.length-1"><i class="fas fa-caret-down"></i></button>
+          <button class="btn btn-outline-danger" type="button" (click)="salidaEliminar(i);"><i class="fas fa-minus"></i></button>
+        </div>
+      </div>
+      <div class="tableContent">
+        <table class="table table-sm table-editor">
+          <tbody>
+            <tr>
+              <td *ngFor="let item of salida.items; let e = index" style="text-align: center; position: relative">
+                <div style="position: absolute; top: 0.15rem; left: 0.15rem;">{{e}}</div>
+                <div style="display: inline-block;">
+                  <a href="#" title="Mover a la izquierda" class="text-info mr-1" (click)="salidaHijoIzquierda(i, e); $event.preventDefault()"><i class="fas fa-caret-left"></i></a>
+                  <a href="#" title="Agregar item a la izquierda" class="text-secondary mr-1" (click)="agregarHijoIzquierda(i, e); $event.preventDefault()"><i class="fas fa-reply"></i></a>
+                  <a href="#" title="Eliminar" class="text-danger mr-1" (click)="salidaHijoEliminar(i, e); $event.preventDefault()"><i class="fas fa-times-circle"></i></a>
+                  <a href="#" title="Agregar item a la derecha" class="text-secondary mr-1" (click)="agregarHijoDerecha(i, e); $event.preventDefault()"><i class="fas fa-share"></i></a>
+                  <a href="#" title="Mover a la derecha" class="text-info" (click)="salidaHijoDerecha(i, e); $event.preventDefault()"><i class="fas fa-caret-right"></i></a>
+                </div>
+                <input type="text" class="form-control"  [(ngModel)]="item.name">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <button title="Texto" class="btn btn-outline-primary" [ngClass]="{'btn-primary' : item.type == 'string', 'btn-outline-primary' : item.type != 'string'}" type="button" (click)="item.type = 'string'"><i class="fas fa-text-width"></i></button>
+                    <button title="Numérico" class="btn btn-outline-info" [ngClass]="{'btn-info' : item.type == 'number', 'btn-outline-info' : item.type != 'number'}" type="button" (click)="item.type = 'number'"><i class="fas fa-sort-numeric-down-alt"></i></button>
+                    <button title="Fecha" class="btn btn-outline-warning" [ngClass]="{'btn-warning' : item.type == 'Date', 'btn-outline-warning' : item.type != 'Date'}" type="button" (click)="item.type = 'Date'"><i class="far fa-calendar-alt"></i></button>
+                    <button title="Condición" class="btn btn-outline-danger" [ngClass]="{'btn-danger' : item.type == 'boolean', 'btn-outline-danger' : item.type != 'boolean'}" type="button" (click)="item.type = 'boolean'"><i class="fas fa-yin-yang"></i></button>
+                    <button title="Objeto" class="btn btn-outline-secondary" [ngClass]="{'btn-secondary' : item.type == 'any', 'btn-outline-secondary' : item.type != 'any'}" type="button" (click)="item.type = 'any'"><i class="fas fa-archive"></i></button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="col-sm text-left">
+      <button type="button" class="btn btn-outline-success" (click)="salidaAgregar()"><i class="fas fa-plus"></i></button>
+    </div>
+    <div class="col-sm text-right">
+      <button type="button" class="btn btn-outline-dark mr-2" (click)="c('CLOSE')">Cerrar</button>
+      <button type="button" class="btn btn-outline-primary" (click)="c('SAVE')">Guardar</button>
+    </div>
+  </div>
+</ng-template>

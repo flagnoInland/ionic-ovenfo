@@ -1,0 +1,7 @@
+<div class="input-group">
+    <input type="search" class="form-control" [(ngModel)]="item.config.value" placeholder="{{item.config.placeholder}}">
+    <div class="input-group-append">
+        <span class="input-group-text" (click)="$event.preventDefault();"><i class="fa fa-search" aria-hidden="true"></i> {{item.config.value}}</span>
+        <span *ngIf="item.config.enableScan" class="input-group-text btn btn-info"><i class="fas fa-qrcode"></i></span>
+    </div>
+</div>

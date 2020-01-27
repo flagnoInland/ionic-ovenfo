@@ -1,0 +1,23 @@
+<div class="tableContent">
+    <table class="table bg-white" [ngClass]="{'table-striped' : item.config.striped, 'table-hover' : item.config.hover, 'table-bordered' : item.config.bordered, 'table-sm' : item.config.small}">
+        <thead *ngIf="item.config.showTitle">
+            <tr>
+                <th *ngFor='let row of item.config.rows; let i = index' [class]="(row.cabeFondo?row.cabeFondo:'')+' '+(row.cabeAlineo?row.cabeAlineo:'')" [style.width]="getWidth(row)" [style.min-width]="getMinWidth(row)" [style.max-width]="getMaxWidth(row)"	[style.position]="'relative'" (mouseenter)="row.verDetalle = true" (mouseleave)="row.verDetalle = false">
+                    <div *ngIf="row.verDetalle && !readOnly" style="position: absolute; top: -0.4rem; ">
+                        <a class="text-info text-size-10 mr-2" href="#" (click)="$event.preventDefault(); moveLeft(i);"><i class="fas fa-arrow-alt-circle-left"></i></a>
+                        <a class="text-danger text-size-10 mr-2" href="#" (click)="$event.preventDefault(); delete(i);"><i class="fas fa-eraser"></i></a>
+                        <a class="text-info text-size-10" href="#" (click)="$event.preventDefault(); moveRight(i);"><i class="fas fa-arrow-alt-circle-right"></i></a>
+                    </div>
+                    <bue-editor [design]="row.selectedHead" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td *ngFor='let row of item.config.rows' [class]="((row.detaFondo)?row.detaFondo:'')+' '+((row.detaAlineo)?row.detaAlineo:'')">
+                    <bue-editor [design]="row.selectedBody" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

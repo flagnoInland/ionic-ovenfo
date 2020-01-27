@@ -1,0 +1,104 @@
+<div class="tis-listContent mb-3 noImpresion">
+	<ul class="list-inline pt-2 pb-2 tis-lineDivide">
+		<li class="list-inline-item pt-2 ml-3">
+			<h5 class="vistaA">Unidades de negocio</h5>
+			<h5 class="vistaBC">Listado de Unidades de negocio</h5>
+		</li>
+		<li class="list-inline-item float-right mr-3 tis-dis-ifle">
+			<button [routerLink]="['new']" type="button" class="btn btn-primary mr-1" placement="top" ngbTooltip="Nueva unidad"><i class="fas fa-plus"></i> Nuevo</button>
+		</li>
+	</ul>
+	<ul class="list-inline" style="min-height: 3rem;">
+		<li class="list-inline-item ml-3">
+			<button type="button" (click)="list()" class="btn btn-info" placement="top" ngbTooltip="Actualizar"><i class="fas fa-sync-alt"></i></button>
+		</li>
+		<li class="list-inline-item float-right mr-3 tis-dis-ifle">
+			<span class="mt-1 mr-3">{{uns.length}} de {{pagin_total}}<span class="vistaBC tis-dis-iblk">&nbsp;registros</span></span>
+			<div class="tis-pagin">
+				<ngb-pagination [collectionSize]="pagin_total" [(page)]="pagin_page" [maxSize]="pagin_size" (pageChange)="list()"></ngb-pagination>
+			</div>
+		</li>
+	</ul>
+</div>
+<div class="container-fluid noImpresion">
+	<div class="tableContent">
+		<table class="table table-striped table-hover bg-white">
+			<thead>
+				<tr>
+					<th scope="col">Código</th>
+					<th scope="col">Nombre</th>
+					<th scope="col">Estado</th>
+					<th scope="col" style="width:1rem"><i class="text-muted text-size-10 fas fa-edit"></i></th>
+					<th scope="col" style="width:1rem"><i class="text-muted text-size-10 fas fa-eraser"></i></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let item of uns">
+					<td>{{item.unidad_negocio_id}}</td>
+					<td>{{item.nombre}}</td>
+					<td>
+						<i *ngIf="item.estado == '1'" class="fas fa-toggle-on text-success text-size-15" title="Activo"></i>
+						<i *ngIf="item.estado == '0'" class="fas fa-toggle-off text-danger text-size-15" title="Inactivo"></i>
+					</td>
+					<td>
+						<a class="text-size-10 text-success" [routerLink]="['edit', item.unidad_negocio_id]"><i class="fas fa-edit"></i></a>
+					</td>
+					<td>
+						<a class="text-size-10 text-danger" href="#" (click)="$event.preventDefault(); eliminar(item.unidad_negocio_id);"><i class="fas fa-eraser"></i></a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<ng-template #modalConfElim let-c="close" let-d="dismiss">
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Registros asociados</h4>
+		<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body tis-card-sm">
+        <h5>¿Confirma eliminar los registros asociados?</h5>
+		<div *ngIf="elminiarConf.roles">
+            <h6>Roles asociados</h6>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let item of elminiarConf.roles">{{item.nombre}}</li>
+            </ul>
+        </div><br>
+		<div *ngIf="elminiarConf.catalogos">
+            <h6>Catálogos asociadas</h6>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let item of elminiarConf.catalogos">{{item.nombre}}</li>
+            </ul>
+        </div><br>
+		<div *ngIf="elminiarConf.usuarios">
+            <h6>Configuraciones de usuario asociados</h6>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let item of elminiarConf.usuarios">{{item.nombre}}</li>
+            </ul>
+        </div><br>
+		<div *ngIf="elminiarConf.empresas">
+            <h6>Empresas asociadas</h6>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let item of elminiarConf.empresas">{{item.nombre}}</li>
+            </ul>
+        </div><br>
+		<div *ngIf="elminiarConf.terminos">
+            <h6>Términos asociados</h6>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let item of elminiarConf.terminos">{{item.nombre}}</li>
+            </ul>
+        </div><br>
+		<div *ngIf="elminiarConf.faqs">
+            <h6>FAQs asociados</h6>
+            <ul class="list-group">
+                <li class="list-group-item" *ngFor="let item of elminiarConf.faqs">{{item.nombre}}</li>
+            </ul>
+        </div>
+	</div>
+	<div class="modal-footer">
+        <button type="button" class="btn btn-outline-success" (click)="c('Confirmar')">Confirmar</button>
+        <button type="button" class="btn btn-outline-danger" (click)="c('Cancelar')">Cancelar</button>
+	</div>
+</ng-template>

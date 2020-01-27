@@ -1,0 +1,572 @@
+/*@import url("../node_modules/primeicons/primeicons.css");
+@import url("../node_modules/primeng/resources/primeng.min.css");
+@import url("../node_modules/primeng/resources/themes/bootstrap/theme.css");*/
+
+
+/*MAP STYLES*/
+
+#map {
+    width: 100%;
+    height: 480px;
+}
+
+
+/* body a {
+    color: #ff6303;
+    text-decoration: none;
+} */
+
+
+/* modal animation */
+
+.modal-content {
+    animation-name: example;
+    animation-duration: 0.3s;
+}
+
+@keyframes example {
+    0% {
+        transform: scale(0.5)
+    }
+    75% {
+        transform: scale(1.1)
+    }
+    100% {
+        transform: scale(1)
+    }
+}
+
+.pac-container {
+    z-index: 100000;
+}
+
+.table thead th {
+    vertical-align: middle;
+}
+
+
+/*EN MAP STYLES*/
+
+.separadorA {
+    margin: 10px;
+    border: 0px;
+}
+
+.btn-outline-tis-secondary {
+    color: #3c4e74;
+    background-color: transparent;
+    background-image: none;
+}
+
+.link-second a {
+    color: #c66930 !important;
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.link-second a:focus,
+.link-second a:hover {
+    color: #e87833;
+}
+
+
+/* FOR LIST VIEWS */
+
+@media screen and (max-width: 576px) {
+    .tis-columnHide-sm {
+        /*hide column*/
+        display: none;
+    }
+    .tis-pagin {
+        /* max-width: 225px; */
+        overflow: auto;
+        /* margin-top: -0.3rem; */
+        margin: 0px 2px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .tis-pagin {
+        margin: 0px;
+    }
+}
+
+.tis-listContent {
+    background-color: #ffffff;
+    -webkit-box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.1);
+}
+
+.tis-lineDivide {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tis-dis-ifle {
+    display: inline-flex;
+}
+
+.tis-dis-iblk {
+    display: inline-block;
+}
+
+.tableContent {
+    width: 100%;
+    overflow: auto;
+}
+
+.tableBorderCSS1 {
+    max-height: 150px;
+    border: solid 1px #d6d6d6;
+    border-radius: 8px;
+}
+
+.info-ficha-laboral .nav-pills .nav-link.active,
+.info-ficha-laboral .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #004165;
+}
+
+@media screen and (max-width: 576px) {
+    .tableContent table {
+        zoom: .8;
+    }
+    .container-fluid {
+        width: 100%;
+        padding-right: 7px;
+        padding-left: 7px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+}
+
+@media screen and (min-width: 576px) and (max-width: 768px) {
+    .container-fluid {
+        width: 100%;
+        padding-right: 10px;
+        padding-left: 10px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+}
+
+
+/* For CONTENTS */
+
+.botoneraCard {
+    margin-top: .5rem;
+    /*border-bottom: none;*/
+    border-radius: 0.25rem 0.25rem 0rem 0rem;
+}
+
+.botoneraCard .card-body {
+    padding: 0.5rem;
+}
+
+.tis-cards-mt-2 .card {
+    margin-top: 0.5rem;
+}
+
+.tis-cards-mt-2 .card-header h5>button {
+    padding: 0px;
+    margin: 0px;
+    line-height: 0;
+}
+
+.tis-cards-mt-2 .accordion .card:first-of-type {
+    border-bottom: 1px solid rgba(0, 0, 0, .125);
+}
+
+.tis-card-sm .card-header {
+    padding: 0;
+}
+
+.tis-panel-title-label {
+    color: #505e6a;
+}
+
+.tis-panelCloseBtn {
+    right: 8px;
+    position: absolute;
+    top: 8px;
+}
+
+.tis-cardBodyInput {
+    padding: 0.82rem 1.25rem;
+    display: flex;
+}
+
+
+/* For prints */
+
+.impresionId {
+    display: none;
+}
+
+.impresionIdTable {
+    display: none;
+}
+
+
+/* For images */
+
+.leftMenuPhoto {
+    max-width: 6rem;
+    border: 1px solid #ff5f2d;
+}
+
+@media print {
+    body {
+        padding-top: 0rem;
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #ffffff;
+    }
+    .impresionId {
+        display: inline;
+    }
+    .impresionIdTable {
+        display: table-row;
+    }
+    .impresionId .card {
+        border: 1px solid rgba(38, 28, 0, .625);
+        border-radius: 0;
+    }
+    .impresionId .card-header {
+        background-color: #e2e2e2!important;
+        padding: .25rem .75rem;
+    }
+    .impresionId a {
+        color: black;
+        font-weight: 300;
+        text-decoration: none;
+        background-color: transparent;
+    }
+    .impresionId .card-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding: 0.4rem;
+    }
+    .impresionId table td {
+        color: #3f3f3f;
+    }
+    .impresionId table th {
+        color: #3f3f3f;
+    }
+    .form-group {
+        margin-bottom: 0.2rem;
+    }
+    label {
+        margin-bottom: .1rem;
+    }
+    .form-control {
+        padding: .2rem .5rem;
+    }
+    .noImpresion {
+        display: none;
+    }
+    .tableWidth100 {
+        width: 100%;
+    }
+}
+
+.customSelc {
+    background-color: #e1f0ff;
+}
+
+
+/* Nuevos botones */
+
+.btn-selectRow {
+    position: absolute;
+    margin-top: -0.25rem;
+    margin-left: -0.25rem;
+}
+
+.btn-selectRow:link {
+    background-color: white;
+}
+
+.bg-outline-danger {
+    background-color: #fff5f5!important;
+}
+
+.badge-outline-third {
+    color: #bf29f8;
+    background-color: #fce4fe;
+}
+
+
+/* Formularios */
+
+.titulo-Select {
+    color: #004165;
+    font-weight: 600;
+    border: 0px;
+}
+
+.titulo-Select option {
+    font-weight: 600;
+}
+
+
+/* oh-editor */
+
+.oh-view-comp-row:not(.oh-view-readOnly) {
+    width: 100%;
+    min-height: 3.3rem;
+    border: 1px dashed #6696b3;
+    min-width: 2rem;
+}
+
+.oh_editor_colConfig {
+    padding: 0px;
+    margin: 0px;
+}
+
+.oh_editor_comp {
+    overflow: auto;
+}
+
+.oh_editor_compList {
+    padding: 0px;
+}
+
+.oh_editor_compList li {
+    border-radius: 0px;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+}
+
+.oh_editor_conf {
+    background-color: #ffffff;
+    padding: 0.5rem;
+}
+
+.oh_editor_conf label {
+    margin: 0px;
+}
+
+.oh_editor_rangeOut {
+    position: absolute;
+    margin-top: -0.5rem;
+}
+
+.border-primaryAPM {
+    border-color: #FF6303!important;
+}
+
+.oh_text-mono {
+    font-family: monospace;
+}
+
+
+/* in-flight clone */
+
+.gu-mirror {
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+    pointer-events: none;
+}
+
+
+/* high-performance display:none; helper */
+
+.gu-hide {
+    left: -9999px !important;
+}
+
+
+/* added to mirrorContainer (default = body) while dragging */
+
+.gu-unselectable {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+
+/* added to the source element while its mirror is dragged */
+
+.gu-transit {
+    opacity: 0.2;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+    filter: alpha(opacity=20);
+    pointer-events: none;
+}
+
+
+/*
+To prevent the "Uncaught HierarchyRequestError:
+Failed to execute 'insertBefore' on 'Node':
+The new child element contains the parent." error,
+just make the selected element's shadow reject all mouse events:
+Reference: [bevacqua/dragula#52](https://github.com/bevacqua/dragula/issues/52) commented by Syforce
+*/
+
+
+/* news */
+
+.form-control-minimal {
+    border: 0px;
+    border-bottom: 1px solid;
+    border-radius: 0px;
+}
+
+.frm_hl_div {
+    position: relative;
+}
+
+@media print {
+    .doNotPrint {
+        display: none !important;
+    }
+    .modal-dialog {
+        max-width: 800px;
+    }
+    .modal-content {
+        border: transparent
+    }
+    .modal-body {
+        padding-top: 40px;
+    }
+    @page {
+        size: auto;
+        margin: 0mm;
+    }
+}
+
+.frm_hl_copy {
+    position: absolute;
+    right: 0px;
+    top: 7px;
+}
+
+.frm_hl_hid {
+    height: 0px;
+    position: absolute;
+    z-index: -5;
+}
+
+*::-webkit-scrollbar {
+    width: 0.3rem;
+    height: 0.4rem;
+}
+
+.btn-outline-orange {
+    color: #ff631b;
+    background-color: transparent;
+    background-image: none;
+    border-color: #ff6303;
+}
+
+.btn-outline-orange:hover {
+    color: #fff;
+    background-color: #ff6303;
+    border-color: #ff6303;
+}
+
+.btn-outline-orange:not(:disabled):not(.disabled).active,
+.btn-outline-orange:not(:disabled):not(.disabled):active,
+.show>.btn-outline-orange.dropdown-toggle {
+    color: #fff;
+    background-color: #ff6303;
+    border-color: #ff6303;
+}
+
+.c-pointer {
+    cursor: pointer;
+}
+
+.table-editor {
+    margin-bottom: 0rem;
+}
+
+.table-editor tr td {
+    padding: .2rem;
+}
+
+ngb-typeahead-window {
+    width: 100% !important;
+}
+
+
+/* .twitter-typeahead,
+.tt-hint,
+.tt-input,
+.tt-menu {
+    width: 100%;
+} */
+
+.typeahead-input .dropdown-menu.show {
+    overflow: auto !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd):hover {
+    background-color: #dbf1f5;
+}
+
+.btn.focus,
+.btn:focus,
+.close:not(:disabled):not(.disabled):focus,
+.close:not(:disabled):not(.disabled):hover {
+    outline: unset;
+}
+
+.close:not(:disabled):not(.disabled):focus,
+.close:not(:disabled):not(.disabled):hover {
+    opacity: .5;
+}
+
+.dropdown-menu {
+    min-width: 5rem;
+    padding: .25rem 0!important;
+    margin: 0!important;
+}
+
+.input-selected-text {
+    padding: 0.277rem .5rem;
+    border-left: 5px solid #42A948 !important;
+}
+
+.input-selected-text .selected-text {
+    font-size: 0.9rem;
+}
+
+.btn-link-buttom {
+    position: relative;
+}
+
+.btn-link-buttom .badge {
+    position: absolute;
+    top: -0.7rem;
+    right: -0.7rem;
+    font-size: 0.8rem;
+}
+
+.form-control[readonly] {
+    background-color: #f7f7f7;
+    opacity: 1;
+}
+
+.badge-outline-info {
+    color: #17a2b8;
+    /* background-color: #FEEEE4; */
+    border-color: #17a2b8;
+}
+
+.badge-outline-primary {
+    color: #ff6303;
+    /* background-color: #FEEEE4; */
+    border-color: #ff6303;
+}
+
+.badge-outline-dark {
+    color: #343a40;
+    /* background-color: #FEEEE4; */
+    border-color: #343a40;
+}

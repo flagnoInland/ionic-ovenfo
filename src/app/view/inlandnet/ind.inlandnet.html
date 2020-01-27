@@ -1,0 +1,7 @@
+<ind-menu #objMenu [(openMenu)]="cse.config.openMenu"></ind-menu>
+<div class="box-main" [ngClass]="{'box-mainFull' : !cse.config.openMenu, 'box-mainPart' : cse.config.openMenu}">
+	<ind-nav #objNav [(openMenu)]="cse.config.openMenu" class="noImpresion"></ind-nav>
+	<hr [hidden]="cse.config.disableSeparator" class="separadorA noImpresion">
+	<router-outlet></router-outlet>
+	<div style="height:35px"></div>
+</div>

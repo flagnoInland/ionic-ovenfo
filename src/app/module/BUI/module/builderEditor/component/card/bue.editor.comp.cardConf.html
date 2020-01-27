@@ -1,0 +1,42 @@
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label>Id</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Mostrar</label><br>
+                <div class="btn-group btn-group-toggle">
+                    <label class="btn-primary" ngbButtonLabel>
+                        <input type="checkbox" ngbButton [(ngModel)]="item.config.showHeader"> Encabezado
+                    </label>
+                    <label class="btn-primary" ngbButtonLabel>
+                        <input type="checkbox" ngbButton [(ngModel)]="item.config.showBody"> Cuerpo
+                    </label>
+                    <label class="btn-primary" ngbButtonLabel>
+                        <input type="checkbox" ngbButton [(ngModel)]="item.config.showFooter"> Pie
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-4" *ngIf="item.config.showHeader">
+            <div class="form-group">
+                <label>Título</label>
+                <select class="form-control" [(ngModel)]="item.config.title">
+                    <option *ngFor="let type of title" [value]="type.value">{{type.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Fondo</label>
+                <select class="form-control" [(ngModel)]="item.config.background">
+                    <option *ngFor="let type of background" [value]="type.value">{{type.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

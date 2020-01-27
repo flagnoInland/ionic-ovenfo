@@ -1,0 +1,8 @@
+<span *ngIf="item.config.type == 'span'" [class]="((readOnly && item.vistaResponsiva)?item.vistaResponsiva:'')">
+    <span *ngIf="item.config.external && item.config.external.length>0" class="text-muted">Contenido estático</span>
+    <bue-editor *ngIf="!item.config.external || item.config.external.length==0" [design]="item.selected" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+</span>
+<div *ngIf="item.config.type == 'div'" [class]="item.config.typeDiv+' '+((readOnly && item.vistaResponsiva)?item.vistaResponsiva:'')">
+    <span *ngIf="item.config.external && item.config.external.length>0" class="text-muted">Contenido estático</span>
+    <bue-editor *ngIf="!item.config.external || item.config.external.length==0" [design]="item.selected" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+</div>

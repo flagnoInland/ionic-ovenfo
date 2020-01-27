@@ -1,0 +1,42 @@
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label>Id</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id">
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label>Valor</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" [ngClass]="{'btn-outline-primary' : !item.config.value.esEnlace, 'btn-primary' : item.config.value.esEnlace}" (click)="$event.preventDefault(); buscarValueBind()"><i class="fas fa-assistive-listening-systems" aria-hidden="true"></i></span>
+                    </div>
+                    <input #inp_value="ngModel" name="inp_value" type="text" class="form-control form-control-sm" [(ngModel)]="item.config.value.valor" placeholder="Valor">
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label>Color</label>
+                <select class="form-control" [(ngModel)]="item.config.color" required>
+                    <option *ngFor="let type of alertType" [value]="type.type">{{type.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label>¿Se cierra?</label><br>
+                <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="item.config.isDismissible">
+                    <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" [value]="true"> Si
+                    </label>
+                    <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" [value]="false"> No
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

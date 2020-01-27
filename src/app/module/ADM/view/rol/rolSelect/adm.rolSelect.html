@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-6">
+        <label>
+            <strong><i class="fas fa-user-friends"></i> Roles permitidos 
+            <span class="text-danger" *ngIf="required && ((roles_xml && roles_xml.length == 0) || !roles_xml)"><i class="fas fa-exclamation-triangle"></i></span>
+            <span class="text-success" *ngIf="required && roles_xml && roles_xml.length > 0"><i class="fas fa-check-circle"></i></span>
+            <input type="hidden" #inp_select="ngModel" class="form-control" name="{{name}}" [(ngModel)]="roles_xml" [required]="required"></strong>
+        </label>
+        <div style="max-height: 500px; overflow: auto; border: 2px solid gainsboro;">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">Rol</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col" style="width:1rem"><i title="Seleccionar" class="text-muted text-size-10 far fa-check-square"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let rol of roles; let i = index">
+                        <th scope="row">{{rol.nombre}}</th>
+                        <td>
+                            <span *ngIf="rol.estado" class="badge badge-pill badge-outline-success">
+                                <i class="far fa-thumbs-up"></i> Activo</span>
+                            <span *ngIf="!rol.estado" class="badge badge-pill badge-outline-danger">
+                                <i class="fas fa-exclamation-triangle"></i> Inactivo</span>
+                        </td>
+                        <td>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="rolSeleccionar_{{i}}" name="rolSeleccionar_{{i}}" [(ngModel)]="rol.seleccionado" (change)="seleccionarRol($event, i)">
+                                <label class="custom-control-label" for="rolSeleccionar_{{i}}">&nbsp;</label>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-6">
+        <label><strong><i class="fas fa-indent"></i> Menus asociados</strong></label>
+        <div class="form-group row">
+            <label class="col-form-label col-sm-4">
+                <span>Unidad(es) de negocio ({{UNLista.length}})</span>
+            </label>
+            <div class="col-sm-8">
+                <select #inp_unidad_negocio="ngModel" name="inp_unidad_negocio" class="form-control" (change)="filtrarUnidad()" [(ngModel)]="UNSeleccionado">
+                    <option *ngFor="let unidad of UNLista" [value]="unidad.unidad_negocio_id">{{unidad.nombre}} ({{unidad.estado}})</option>
+                </select>
+            </div>
+        </div>
+        <div style="max-height: 450px; overflow: auto; border: 2px solid gainsboro;">
+            <sha-treeMultiple [disabled]="true" [hijos]="arbol.hijos" (eventosItem)="eventosItem($event)"></sha-treeMultiple>
+        </div>                                
+    </div>
+</div>

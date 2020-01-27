@@ -1,0 +1,79 @@
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label>Id</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id">
+            </div>
+            <div class="form-group">
+                <label>Valor</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" [ngClass]="{'btn-outline-primary' : !item.config.value.esEnlace, 'btn-primary' : item.config.value.esEnlace}" (click)="$event.preventDefault(); buscarValueBind()"><i class="fas fa-assistive-listening-systems" aria-hidden="true"></i></span>
+                    </div>
+                    <input type="text" class="form-control form-control-sm border-primaryAPM" [(ngModel)]="item.config.value.valor" placeholder="Valor">
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label>Tipo de lista enlace</label><br>
+                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_tipo" [(ngModel)]="item.config.tipoEnlace">
+                            <label ngbButtonLabel class="btn-primary">
+                                <input ngbButton type="radio" [value]="'enlace'"> Enlace
+                            </label>
+                            <label ngbButtonLabel class="btn-primary">
+                                <input ngbButton type="radio" [value]="'opcion'"> Opciones
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group" *ngIf="item.config.tipoEnlace=='enlace'">
+                        <label>Iterar (*ngFor)</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm border-primaryAPM" [(ngModel)]="item.config.for" placeholder="Iterar">
+                            <div class="input-group-append">
+                                <span class="input-group-text btn-primary" (click)="$event.preventDefault(); buscarForBind();"><i class="fas fa-assistive-listening-systems"></i></span>
+                                <span class="input-group-text btn-outline-success" (click)="$event.preventDefault(); nuevoForBind();"><i class="fas fa-plus"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="item.config.tipoEnlace=='opcion'">
+                        <label>Opciones</label>
+                        <div class="tableContent">
+                            <table class="table table-striped table-hover table-sm bg-white">
+                                <thead>
+                                    <tr>
+                                        <th>Fila</th>
+                                        <th style="min-width: 80px;">Id</th>
+                                        <th style="min-width: 80px;">Valor</th>
+                                        <th style="min-width: 80px;">Color</th>
+                                        <th style="width:1rem"><a class="text-size-10 text-success" (click)="addRow(); $event.preventDefault();" href="#"><i class="fas fa-plus-square"></i></a></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor='let row of item.config.options; let i = index'>
+                                        <td>{{i+1}}</td>
+                                        <td><input type="text" class="form-control" [(ngModel)]="row.id"></td>
+                                        <td><input type="text" class="form-control" [(ngModel)]="row.value"></td>
+                                        <td><select class="form-control" [(ngModel)]="row.color">
+                                                <option *ngFor="let color of btnColors" [value]="color.class">{{color.name}}</option>
+                                            </select></td>
+                                        <td><a class="text-size-10 text-danger" (click)="deleteRow(i); $event.preventDefault();" href="#"><i class="fas fa-eraser"></i></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <a class="text-size-15 text-success" (click)="addRow(); $event.preventDefault();" href="#"><i class="fas fa-plus-square"></i></a>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

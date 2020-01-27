@@ -1,0 +1,42 @@
+<div class="box-sidebar" *ngIf="openMenu" [@ohLeftMenu]>
+  <div class="select-company">
+    <div class="col">
+      <div class="row">
+          <span *ngIf="cse.data.user.profiles.length==1" class="text-GrayBlue">{{cse.data.user.profiles[0].businessName}}</span>
+          <div *ngIf="cse.data.user.profiles.length>1" ngbDropdown class="d-inline-block">
+            <button class="btn btn-outline-light" id="drop_unidades" ngbDropdownToggle>{{obtenerNombre()}}</button>
+            <div ngbDropdownMenu aria-labelledby="drop_unidades">
+              <button ngbDropdownItem class="dropdown-item" (click)="changeProfile(profile.id)" *ngFor="let profile of cse.data.user.profiles">{{profile.businessName}}</button>
+            </div>
+          </div>
+          <a href="#" class="text-light" (click)="$event.preventDefault(); $event.stopPropagation(); sincronizar()" ngbTooltip="Sincronizar" placement="right" style="position: absolute; right: 0.3rem; font-size: 20px;"><i class="fas fa-sync"></i></a>
+      </div>
+    </div>
+  </div>
+  <div style="position: relative">
+      <a href="#" [routerLink]="['/'+baseBe+'/Main']">
+        <img class="px-3 pt-4 pb-3 mw-100" width="300" src="https://containerservices.inlandservices.com/source/img/logo-01.svg">
+      </a>
+  </div>
+  <hr>
+  <h6 class="p-3 titulo-sidebar">
+    {{cse.data.user.data.company}}
+  </h6>
+  <div ngbDropdown class="d-inline-block" style="width: 100%">
+    <h6 class="pb-3 pt-0 px-3 sub-titulo_sidebar" id="drop_datos_perfil" ngbDropdownToggle style="white-space: normal;">
+      {{cse.data.user.data.name}} {{cse.data.user.data.lastName}} {{cse.data.user.data.lastMiddle}}
+    </h6>
+    <div ngbDropdownMenu aria-labelledby="drop_datos_perfil">
+      <button *ngFor="let option of cse.data.uo" class="dropdown-item" [routerLink]="[option.url]">
+        <i [ngClass]="option.icon"></i> {{option.name}}</button>
+    </div>
+  </div>
+  <hr>
+  <ul class="nav flex-column menu-apm">
+    <li *ngFor="let item of treeChild" class="nav-item menu-titulo" [ngClass]="{'menu-titulo' : item.isMain}">
+      <a class="nav-link" [ngClass]="{'pl-1' : item.isMain}" [routerLink]="[item.urlTree]" [routerLinkActive]="item.urlTree">{{item.name}}
+        <i class="fas fa-arrow-right float-right"></i>
+      </a>
+    </li>
+  </ul>
+</div>

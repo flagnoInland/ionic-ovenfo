@@ -1,0 +1,23 @@
+<input *ngIf="item.config.type != 'textarea' && item.config.type != 'richtext'" class="form-control"
+    [(ngModel)]="item.config.value.valor" 
+    [placeholder]="item.config.placeholder" 
+    [type]="item.config.type" 
+    [disabled]="item.config.disabled" 
+    [readonly]="item.config.readOnly" 
+    [required]="item.config.required" 
+    [minlength] = "item.config.minlength"
+    [maxlength] = "item.config.maxlength"
+    [min] = "item.config.min"
+    [max] = "item.config.max"
+    [step] = "item.config.step"
+>
+<textarea *ngIf="item.config.type == 'textarea'" class="form-control"
+[(ngModel)]="item.config.value.valor" 
+[placeholder]="item.config.placeholder" 
+[disabled]="item.config.disabled" 
+[readonly]="item.config.readOnly" 
+[required]="item.config.required" 
+[minlength] = "item.config.minlength"
+[maxlength] = "item.config.maxlength"
+></textarea>
+<angular-tinymce *ngIf="item.config.type == 'richtext'" formTinymce [(ngModel)]='item.config.value.valorRich' [settings]='cse.tinymceConfig' [required]="item.config.required"></angular-tinymce>

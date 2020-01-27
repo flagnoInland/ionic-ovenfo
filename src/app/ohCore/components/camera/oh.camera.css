@@ -1,0 +1,119 @@
+.oh_content {
+    visibility: visible;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 1051;
+}
+
+.oh_cam_btnReturn {
+    position: fixed;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+.oh_cam_btnChamge {
+    position: fixed;
+    bottom: 0.5rem;
+    left: 0.5rem;
+}
+
+.oh_cam_btnTake,
+.oh_cam_btnChamge,
+.oh_cam_btnReturn,
+.oh_previewClose {
+    font-size: 1.3rem;
+}
+
+.oh_video {
+    position: relative;
+}
+
+.oh_buttonsContent {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    text-align: center;
+    padding-bottom: 6rem;
+    /*padding-bottom: 6rem;*/
+}
+
+.oh_viewPhotos {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    overflow-x: auto;
+    width: 100%;
+    padding-bottom: 0.15rem;
+    padding-right: 0.15rem;
+    padding-left: 0.15rem;
+}
+
+@media screen and (min-width: 640px) {
+    .oh_buttonsContent {
+        padding-bottom: 0.5rem;
+    }
+    .oh_viewPhotos {
+        max-width: 16rem;
+    }
+}
+
+.oh_viewLane {
+    width: max-content;
+    width: -moz-max-content;
+    padding-top: 0.4rem;
+}
+
+.oh_viewContentPhoto {
+    position: relative;
+    display: inline-block;
+    max-height: 6rem;
+    margin-right: 0.5rem;
+    max-width: 6rem;
+    border: solid 1px red;
+    height: 6rem;
+    background: #00000085;
+}
+
+.oh_viewPhoto {
+    width: 100%;
+    /* border: solid 1px red; */
+    cursor: pointer;
+}
+
+.oh_viewDelete {
+    position: absolute;
+    top: -0.3rem;
+    right: -0.3rem;
+    cursor: pointer;
+}
+
+.oh_preview {
+    position: fixed;
+    background: black;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    text-align: center;
+    /*bottom: 0;*/
+}
+
+
+/*
+.oh_preview:before {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+*/
+
+.oh_previewClose {
+    top: 0.5rem;
+    right: 0.5rem;
+    position: fixed;
+}

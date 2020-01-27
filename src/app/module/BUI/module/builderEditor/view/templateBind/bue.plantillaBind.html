@@ -1,0 +1,336 @@
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-coins text-info"></i> Entidades
+                    <a href="#" (click)="entitieNew(); $event.preventDefault();" class="text-success oh_editor_bindAdd"><i class="fas fa-plus-circle"></i></a>
+                </div>
+                <ul class="list-group list-group-flush oh_editor_bindList">
+                    <li class="list-group-item" *ngFor="let item of design.bind.entities; let i = index">
+                        <span class="font-weight-bold">{{item.name}}</span>&nbsp;<span class="text-muted font-italic"><{{item.type}}></span><span *ngIf="item.isList" class="font-weight-bold">[]</span> <i *ngIf="item.isInput" class="text-warning fas fa-sign-in-alt"></i> <i *ngIf="item.isOutput" class="text-warning fas fa-sign-out-alt"></i>
+                        <div class="oh_editor_bindOpc">
+                            <a href="#" *ngIf="!item.readOnly" (click)="entitieDelete(i); $event.preventDefault();" class="text-danger mr-2"><i class="fas fa-eraser"></i></a>
+                            <a href="#" *ngIf="!item.readOnly" (click)="entitieEdit(i); $event.preventDefault();" class="text-info"><i class="fas fa-edit"></i></a>
+                            <a *ngIf="item.readOnly"  class="text-muted mr-2"><i class="fas fa-eraser"></i></a>
+                            <a *ngIf="item.readOnly"  class="text-muted"><i class="fas fa-edit"></i></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-dot-circle text-info"></i> Métodos
+                    <a href="#" (click)="methodOpen(); $event.preventDefault();" class="text-success oh_editor_bindAdd"><i class="fas fa-plus-circle"></i></a>
+                </div>
+                <ul class="list-group list-group-flush oh_editor_bindList">
+                    <li class="list-group-item" *ngFor="let item of design.bind.methods; let i = index">
+                        <span class="font-weight-bold">{{item.name}}</span>(<span class="text-muted font-italic">{{getParams(i)}}</span>)
+                        <div class="oh_editor_bindOpc">
+                            <a href="#" *ngIf="!item.readOnly" (click)="methodDelete(i); $event.preventDefault();" class="text-danger mr-2"><i class="fas fa-eraser"></i></a>
+                            <a href="#" *ngIf="!item.readOnly" (click)="methodEdit(i); $event.preventDefault();" class="text-info"><i class="fas fa-edit"></i></a>
+                            <a *ngIf="item.readOnly"  class="text-muted mr-2"><i class="fas fa-eraser"></i></a>
+                            <a *ngIf="item.readOnly"  class="text-muted"><i class="fas fa-edit"></i></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row pt-4">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-code-branch text-info"></i> Servicios
+                    <a href="#" (click)="serviceOpen(); $event.preventDefault();" class="text-success oh_editor_bindAdd"><i class="fas fa-plus-circle"></i></a>
+                </div>
+                <ul class="list-group list-group-flush oh_editor_bindList">
+                    <li class="list-group-item" *ngFor="let item of design.bind.services; let i = index">
+                        <i *ngIf="item.type == 'private'" class="text-warning fas fa-lock"></i>
+                        <i *ngIf="item.type == 'public'" class="text-warning fas fa-lock-open"></i>&nbsp;
+                        <span>{{item.name}} : <span class="font-weight-bold">{{getService(item.name)}}</span></span>
+                        <div class="oh_editor_bindOpc">
+                            <a href="#" (click)="serviceDelete(i); $event.preventDefault();" class="text-danger mr-1"><i class="fas fa-eraser"></i></a>
+                            <a href="#" (click)="serviceEdit(i); $event.preventDefault();" class="text-info"><i class="fas fa-edit"></i></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <i class="far fa-dot-circle text-info"></i> Métodos Predefinidos
+                    <a href="#" (click)="predefinedOpen(); $event.preventDefault();" class="text-success oh_editor_bindAdd"><i class="fas fa-plus-circle"></i></a>
+                </div>
+                <ul class="list-group list-group-flush oh_editor_bindList">
+                    <li class="list-group-item" *ngFor="let item of design.bind.predefineds; let i = index">
+                        <span class="font-weight-bold">{{item.name}}</span>(<span *ngIf="item.subType" class="text-muted font-italic">{{item.subType}}</span>)
+                        <div class="oh_editor_bindOpc">
+                                <a href="#" (click)="predefinedDelete(i); $event.preventDefault();" class="text-danger mr-1"><i class="fas fa-eraser"></i></a>
+                                <a href="#" (click)="predefinedEdit(i); $event.preventDefault();" class="text-info"><i class="fas fa-edit"></i></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #modEntities let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-coins text-info"></i> Entidad</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form class="form-enable">
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">
+                    <span>Nombre <i title="Ejm: pDato" class="fas fa-info-circle text-warning"></i></span>
+                </label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="pName" [(ngModel)]="entitie.name">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">
+                    <span>Tipo de dato</span>
+                </label>
+                <div class="col-sm-8">
+                    <select class="form-control" name="pDataType" [(ngModel)]="entitie.type">
+                        <option *ngFor="let option of ohbOptions.dataTypes" [value]="option.id">{{option.desc}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row" *ngIf="entitie.type=='any'">
+                <label class="col-form-label col-sm-4">
+                    <span>Definición de objeto</span>
+                </label>
+                <div class="col-sm-8">
+                    <button (click)="entitieAbrirEditor('definition')" class="btn btn-outline-info btn-sm mr-2"><i class="far fa-file-code"></i></button>
+                    <button *ngIf="!entitie.value || entitie.value==''" (click)="entitieInicializar()" class="btn btn-outline-secondary btn-sm"><i class="fas fa-magic"></i> Inicializar prueba</button>
+                </div>
+            </div>
+            <div class="form-group row" [hidden]="true">
+                <label class="col-form-label col-sm-4">
+                    <span>Es lista?</span>
+                </label>
+                <div class="col-sm-8">
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="isList" [(ngModel)]="entitie.isList">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="true"> Si
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="false"> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row" [hidden]="true">
+                <label class="col-form-label col-sm-4">
+                    <span>Es entrada?</span>
+                </label>
+                <div class="col-sm-8">
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="isInput" [(ngModel)]="entitie.isInput">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="true"> Si
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="false"> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row" [hidden]="true">
+                <label class="col-form-label col-sm-4">
+                    <span>Es salida?</span>
+                </label>
+                <div class="col-sm-8">
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="isOutput" [(ngModel)]="entitie.isOutput">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="true"> Si
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="false"> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">
+                    <span>Valor <i title="Ejm: &#34;Valor&#34;" class="fas fa-info-circle text-warning"></i></span>
+                </label>
+                <div class="col-sm-8">
+                    <input *ngIf="entitie.type!='boolean' && entitie.type!='any'" class="form-control bg-secondary text-light oh_text-mono text-" type="text" name="pValue" [(ngModel)]="entitie.value">
+                    <button *ngIf="entitie.type=='any'" (click)="entitieAbrirEditor('value')" class="btn btn-outline-info btn-sm mr-2"><i class="far fa-file-code"></i> </button>
+                    <button *ngIf="entitie.type=='any' && (entitie.value && entitie.value!='')" (click)="entitieLimpiar()" class="btn btn-outline-danger btn-sm"><i class="fas fa-eraser"></i> Borrar</button>
+                
+                    <div *ngIf="entitie.type=='boolean'" #inp_valorRadio class="btn-group btn-group-toggle" ngbRadioGroup name="inp_valorRadio" [(ngModel)]="entitie.value">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="'true'"> true
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" [value]="'false'"> false
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" (click)="c('cancel')"><i class="fas fa-times"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-success" (click)="c('save')"><i class="far fa-save"></i> Guardar</button>
+    </div>
+</ng-template>
+<ng-template #modEntitiesEditor let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="far fa-file-code"></i> Editor JSON</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div id="jsoneditor" style="width: 100%; height: 400px;"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" (click)="c('cancel')"><i class="fas fa-times"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-success" (click)="c('save')"><i class="far fa-save"></i> Guardar</button>
+    </div>
+</ng-template>
+<ng-template #modMethods let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-dot-circle text-info"></i> Método</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form class="form-enable">
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">
+                    <span>Nombre <i title="Ejm: methodName" class="fas fa-info-circle text-warning"></i></span>
+                </label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="pName" [(ngModel)]="method.name">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">
+                    <span>Contenido</span>
+                </label>
+                <div class="col-sm-8">
+                    <textarea [ohHighlight]="method.value" [options]="{}" [lang]="'ts'"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">
+                    <span>Parámetros <i title="Ejm: paramName" class="fas fa-info-circle text-warning"></i></span>
+                </label>
+                <div class="col-sm-8">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                            <th scope="col">Parámetro</th>
+                            <th scope="col">Tipo de dato</th>
+                            <th scope="col">Opcional</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let param of method.params; let i = index">
+                                <td scope="row">
+                                    <input name="param_{{i}}" class="form-control" type="text" [(ngModel)]="param.name">
+                                </td>
+                                <td>
+                                    <select name="type_{{i}}" class="form-control" [(ngModel)]="param.type">
+                                        <option *ngFor="let option of ohbOptions.dataTypes" [value]="option.id">{{option.desc}}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="inp_obligatorio_{{i}}" name="inp_obligatorio_{{i}}" [(ngModel)]="param.isOptional">
+                                        <label class="custom-control-label" for="inp_obligatorio_{{i}}">&nbsp;</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a href="#" (click)="methodAddAtribute(); $event.preventDefault();" class="text-success oh_editor_bindAddSpl"><i class="fas fa-plus-circle"></i></a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" (click)="c('cancel')"><i class="fas fa-times"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-success" (click)="c('save')"><i class="far fa-save"></i> Guardar</button>
+    </div>
+</ng-template>
+<ng-template #modServices let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-coins text-info"></i> Servicio</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form class="form-enable">
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">
+                    <span>Servicio</span>
+                </label>
+                <div class="col-sm-8">
+                    <select class="form-control" name="pDataType" [(ngModel)]="service.name">
+                        <option *ngFor="let option of ohbOptions.services" [value]="option.id">{{option.desc}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">
+                    <span>Tipo</span>
+                </label>
+                <div class="col-sm-8">
+                    <div class="btn-group btn-group-toggle" ngbRadioGroup name="isList" [(ngModel)]="service.type">
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" value="public"> Público
+                        </label>
+                        <label ngbButtonLabel class="btn-primary">
+                            <input ngbButton type="radio" value="private"> Privado
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" (click)="c('cancel')"><i class="fas fa-times"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-success" (click)="c('save')"><i class="far fa-save"></i> Guardar</button>
+    </div>
+</ng-template>
+<ng-template #modPredefined let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-dot-circle text-info"></i> Predefinido</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form class="form-enable">
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">
+                    <span>Método</span>
+                </label>
+                <div class="col-sm-8">
+                    <select class="form-control" name="pDataType" [(ngModel)]="predefined.name">
+                        <option *ngFor="let option of ohbOptions.predefineds" [value]="option.id">{{option.desc}}</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" (click)="c('cancel')"><i class="fas fa-times"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-success" (click)="c('save')"><i class="far fa-save"></i> Guardar</button>
+    </div>
+</ng-template>

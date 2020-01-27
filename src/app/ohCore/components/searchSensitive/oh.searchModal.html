@@ -1,0 +1,34 @@
+<div class="modal-header">
+    <h5 class="modal-title">Buscar {{title}}</h5>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('CLOSE')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">
+                    <input id="seaching" autocomplete="off" type="search" class="form-control" [(ngModel)]="filtering[searchBy]" ohFocusOnInit [ohInputFormat]="'upper'" (input)="goListed(0)" (keydown.backspace)="goListed(0)" (keydown.enter)="selectEnter(activeModal)" (keydown.arrowup)="goListed(selectedItem-1)"
+                        (keydown.arrowdown)="goListed(selectedItem+1)" />
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of _search2; let i = index" [ngClass]="{'customSelc' : i == selectedItem}" (click)="selectItem(item, activeModal)">
+                <th style="position: relative;">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="option_{{i}}" name="option" class="custom-control-input" value="{{item[searchId]}}" [(ngModel)]="selectedIt">
+                        <label class="custom-control-label"  for="option_{{i}}">{{item[searchBy]}}</label>
+                    </div>
+                    <div *ngIf="type == 1" class="badge badge-primary" style="position: absolute; top: 1rem; right: 0.5rem;">{{item.tag}}</div>
+                    <div *ngIf="type == 2 && item.tag == 'relevo'" class="badge badge-primary" style="position: absolute; top: 1rem; right: 0.5rem;">{{item.tag}}</div>
+                    <div *ngIf="type == 2 && item.tag == 'punto'" class="badge badge-success" style="position: absolute; top: 1rem; right: 0.5rem;">{{item.tag}}</div>
+                </th>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-danger" (click)="activeModal.dismiss('CANCEL')"><i class="far fa-times-circle"></i> Cancelar</button>
+</div>

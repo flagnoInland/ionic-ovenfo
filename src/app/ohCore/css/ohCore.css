@@ -1,0 +1,13 @@
+.oh_tableContent {
+    width: 100%;
+    overflow: auto;
+}
+
+.oh_hr-sm {
+    margin: 0.2rem 0rem;
+}
+
+.oh_textTop-sm {
+    font-size: 0.5rem;
+    vertical-align: text-top;
+}

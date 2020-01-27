@@ -1,0 +1,237 @@
+<div *ngIf="design.selectedItem" class="oh_editor_conf" style="position: relative;">
+    <div style="position: absolute; right: 0.5rem;">
+            <a href="#" *ngIf="!editProfit" (click)="$event.preventDefault(); editProfit = !editProfit" class="text-muted mr-1">
+                <span *ngIf="design.selectedItem._id">{{design.selectedItem._id}}</span>
+                <span *ngIf="!design.selectedItem._id">S/N</span>
+            </a>
+            <input ohFocusOnInit *ngIf="editProfit" #inp_dropoff="ngModel" name="inp__id" class="form-control form-control-minimal mr-1" style="display: inline; width: 9rem;" [(ngModel)]="design.selectedItem._id" required="true" (keyup.enter)="editProfit = !editProfit;">
+            <{{design.selectedItem.name}}> &nbsp;
+            <a (click)="$event.preventDefault(); deleteElement();" class="btn btn-danger" href="#"><i class="fas fa-eraser"></i> Eliminar</a> &nbsp;
+            <a (click)="$event.preventDefault(); closeConfig();" class="btn btn-outline-danger" href="#"><i class="far fa-times-circle"></i> Cerrar ventana</a>
+    </div>
+    <ngb-tabset>
+        <ngb-tab>
+            <ng-template ngbTabTitle><i class="fas fa-cog"></i> Config</ng-template>
+            <ng-template ngbTabContent>
+                <bue-ec-textboxconf *ngIf="design.selectedItem.id == 1" [item]="design.selectedItem" (onSearchBind)="buscarBind($event)"></bue-ec-textboxconf>
+                <bue-ec-tableconf *ngIf="design.selectedItem.id == 2" [item]="design.selectedItem" (onSearchBind)="buscarBind($event)" (onNewBind)="nuevoBind($event)"></bue-ec-tableconf>
+                <bue-ec-containerconf *ngIf="design.selectedItem.id == 3" [item]="design.selectedItem"></bue-ec-containerconf>
+                <bue-ec-linkconf *ngIf="design.selectedItem.id == 4" [item]="design.selectedItem"></bue-ec-linkconf>
+                <bue-ec-buttonconf *ngIf="design.selectedItem.id == 5" [item]="design.selectedItem"></bue-ec-buttonconf>
+                <bue-ec-rowconf *ngIf="design.selectedItem.id == 6" [item]="design.selectedItem"></bue-ec-rowconf>
+                <bue-ec-searchrowconf *ngIf="design.selectedItem.id == 7" [item]="design.selectedItem"></bue-ec-searchrowconf>
+                <bue-ec-keypadconf *ngIf="design.selectedItem.id == 8" [item]="design.selectedItem"></bue-ec-keypadconf>
+                <bue-ec-outputtextconf *ngIf="design.selectedItem.id == 9" [item]="design.selectedItem" (onSearchBind)="buscarBind($event)"></bue-ec-outputtextconf>
+                <bue-ec-alertconf *ngIf="design.selectedItem.id == 10" [item]="design.selectedItem" (onSearchBind)="buscarBind($event)"></bue-ec-alertconf>
+                <bue-ec-accordionconf *ngIf="design.selectedItem.id == 11" [item]="design.selectedItem"></bue-ec-accordionconf>
+                <bue-ec-tabconf *ngIf="design.selectedItem.id == 12" [item]="design.selectedItem"></bue-ec-tabconf>
+                <bue-ec-selectconf *ngIf="design.selectedItem.id == 13" [item]="design.selectedItem" (onSearchBind)="buscarBind($event)" (onNewBind)="nuevoBind($event)"></bue-ec-selectconf>
+                <bue-ec-datepickerconf *ngIf="design.selectedItem.id == 14" [item]="design.selectedItem"></bue-ec-datepickerconf>
+                <bue-ec-formconf *ngIf="design.selectedItem.id == 15" [item]="design.selectedItem"></bue-ec-formconf>
+                <bue-ec-radioconf *ngIf="design.selectedItem.id == 16" [item]="design.selectedItem" (onSearchBind)="buscarBind($event)" (onNewBind)="nuevoBind($event)"></bue-ec-radioconf>
+                <bue-ec-iconconf *ngIf="design.selectedItem.id == 17" [item]="design.selectedItem"></bue-ec-iconconf>
+                <bue-ec-modalconf *ngIf="design.selectedItem.id == 18" [item]="design.selectedItem" (onNewBind)="nuevoBind($event)"></bue-ec-modalconf>
+                <bue-ec-formrowconf *ngIf="design.selectedItem.id == 19" [item]="design.selectedItem"></bue-ec-formrowconf>
+                <bue-ec-optionconf *ngIf="design.selectedItem.id == 20" [item]="design.selectedItem" (onSearchBind)="buscarBind($event)"></bue-ec-optionconf>
+                <bue-ec-cardconf *ngIf="design.selectedItem.id == 21" [item]="design.selectedItem"></bue-ec-cardconf>
+                <bue-ec-listheaderconf *ngIf="design.selectedItem.id == 22" [item]="design.selectedItem" (onSearchBind)="buscarBind($event)" (onNewBind)="nuevoBind($event)"></bue-ec-listheaderconf>
+                <bue-ec-paginationconf *ngIf="design.selectedItem.id == 23" [item]="design.selectedItem" (onSearchBind)="buscarBind($event)"></bue-ec-paginationconf>
+                <bue-ec-bagdeconf *ngIf="design.selectedItem.id == 24" [item]="design.selectedItem"></bue-ec-bagdeconf>
+                <bue-ec-linkboxconf *ngIf="design.selectedItem.id == 25" [item]="design.selectedItem"></bue-ec-linkboxconf>
+                <bue-ec-linkcontainerconf *ngIf="design.selectedItem.id == 26" [item]="design.selectedItem"></bue-ec-linkcontainerconf>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab>
+            <ng-template ngbTabTitle><i class="far fa-hand-point-down"></i> Eventos</ng-template>
+            <ng-template ngbTabContent>
+                <div class="container-fluid mt-2">
+                    <div class="row">
+                        <div class="col-4 col-md-6">
+                            <div class="form-group">
+                                <label><i class="fas fa-code"></i> Renderiza al evaluar (*ngIf)</label>
+                                <input type="text" class="form-control form-control-sm border border-warning" [(ngModel)]="design.selectedItem.whenIf" placeholder="Renderiza al evaluar">
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-6">
+                            <div class="form-group">
+                                <label><i class="fas fa-code"></i> Oculta al evaluar ([hidden])</label>
+                                <input type="text" class="form-control form-control-sm border border-warning" [(ngModel)]="design.selectedItem.whenHidden" placeholder="Oculta al evaluar">
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-6" *ngIf="design.selectedItem.flagOnChange">
+                            <div class="form-group">
+                                <label><i class="fas fa-code"></i> Evento cambiar</label>
+                                <input type="text" class="form-control form-control-sm border border-info" [(ngModel)]="design.selectedItem.config.onChange" placeholder="Evento cambiar">
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-6" *ngIf="design.selectedItem.flagOnClick">
+                            <div class="form-group">
+                                <label><i class="fas fa-code"></i> Evento click, <a href="#" ngbTooltip="Evento al hacer click."><i class="fas fa-question-circle"></i></a></label>
+                                <input type="text" class="form-control form-control-sm border border-info" [(ngModel)]="design.selectedItem.config.onClick" placeholder="Evento click">
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-6" *ngIf="design.selectedItem.flagOnClose && design.selectedItem.config.isDismissible">
+                            <div class="form-group">
+                                <label><i class="fas fa-code"></i> Evento cerrar, <a href="#" ngbTooltip="Evento al cerrar."><i class="fas fa-question-circle"></i></a></label>
+                                <input type="text" class="form-control form-control-sm border border-info" [(ngModel)]="design.selectedItem.config.onClose" placeholder="Evento Cerrar">
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-6" *ngIf="design.selectedItem.flagOnKey">
+                            <div class="form-group">
+                                <label><i class="fas fa-code"></i> Evento teclado, <a href="#" ngbTooltip="Evento teclado"><i class="fas fa-question-circle"></i></a></label>
+                                <div class="input-group">
+                                    <select class="form-control" name="inp_keyType" [(ngModel)]="design.selectedItem.config.onKeyType">
+                                        <option *ngFor="let vista of keyType" [value]="vista.tipo">{{vista.nombre}}</option>
+                                    </select>
+                                    <select class="form-control" name="inp_keyButton" [(ngModel)]="design.selectedItem.config.onKeyButton">
+                                        <option *ngFor="let vista of keyButton" [value]="vista.boton">{{vista.nombre}}</option>
+                                    </select>
+                                    <input type="text" class="form-control" placeholder="Evento tecla" name="inp_keyValue" [(ngModel)]="design.selectedItem.config.onKeyValue">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab>
+            <ng-template ngbTabTitle><i class="far fa-eye"></i> Vista</ng-template>
+            <ng-template ngbTabContent>
+                <div class="container-fluid mt-2">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label>Contenedor</label><br>
+                                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="design.selectedItem.viewContent">
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" [value]="'div'"> div
+                                            </label>
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" [value]="'span'"> span
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label>Exposición</label><br>
+                                        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="design.selectedItem.isMaxWidh">
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" [value]="false"> Ajustado
+                                            </label>
+                                            <label ngbButtonLabel class="btn-primary">
+                                                <input ngbButton type="radio" [value]="true"> Vertical
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Ancho (%)</label><br>
+                                <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="design.selectedItem.width">
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" value=""> NA
+                                    </label>
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" value="100"> 100
+                                    </label>
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" value="75"> 75
+                                    </label>
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" value="50"> 50
+                                    </label>
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" value="25"> 25
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Vista responsiva</label><br>
+                                <select class="form-control" name="pConfigVistaResponsiva" [(ngModel)]="design.selectedItem.vistaResponsiva">
+                                    <option *ngFor="let vista of vistaResponsiva" [value]="vista.clase">{{vista.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <label>Espacios</label><br>
+                            <table class="table table-striped table-hover table-sm bg-white" style="min-width: 25rem;">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Área</th>
+                                        <th>Tamaño</th>
+                                        <th style="width:1rem"><a class="text-size-10 text-success" (click)="addSpace(); $event.preventDefault();" href="#"><i class="fas fa-plus-square"></i></a></th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="design.selectedItem.spacing">
+                                    <tr *ngFor='let space of design.selectedItem.spacing; let i = index'>
+                                        <td><select class="form-control" [(ngModel)]="space.type">
+                                                <option *ngFor="let confSpace of spacingType" [value]="confSpace.type">{{confSpace.name}}</option>
+                                        </select></td>
+                                        <td>
+                                            <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="space.area">
+                                                <label ngbButtonLabel class="btn-outline-info" *ngFor="let confSpace of spacingArea">
+                                                    <input ngbButton type="radio" [value]="confSpace.type"> <i [class]="confSpace.name"></i>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td><select class="form-control" [(ngModel)]="space.size">
+                                                <option *ngFor="let confSpace of spacingSize" [value]="confSpace.type">{{confSpace.name}}</option>
+                                        </select></td>
+                                        <td><a class="text-size-10 text-danger" (click)="deleteSpace(i); $event.preventDefault();" href="#"><i class="fas fa-eraser"></i></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <a class="text-size-15 text-success" (click)="addSpace(); $event.preventDefault();" href="#"><i class="fas fa-plus-square"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
+</div>
+<ng-template #modBuscar let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fab fa-searchengin"></i> Predefinido</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <input #inp_buscar type="search" (keydown.enter)="buscar()" class="form-control" [(ngModel)]="buscar" placeholder="Buscar atributo">
+        <div class="input-group-append">
+            <span class="input-group-text" (click)="buscar()"><i class="fa fa-search" aria-hidden="true"></i> buscar</span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" (click)="c('cancel')"><i class="fas fa-times"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-success" (click)="c('save')"><i class="far fa-save"></i> Guardar</button>
+    </div>
+</ng-template>
+<ng-template #modEntitiesNew let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-file-code"></i> Nueva entidad</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label>Valor</label>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend" *ngIf="tipoEnlace == 'opcion'">
+                    <span class="input-group-text" id="basic-addon1">this.ohbData.</span>
+                </div>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="nuevoEnlace" placeholder="Nombre">
+            </div>
+        </div>
+        <div id="jsoneditorNew" style="width: 100%; height: 400px;"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" (click)="c('cancel')"><i class="fas fa-times"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-success" [disabled]="!nuevoEnlace" (click)="c('save')"><i class="far fa-save"></i> Guardar</button>
+    </div>
+</ng-template>

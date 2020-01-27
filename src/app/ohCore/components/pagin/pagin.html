@@ -1,0 +1,31 @@
+<div class="pr-3 d-flex" *ngIf="obj_pagin">
+    <div *ngIf="length != 0 && obj_pagin.total != 0; else else_tmp;">
+        <span class="mr-1 mr-sm-2 pagin-text">
+            {{(obj_pagin.size_rows * obj_pagin.page - (obj_pagin.size_rows-1))}}-{{(obj_pagin.size_rows * obj_pagin.page - (obj_pagin.size_rows-length))}} de {{obj_pagin.total}}<span class="vistaBC">&nbsp;registros</span>
+        </span>
+    </div>
+    <ng-template #else_tmp>
+        <span class="mr-1 pagin-text">Sin registros</span>
+    </ng-template>
+     <ng-template [ngIf]="length != obj_pagin.total">
+        <ngb-pagination [collectionSize]="obj_pagin.total" [rotate]="true" [ellipses]="false" [boundaryLinks]="true" [(page)]="obj_pagin.page" [maxSize]="default.max_size()" [pageSize]="obj_pagin.size_rows" [size]="obj_pagin.size" (pageChange)="list.emit()"></ngb-pagination>
+    </ng-template> 
+    <div class="pb-3">
+        <button type="button" class="btn btn-outline-orange btn-sm ml-1 mr-ml-2" placement="left-top" [ngbPopover]="popContent" #p="ngbPopover" [popoverTitle]="popTitle" [autoClose]="'outside'" [disabled]="length == 0 && obj_pagin.total == 0"><i class="fas fa-list-ol"></i></button>
+    </div>
+    <ng-template #popTitle>Mostrar:</ng-template>
+    <ng-template #popContent>
+        <div class="d-flex justify-content-center">
+            <select class="form-control form-control-sm custom-select custom-select-sm" name="size_rows" [(ngModel)]="obj_pagin.size_rows" (change)="execList(); p.close()">
+                <ng-template ngFor let-size [ngForOf]="obj_pagin.options" let-id_size="index" [ngForTrackBy]="trackByFn">
+                    <!-- <ng-container *ngFor="let size of obj_pagin.options; index as id_size"> -->
+                        <ng-template [ngIf]="validSize(id_size)">
+                            <option [value]="size">{{size}}</option>
+                        </ng-template>
+                    <!-- </ng-container> -->
+                </ng-template>
+            </select>
+            <span class="ml-2 mt-1">registros</span>
+        </div>
+    </ng-template>
+</div>

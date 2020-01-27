@@ -1,0 +1,175 @@
+<div class="container-fluid tis-cards-mt-2">
+	<form #frmRegister="ngForm" class="form-enable" (ngSubmit)="doProcess()">
+		<div class="card">
+			<div class="card-header">
+				<i class="fas fa-envelope-open-text"></i> Datos de notificación</div>
+			<div class="card-body">
+				<div class="form-row">
+					<div class="form-group col-md-2">
+						<label for="inpIcono">Ícono <a href="https://fontawesome.com/icons?d=gallery&m=free"
+								target="_blank"><i class="fas fa-info-circle" placeholder="Ícono"
+									ngbTooltip="Libreria Font Awesome, ejemplo 'fab fa-500px' de &#60;i class='fab fa-500px'&#62;&#60;/i&#62;"></i></a></label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<div class="input-group-text"><i [ngClass]="objAdd.icono"></i></div>
+							</div>
+							<input #inp_icono="ngModel" name="inp_icono" type="text" class="form-control"
+								[(ngModel)]="objAdd.icono" placeholder="Ícono" [ohInputFormat]="'fontawesome'"
+								required="true">
+						</div>
+						<div *ngIf="inp_icono.invalid && (inp_icono.dirty || inp_icono.touched)"
+							class="alert alert-danger alert-form">
+							<ul>
+								<li *ngIf="inp_icono.errors.required">El campo es requerido.</li>
+							</ul>
+						</div>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="inpTitulo">Título</label>
+						<input #inpTitulo="ngModel" name="inpTitulo" type="text" class="form-control"
+							[(ngModel)]="objAdd.titulo" placeholder="Título" required="true">
+						<div *ngIf="inpTitulo.invalid && (inpTitulo.dirty || inpTitulo.touched)"
+							class="alert alert-danger alert-form">
+							<ul>
+								<li *ngIf="inpTitulo.errors.required">El campo es requerido.</li>
+							</ul>
+						</div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="inpSubtitulo">Subtítulo</label>
+						<input #inpSubtitulo="ngModel" name="inpSubtitulo" class="form-control"
+							[(ngModel)]="objAdd.subtitulo" placeholder="Subtítulo" type="text" required="true">
+						<div *ngIf="inpSubtitulo.invalid && (inpSubtitulo.dirty || inpSubtitulo.touched)"
+							class="alert alert-danger alert-form">
+							<ul>
+								<li *ngIf="inpSubtitulo.errors.required">El campo es requerido.</li>
+							</ul>
+						</div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="inpSubtitulo">Fecha de caducidad</label>
+						<oh-datetime [(fecha_hora)]="objAdd.fecha_caducidad" [time]="{hour: 23,minute: 59}"></oh-datetime>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<label for="inpDescripcion">Descripción</label>
+						<angular-tinymce formTinymce #inpDescripcion="ngModel" name="inpDescripcion"
+							[(ngModel)]='objAdd.descripcion' [settings]='descripConfig' required="true">
+						</angular-tinymce>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-12" style="margin-bottom: 0rem;">
+						<label for="inpDescripcion">Configuración del ícono de notificaciones (<i
+								class="fas fa-envelope"></i>)</label>
+						<table class="table table-sm">
+							<thead>
+								<tr>
+									<th scope="col" style="width:1rem"><i title="Principal"
+											class="text-muted text-size-10 far fa-check-square"></i></th>
+									<th scope="col">Opción</th>
+									<th scope="col">Descripción</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" class="custom-control-input" id="config_1"
+												name="config_1" [(ngModel)]="objAdd.nivel">
+											<label class="custom-control-label" for="config_1">&nbsp;</label>
+										</div>
+									</td>
+									<th scope="row">Visible</th>
+									<td>En enviar la notificación se mostrará como un modal, sinó solo se mostrará un indicador de pendiente leer</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" class="custom-control-input" id="config_2"
+												name="config_2" [(ngModel)]="!objAdd.unica_vez">
+											<label class="custom-control-label" for="config_2">&nbsp;</label>
+										</div>
+									</td>
+									<th scope="row">Permanente</th>
+									<td>Se va a listar y visualizar siempre en el ícono, sinó se mostrará una única vez.
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" class="custom-control-input" id="config_3"
+												name="config_3" [(ngModel)]="!objAdd.unica_alerta">
+											<label class="custom-control-label" for="config_3">&nbsp;</label>
+										</div>
+									</td>
+									<th scope="row">Mantener alerta</th>
+									<td>Luego de ser visto y/o leido mantener el indicador de pendiente leido, sinó se
+										mantendrá en el historial pero como leido</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" class="custom-control-input" id="config_4"
+												name="config_4" [(ngModel)]="objAdd.estado">
+											<label class="custom-control-label" for="config_4">&nbsp;</label>
+										</div>
+									</td>
+									<th scope="row">Estado</th>
+									<td>Activo o inactivo</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" class="custom-control-input" id="config_5"
+												name="config_5" [(ngModel)]="objAdd.instanteNotification" [disabled]="!objAdd.estado">
+											<label class="custom-control-label" for="config_5">&nbsp;</label>
+										</div>
+									</td>
+									<th scope="row">Notificar en vivo</th>
+									<td>Luego de grabar si la notificación esta antes de la fecha vencimiento se le
+										notificará al usuario en ese instante</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card mb-2">
+			<div class="card-header">
+				Roles a notificar
+			</div>
+			<div class="card-body">
+				<sha-rolSearch [(roles_list)]="roles_list" [(roles_xml)]="roles_xml" [(roles_concat)]="roles_concat" [required]="true" [form]="frmRegister" [name]="'inp_rol'"></sha-rolSearch>
+			</div>
+		</div>
+		<div class="card bg-light botoneraCard">
+			<div class="card-body">
+				<button type="submit" class="btn btn-primary mr-2" [disabled]="frmRegister.invalid"><i class="far fa-save"></i> Grabar</button>
+				<button type="button" (click)="vistaPrevia()" class="btn btn-outline-info mr-2"><i class="fas fa-eye"></i> Vista previa</button>
+				<button type="button" class="btn btn-outline-secondary" (click)="frmRegister.resetForm({});"><i class="fas fa-eraser"></i> Limpiar</button>
+			</div>
+		</div>
+	</form>
+</div>
+<ng-template #modalPrueba let-c="close" let-d="dismiss">
+    <div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Notificaciones</h4>
+		<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+			<span aria-hidden="true">&times;</span>
+		</button>
+    </div>
+    <div class="modal-body">
+		<div class="card">
+			<div class="card-header tis-adds-header">
+				<i [class]="objAdd.icono"></i> {{objAdd.titulo}}
+			</div>
+			<div class="card-body text-secondary">
+				<h5 class="card-title">{{objAdd.subtitulo}}</h5>
+				<p class="card-text" [innerHTML]="objAdd.descripcion | ohSafeHtml"></p>
+			</div>
+		</div>
+    </div>
+</ng-template>

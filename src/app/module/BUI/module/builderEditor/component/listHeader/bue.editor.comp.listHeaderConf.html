@@ -1,0 +1,92 @@
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label>Id</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Paginación</label><br>
+                <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="item.config.paginacionHabilitar">
+                    <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" [value]="true"> Si
+                    </label>
+                    <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" [value]="false"> No
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-4" *ngIf="item.config.paginacionHabilitar">
+            <div class="form-group">
+                <label>Filtro ligero</label><br>
+                <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="item.config.paginacionFiltro">
+                    <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" [value]="true"> Si
+                    </label>
+                    <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" [value]="false"> No
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-4" *ngIf="item.config.paginacionHabilitar">
+            <div class="form-group">
+                <label>Modal de Filtro</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" [ngClass]="{'btn-outline-primary' : !item.config.modalValue.esEnlace, 'btn-primary' : item.config.modalValue.esEnlace}" (click)="$event.preventDefault(); buscarValueBind()"><i class="fas fa-assistive-listening-systems" aria-hidden="true"></i></span>
+                    </div>
+                    <input #inp_value="ngModel" name="inp_value" type="text" class="form-control form-control-sm" [(ngModel)]="item.config.modalValue.valor" placeholder="Valor" [required]="item.config.required">
+                </div>
+            </div>
+            <div class="alert alert-secondary" role="alert">
+                <small class="form-text text-muted">
+                    <span class="font-weight-bold">Variable</span> : ohfiltro
+                </small>
+            </div>
+        </div>
+        <div class="col-8" *ngIf="item.config.paginacionHabilitar">
+            <div class="form-group">
+                <label>Opciones de filtro (Variable ohfiltro)</label>
+                <table class="table table-striped table-hover table-sm bg-white">
+                    <thead>
+                        <tr>
+                            <th style="width:1rem"><a class="text-size-10 text-success" (click)="addRow(); $event.preventDefault();" href="#"><i class="fas fa-plus-square"></i></a></th>
+                            <th>Variable</th>
+                            <th>Etiqueta</th>
+                            <th>Tipo</th>
+                            <th>Cerrar filtro</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor='let row of item.config.opciones; let i = index'>
+                            <td><a class="text-size-10 text-danger" (click)="deleteRow(i); $event.preventDefault();" href="#"><i class="fas fa-eraser"></i></a></td>
+                            <td><input class="form-control input-sm" [(ngModel)]="row.variable" (input)="nuevoForBind()" placeholder="Variable" type="text"></td>
+                            <td><input class="form-control input-sm" [(ngModel)]="row.etiqueta" (input)="nuevoForBind()" placeholder="Etiqueta" type="text"></td>
+                            <td>
+                                <div class="btn-group btn-group-toggle" ngbRadioGroup name="inp_tipo_{{i}}" [(ngModel)]="row.tipo" (change)="nuevoForBind()">
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" [value]="''"> Normal
+                                    </label>
+                                    <label ngbButtonLabel class="btn-primary">
+                                        <input ngbButton type="radio" [value]="'fechaRango'"> Fechas
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="inp_tipo_{{i}}" name="inp_tipo_{{i}}" [(ngModel)]="row.cerrarFiltro" (change)="nuevoForBind()">
+                                    <label class="custom-control-label" for="inp_tipo_{{i}}">&nbsp;</label>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a class="text-size-15 text-success" (click)="addRow(); $event.preventDefault();" href="#"><i class="fas fa-plus-square"></i></a>
+            </div>
+        </div>
+    </div>
+</div>

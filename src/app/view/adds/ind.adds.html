@@ -1,0 +1,33 @@
+<div style="overflow: hidden;">
+    <div style="width: 200%; display: inline-flex;">
+        <ul class="list-unstyled tis-adds-ul" style="width: 50%;" *ngIf="openAdds" [@ohLeftMenu]>
+            <li class="media tis-adds-li" *ngFor="let add of coreService.data.adds; let i = index" (click)="$event.preventDefault(); openAdd(i);" [ngClass]="{'tis-adds-liNoRead' : add.read==0}">
+                <div class="mr-3 tis-adds-icon text-primary">
+                    <i [class]="add.icon"></i>
+                </div>
+                <div class="media-body tis-adds-body">
+                    <h5 class="mt-0 mb-1">
+                        {{add.title}}
+                        <small *ngIf="add.sendDate" class="text-secondary tis-adds-date">{{add.sendDate | date: coreService.config.formatDate}}</small>
+                    </h5>
+                    {{add.subtitle}}
+                </div>
+            </li>
+        </ul>
+        <div style="width: 50%;" *ngIf="openDetail" [@ohRight]>
+            <div class="card">
+                <div class="card-header tis-adds-header">
+                    <a class="text-primary tis-adds-arrowBack" (click)="$event.preventDefault(); returning();"><i class="fas fa-arrow-alt-circle-left"></i></a>
+                    <i [class]="add.icon"></i> {{add.title}}
+                </div>
+                <div class="card-body text-secondary">
+                    <h5 class="card-title">{{add.subtitle}}</h5>
+                    <p class="card-text" [innerHTML]="add.description | ohSafeHtml"></p>
+                </div>
+                <div *ngIf="add.type == 1" class="card-footer">
+                    <button type="button" class="btn btn-primary" (click)="onUpdate.emit()"><i class="fas fa-sync"></i> Actualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

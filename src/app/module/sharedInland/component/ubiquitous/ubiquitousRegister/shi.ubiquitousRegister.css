@@ -1,0 +1,17 @@
+.map-dir {
+    height: 330px;
+    width: 100%;
+}
+
+.auto-complete {
+    position: absolute;
+    z-index: 999999999;
+    width: 100%;
+}
+
+
+/* @media screen and (max-width: 576px) {
+    .auto-complete {
+        width: 100%;
+    }
+} */

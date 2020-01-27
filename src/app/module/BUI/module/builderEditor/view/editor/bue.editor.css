@@ -1,0 +1,35 @@
+.oh_editor_outComp:not(.oh-view-readOnly) {
+	border: solid 1px transparent;
+}
+
+.oh_editor_outComp:not(.oh-view-readOnly) .oh_editor_handle {
+	border: solid 8px transparent;
+    padding: 2px;
+}
+
+.oh_editor_overComp:not(.oh-view-readOnly) {
+	border: solid 1px #4d7288;
+}
+
+.oh_editor_overComp:not(.oh-view-readOnly) .oh_editor_handle {
+	border: solid 8px #7facc7;
+    cursor: pointer;
+}
+
+.oh_editor_compSelected:not(.oh-view-readOnly) {
+	border: solid 8px #7facc7 !important;
+    cursor: pointer;
+    padding: 2px;
+}
+
+.oh_editor_viewComp_A {
+	display: block;
+}
+
+.oh_editor_viewComp_B {
+	display: inline-block;
+}	
+
+.oh_editor_default {
+	cursor: default;
+}

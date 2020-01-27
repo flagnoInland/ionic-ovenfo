@@ -1,0 +1,81 @@
+.separador-abajo {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.box-header {
+    height: 60px;
+    width: 100%;
+    z-index: 2;
+    padding: 10px;
+    position: relative;
+}
+
+.dark-modal .modal-header {
+    border-top-left-radius: .0rem;
+    border-top-right-radius: .0rem;
+    background-color: #002133;
+    color: white;
+}
+
+.dark-modal .modal-content {
+    border: 0px;
+}
+
+.dark-modal .modal-body {
+    padding: 0rem;
+}
+.dark-modal .close {
+    color: #fff;
+}
+
+.tis-notify {
+    position:  absolute;
+    height: 60px;
+    top: 0;
+    font-size: 1.7rem;
+    text-align:  center;
+    padding-top: 0.5rem;
+}
+
+.tis-notify-btn {
+    width: 4.5rem;
+    right: 5rem;
+    color: #004165!important;
+}
+
+.tis-notify-btnDis {
+    width: 4.5rem;
+    right: 5rem;
+    color: #e6e6e6!important;
+}
+
+.tis-notify-btnSmall {
+    width: 3.0rem;
+    right: 2.5rem;
+    color: #004165!important;
+}
+
+.tis-notify-btnDisSmall {
+    width: 3.0rem;
+    right: 2.5rem;
+    color: #e6e6e6!important;
+}
+
+
+.tis-notify .badge {
+    font-size: 0.6rem;
+    position: absolute;
+	color: white;
+	background-color: #ff6303;
+	right: 0.5rem;
+}
+
+.tis-notify:hover {
+	background-color: #d8e6ee;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.tis-notify:active {
+	background-color: #bbcdd8;
+	border-bottom: 1px solid #e5e5e5;
+}

@@ -1,0 +1,35 @@
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label>Id</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Nombre de marcador</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.placeholder" placeholder="Descripción">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Valor</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.value" placeholder="Valor">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Habilitar Scan</label><br>
+                <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="item.config.enableScan">
+                    <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" [value]="true"> Si
+                    </label>
+                    <label ngbButtonLabel class="btn-primary">
+                        <input ngbButton type="radio" [value]="false"> No
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,139 @@
+<div class="container-fluid" style="position: relative;">
+    <ngb-alert *ngIf="mostrarGuardado" type="success" [dismissible]="true">Existe una plantilla guardada, deseas restaurarla ?, <a hreF="#" (click)="$event.preventDefault(); historicoRestaurar()" (close)="mostrarGuardado = false">Restaurar</a></ngb-alert>
+    <ngb-tabset #tabOpciones="ngbTabset" (tabChange)="cambiarTab($event)">
+        <ngb-tab id="tab-Config">
+            <ng-template ngbTabTitle><i class="fas fa-cogs"></i> Configuración</ng-template>
+            <ng-template ngbTabContent>
+                <bue-plantillaConfig [design]="design" (onGrabar)="grabar($event)" (onValidar)="validarObservaciones()"></bue-plantillaConfig>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab id="tab-Enlaces">
+            <ng-template ngbTabTitle><i class="fas fa-link"></i> Enlaces</ng-template>
+            <ng-template ngbTabContent>
+                <bue-plantillaBind [design]="design"></bue-plantillaBind>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab id="tab-Diseno">
+            <ng-template ngbTabTitle><i class="far fa-object-group"></i> Diseño</ng-template>
+            <ng-template ngbTabContent>
+                <oh-resizer orientation="vertical" [isExtraSize]="true" [changedSize]="148" [defaultDownSize]="250">
+                    <ng-template ohrSide>
+                        <oh-resizer orientation="horizontal" [isExtraSize]="cse.config.openMenu" [changedSize]="250" [defaultLeftSize]="250">
+                            <ng-template ohrSide>
+                                <div class="oh_editor_comp" style="position: relative;">
+                                    <div class="m-1" style="position: absolute;top: 0;">
+                                        <a href="#" (click)="$event.preventDefault(); diseno_instantanea()" title="Tomar Instantanea" class="mr-1 text-info"><i class="fas fa-camera"></i></a>
+                                        <a href="#" (click)="$event.preventDefault(); diseno_copiar()" title="Copiar" class="mr-1 text-info"><i class="far fa-copy"></i></a>
+                                        <a href="#" (click)="$event.preventDefault(); diseno_pegar_abrir()" title="Pegar" class="text-info"><i class="fas fa-paste"></i></a>
+                                        <textarea class="form-control" id="inp_instantanea_copiar" style="height: 1px; position: absolute; z-index: -1; top: -1.1rem;">{{design | json}}</textarea><br>
+                                    </div>
+                                    <div class="m-1 text-right">
+                                        <a *ngIf="historicoCont != 0" href="#" (click)="$event.preventDefault(); historicoInicio()" class="mr-1"><i class="fas fa-fast-backward"></i></a>
+                                        <span *ngIf="historicoCont == 0" class="text-muted mr-1"><i class="fas fa-fast-backward"></i></span>
+                                        <a *ngIf="historicoCont != 0" href="#" (click)="$event.preventDefault(); historicoAtras()" class="mr-1"><i class="fas fa-backward"></i></a>
+                                        <span *ngIf="historicoCont == 0" class="text-muted mr-1"><i class="fas fa-backward"></i></span>
+                                        <a *ngIf="historicoCont != historico.length-1" href="#" (click)="$event.preventDefault(); historicoAdelante()" class="mr-1"><i class="fas fa-forward"></i></a>
+                                        <span *ngIf="historicoCont == historico.length-1" class="text-muted mr-1"><i class="fas fa-forward"></i></span>
+                                        <a *ngIf="historicoCont != historico.length-1" href="#" (click)="$event.preventDefault(); historicoFinal()"><i class="fas fa-fast-forward"></i></a>
+                                        <span *ngIf="historicoCont == historico.length-1" class="text-muted"><i class="fas fa-fast-forward"></i></span>
+                                    </div>
+                                    <div class="list-group">
+                                        <button type="button" style="display: inline" (click)="isCollapForm = !isCollapForm" class="btn-info list-group oh_editor_compList">
+                                            <i class="fab fa-wpforms"></i> Formulario
+                                        </button>
+                                        <ul [ngbCollapse]="isCollapForm" class="list-group oh_editor_compList" [dragula]='nameDrag' id="idCompoForm" [(dragulaModel)]='plCompo.form'>
+                                            <li *ngFor="let component of plCompo.form" class="list-group-item oh_editor_handle"><i [ngClass]="component.icon"></i> {{component.name}}</li>
+                                        </ul>
+                                        <button type="button" style="display: inline" (click)="isCollapEstr = !isCollapEstr" class="btn-info list-group oh_editor_compList">
+                                            <i class="far fa-window-maximize"></i> Estructura
+                                        </button>
+                                        <ul [ngbCollapse]="isCollapEstr" class="list-group oh_editor_compList" [dragula]='nameDrag' id="idCompoStructure" [(dragulaModel)]='plCompo.structure'>
+                                            <li *ngFor="let component of plCompo.structure" class="list-group-item oh_editor_handle"><i [ngClass]="component.icon"></i> {{component.name}}</li>
+                                        </ul>
+                                        <button type="button" style="display: inline" (click)="isCollapComp = !isCollapComp" class="btn-info list-group oh_editor_compList">
+                                            <i class="fas fa-box-open"></i> Componente
+                                        </button>
+                                        <ul [ngbCollapse]="isCollapComp" class="list-group oh_editor_compList" [dragula]='nameDrag' id="idCompoComponents" [(dragulaModel)]='plCompo.component'>
+                                            <li *ngFor="let component of plCompo.component" class="list-group-item oh_editor_handle"><i [ngClass]="component.icon"></i> {{component.name}}</li>
+                                        </ul>
+                                        <button type="button" style="display: inline" (click)="isCollapComu = !isCollapComu" class="btn-info list-group oh_editor_compList">
+                                            <i class="fas fa-boxes"></i> Compuesto
+                                        </button>
+                                        <ul [ngbCollapse]="isCollapComu" class="list-group oh_editor_compList" [dragula]='nameDrag' id="idCompoComplex" [(dragulaModel)]='plCompo.complex'>
+                                            <li *ngFor="let component of plCompo.complex" class="list-group-item oh_editor_handle"><i [ngClass]="component.icon"></i> {{component.name}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template ohrSide>
+                                <bue-editor [(design)]="design" [bind]="design.bind" [nameDragula]='nameDrag' (onSelectedItem)="getSelectedItem($event)" [readOnly]="false"></bue-editor>
+                            </ng-template>
+                        </oh-resizer>
+                    </ng-template>
+                    <ng-template ohrSide>
+                        <bue-plantillaDesign [design]="design" (onDeleteItem)="deleteItem($event)"></bue-plantillaDesign>
+                    </ng-template>
+                </oh-resizer>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab id="tab-VistaPrevia">
+            <ng-template ngbTabTitle><i class="fas fa-eye"></i> Vista previa</ng-template>
+            <ng-template ngbTabContent>
+                <bue-editor [design]="design" [bind]="design.bind" [nameDragula]='nameDrag' (onSelectedItem)="getSelectedItem($event)" [readOnly]="true"></bue-editor>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab id="tab-Codigo">
+            <ng-template ngbTabTitle><i class="fas fa-code"></i> Código</ng-template>
+            <ng-template ngbTabContent>
+                <ngb-tabset>
+                    <ngb-tab id="tab-CodigoHTML">
+                        <ng-template ngbTabTitle><i class="fas fa-code"></i> HTML</ng-template>
+                        <ng-template ngbTabContent>
+                            <div style="position: relative;">
+                                <button type="button" class="btn btn-sm btn-default mx-2" (click)="copiar('html')" style="position: absolute; right: 0px; top: 7px;"><i class="far fa-copy"></i></button>
+                                <textarea id="inp_preview_html" [innerHTML]="preview.html" style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                                <textarea [ohHighlight]="preview.html" [options]="{}" [lang]="'html'"></textarea>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="tab-CodigoTS">
+                        <ng-template ngbTabTitle><i class="fas fa-code"></i> TypeScript</ng-template>
+                        <ng-template ngbTabContent>
+                            <div style="position: relative;">
+                                <button type="button" class="btn btn-sm btn-default mx-2" (click)="copiar('ts')" style="position: absolute; right: 0px; top: 7px;"><i class="far fa-copy"></i></button>
+                                <textarea id="inp_preview_ts" [innerHTML]="preview.ts" style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                                <textarea [ohHighlight]="preview.ts" [options]="{}" [lang]="'typescript'"></textarea>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab id="tab-CodigoCSS">
+                        <ng-template ngbTabTitle><i class="fas fa-code"></i> CSS</ng-template>
+                        <ng-template ngbTabContent>
+                            <div style="position: relative;">
+                                <button type="button" class="btn btn-sm btn-default mx-2" (click)="copiar('css')" style="position: absolute; right: 0px; top: 7px;"><i class="far fa-copy"></i></button>
+                                <textarea id="inp_preview_css" [innerHTML]="preview.css" style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                                <textarea [ohHighlight]="preview.css" [options]="{}" [lang]="'css'"></textarea>
+                            </div>
+                        </ng-template>
+                    </ngb-tab>
+                </ngb-tabset>
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
+    <div class="text-muted font-italic" style="position: absolute; right: 1.5rem; top: 0.2rem;">{{design.config.url}}</div>
+</div>
+<ng-template #modalPegar let-cl="close" let-di="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">
+            <span>Pegar contenido</span>
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="di('dismiss')"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div class="modal-body">
+        <textarea class="form-control" [(ngModel)]="pegarContenido" style="height: 10rem" type="textarea"></textarea>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" (click)="cl('pegar')"><i class="fas fa-paste"></i> Pegar</button>
+        <button class="btn btn-outline-secondary" (click)="cl('cerrar')"><i class="fas fa-times-circle"></i> Cancelar</button>
+    </div>
+</ng-template>

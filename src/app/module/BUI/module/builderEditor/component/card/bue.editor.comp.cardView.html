@@ -1,0 +1,29 @@
+<div class="card" [class]="item.config.background" *ngFor='let row of item.config.rows'>
+    <div class="card-header" *ngIf="item.config.showHeader && item.config.title=='div'">
+        <bue-editor [bind]="bind" [design]="row.selectedHead" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+    </div>
+    <h1 class="card-header" *ngIf="item.config.showHeader && item.config.title=='h1'">
+        <bue-editor [bind]="bind" [design]="row.selectedHead" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+    </h1>
+    <h2 class="card-header" *ngIf="item.config.showHeader && item.config.title=='h2'">
+        <bue-editor [bind]="bind" [design]="row.selectedHead" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+    </h2>
+    <h3 class="card-header" *ngIf="item.config.showHeader && item.config.title=='h3'">
+        <bue-editor [bind]="bind" [design]="row.selectedHead" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+    </h3>
+    <h4 class="card-header" *ngIf="item.config.showHeader && item.config.title=='h4'">
+        <bue-editor [bind]="bind" [design]="row.selectedHead" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+    </h4>
+    <h5 class="card-header" *ngIf="item.config.showHeader && item.config.title=='h5'">
+        <bue-editor [bind]="bind" [design]="row.selectedHead" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+    </h5>
+    <h6 class="card-header" *ngIf="item.config.showHeader && item.config.title=='h6'">
+        <bue-editor [bind]="bind" [design]="row.selectedHead" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+    </h6>
+    <div class="card-body" *ngIf="item.config.showBody">
+        <bue-editor [bind]="bind" [design]="row.selectedBody" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+    </div>
+    <div class="card-footer" *ngIf="item.config.showFooter">
+        <bue-editor [bind]="bind" [design]="row.selectedFooter" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor>
+    </div>
+</div>

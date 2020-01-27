@@ -1,0 +1,447 @@
+<div class="container-fluid tabs-contenido">
+    <div class="card mb-2">
+        <div class="card-header"><i class="fas fa-database"></i> Base de Datos</div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label for="storeSchema" class="col-sm-2 col-form-label">Esquema</label>
+                <div class="col-sm-4">
+                    <select class="form-control" [(ngModel)]="store.schema" name="storeSchema" [value]="store.schema" (change)="segtablaListar()">
+                            <option *ngFor="let schema of store.schemas" [value]="schema.nombre" >{{schema.nombre}}</option>
+                        </select>
+                </div>
+                <label for="storeTable" class="col-sm-2 col-form-label">Tabla o Vista</label>
+                <div class="col-sm-4">
+                    <select class="form-control" [(ngModel)]="store.table" name="storeTable" [value]="store.table" (change)="segColumnaListar()">
+                            <option *ngFor="let table of store.tables" [value]="table.nombre" >{{table.nombre}}</option>
+                        </select>
+                </div>
+            </div>
+            <div class="tableContent table-responsive">
+                <table class="table table-hover bg-white">
+                    <thead>
+                        <tr>
+                            <th scope="col">Reg.</th>
+                            <th scope="col">Obt.</th>
+                            <th scope="col">Edi.</th>
+                            <th scope="col">Eli.</th>
+                            <th scope="col">Lis.</th>
+                            <th scope="col">Columna</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Tam.</th>
+                            <th scope="col" colspan="2">Ref. FK</th>
+                            <th scope="col">Null</th>
+                            <th scope="col">Pos.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let tupla of store.columns; let i = index" [ngClass]="tupla.posicion==1?'bg-pk':''">
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input ng-untouched ng-dirty" type="checkbox" [(ngModel)]="tupla.chk_reg"  name="chk_reg{{i}}" id="chk_reg{{i}}">
+                                    <label class="custom-control-label" for="chk_reg{{i}}"></label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input ng-untouched ng-dirty" type="checkbox" [(ngModel)]="tupla.chk_obt"  name="chk_obt{{i}}" id="chk_obt{{i}}" [disabled]="i == 0">
+                                    <label class="custom-control-label" for="chk_obt{{i}}"></label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input ng-untouched ng-dirty" type="checkbox" [(ngModel)]="tupla.chk_edi"  name="chk_edi{{i}}" id="chk_edi{{i}}" [disabled]="i == 0">
+                                    <label class="custom-control-label" for="chk_edi{{i}}"></label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input ng-untouched ng-dirty" type="checkbox" [(ngModel)]="tupla.chk_eli"  name="chk_eli{{i}}" id="chk_eli{{i}}" [disabled]="i == i">
+                                    <label class="custom-control-label" for="chk_eli{{i}}"></label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input ng-untouched ng-dirty" type="checkbox" [(ngModel)]="tupla.chk_lis"  name="chk_lis{{i}}" id="chk_lis{{i}}">
+                                    <label class="custom-control-label" for="chk_lis{{i}}"></label>
+                                </div>
+                            </td>
+                            <td>{{tupla.columna}} {{tupla.ref_esquema ? '(FK)' : ''}}</td>
+                            <td>{{tupla.tipo}}</td>
+                            <td>{{tupla.tamano}}</td>
+                            <td style="color:#e0a800 !important;">{{tupla.ref_esquema ? (tupla.ref_esquema + '.' + tupla.ref_tabla) : ''}}</td>
+                            <td style="color:#e0a800 !important;">{{tupla.ref_columna ? tupla.ref_columna : ''}}</td>
+                            <td>{{tupla.nulable}}</td>
+                            <td>{{tupla.posicion}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid tabs-contenido">
+    <div class="card mb-2">
+        <div class="card-header">
+            <i class="fas fa-scroll"></i> Stores CRUD
+            <button type="button" (click)="saveStores()" class="btn btn-sm btn-dark float-right ml-2" [disabled]="store.invalid">
+                <i class="fas fa-save"></i> Guardar
+            </button>
+            <button type="button" (click)="generateQuerys()" class="btn btn-sm btn-dark float-right ml-2" [disabled]="store.generate">
+                <i class="fas fa-greater-than-equal"></i> Generar
+            </button>
+        </div>
+        <div class="card-body">
+            <ngb-tabset (tabChange)="cambiarTab($event)">
+                <ngb-tab id="tabRegistrar">
+                    <ng-template ngbTabTitle> Registrar </ng-template>
+                    <ng-template ngbTabContent>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="table-responsive mb-3 border-right border-left">
+                                    <button type="button" class="btn btn-sm btn-dark mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                    <table class="table table-hover bg-white mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" colspan="4" style="text-align: center;">REFERENCIAS (JSON/XML)</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">Tabla</th>
+                                                <th scope="col">Columna</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let referenciaItem of store.referenciasList;let i = index">
+                                                <td>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input class="custom-control-input ng-untouched ng-dirty" type="checkbox" [(ngModel)]="referenciaItem.json_reg"  name="json_reg{{i}}" id="json_reg{{i}}" (change)="generateRegistrarQuery()">
+                                                        <label class="custom-control-label" for="json_reg{{i}}"></label>
+                                                    </div>
+                                                </td>
+                                                <td>{{referenciaItem.esquema}}.{{referenciaItem.tabla}}</td>
+                                                <td>{{referenciaItem.columna}} (FK)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="btn-group btn-group-sm btn-group-toggle float-right" ngbRadioGroup name="radioStates" [(ngModel)]="store.tipo_childs" style="position: absolute; margin-top: 0.3rem; right: 5.75rem;" (change)="generateQuerys()">
+                                    <label ngbButtonLabel class="btn-light" title="JSON">
+                                        <input ngbButton type="radio" value="JSON">JSON
+                                    </label>
+                                    <label ngbButtonLabel class="btn-light" title="XML">
+                                        <input ngbButton type="radio" value="XML">XML
+                                    </label>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-light mx-2" (click)="copy()" style="position: absolute;right: 3rem;top: 0.3rem;"><i class="far fa-copy"></i></button>
+                                <button type="button" class="btn btn-sm btn-light mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                <textarea id="textRegistrar" [innerHTML]="store.query_registrar" style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                                <textarea [ohHighlight]="store.query_registrar" [options]="{}" [lang]="'sql'"></textarea>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab id="tabObtener">
+                    <ng-template ngbTabTitle> Obtener </ng-template>
+                    <ng-template ngbTabContent>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="table-responsive mb-3 border-right border-left">
+                                    <button type="button" class="btn btn-sm btn-dark mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                    <table class="table table-hover bg-white mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" colspan="4" style="text-align: center;">REFERENCIAS (JSON/XML)</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">Tabla</th>
+                                                <th scope="col">Columna</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let referenciaItem of store.referenciasList;let i = index">
+                                                <td>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input class="custom-control-input ng-untouched ng-dirty" type="checkbox" [(ngModel)]="referenciaItem.json_obt"  name="json_obt{{i}}" id="json_obt{{i}}" (change)="generateObtenerQuery()">
+                                                        <label class="custom-control-label" for="json_obt{{i}}"></label>
+                                                    </div>
+                                                </td>
+                                                <td>{{referenciaItem.esquema}}.{{referenciaItem.tabla}}</td>
+                                                <td>{{referenciaItem.columna}} (FK)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="table-responsive mb-3 border-right border-left">
+                                    <button type="button" class="btn btn-sm btn-dark mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                    <table class="table table-hover bg-white mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" colspan="4" style="text-align: center;">FORÁNEAS (JOIN)</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">Columna (FK)</th>
+                                                <th scope="col">Tabla</th>
+                                                <th scope="col">Columna</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let foraneaItem of store.foraneasList; let i = index">
+                                                <td>
+                                                    <a href="#" (click)="$event.preventDefault(); verTablaForanea(modalFK, foraneaItem, i, 0);" class="text-size-10 text-info" ngbTooltip="Join Tabla FK">
+                                                        <i [ngClass]="foraneaItem.use_obt_join ? 'fas fa-network-wired join-use' : 'fas fa-network-wired join-not-use'"></i>
+                                                    </a>
+                                                </td>
+                                                <td>{{foraneaItem.columna}} (FK)</td>
+                                                <td>{{foraneaItem.ref_esquema}}.{{foraneaItem.ref_tabla}}</td>
+                                                <td>{{foraneaItem.ref_columna}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <button for="jsonObtener" type="button" class="btn btn-sm btn-light mx-2" (click)="copy_($event)" style="position: absolute;right: 3rem;top: 0.3rem;"><i class="far fa-copy"></i></button>
+                                <button type="button" class="btn btn-sm btn-light mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                <textarea id="jsonObtener" [innerHTML]="store.json_obtener" style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                                <textarea [ohHighlight]="store.json_obtener" [options]="{}" [lang]="'json'"></textarea>
+                            </div>
+                            <div class="col-sm-7">
+                                <button for="textObtener" type="button" class="btn btn-sm btn-light mx-2" (click)="copy_($event)" style="position: absolute;right: 3rem;top: 0.3rem;"><i class="far fa-copy"></i></button>
+                                <button type="button" class="btn btn-sm btn-light mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                <textarea id="textObtener" [innerHTML]="store.query_obtener" style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                                <textarea [ohHighlight]="store.query_obtener" [options]="{}" [lang]="'sql'"></textarea>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab id="tabEditar">
+                    <ng-template ngbTabTitle> Editar </ng-template>
+                    <ng-template ngbTabContent>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="table-responsive mb-3 border-right border-left">
+                                    <button type="button" class="btn btn-sm btn-dark mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                    <table class="table table-hover bg-white mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" colspan="4" style="text-align: center;">REFERENCIAS (JSON/XML)</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">Tabla</th>
+                                                <th scope="col">Columna</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let referenciaItem of store.referenciasList;let i = index">
+                                                <td>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input class="custom-control-input ng-untouched ng-dirty" type="checkbox" [(ngModel)]="referenciaItem.json_edi"  name="json_edi{{i}}" id="json_edi{{i}}" (change)="generateEditarQuery()">
+                                                        <label class="custom-control-label" for="json_edi{{i}}"></label>
+                                                    </div>
+                                                </td>
+                                                <td>{{referenciaItem.esquema}}.{{referenciaItem.tabla}}</td>
+                                                <td>{{referenciaItem.columna}} (FK)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="btn-group btn-group-sm btn-group-toggle float-right" ngbRadioGroup name="radioStates" [(ngModel)]="store.tipo_childs" style="position: absolute; top: 0.3rem; right: 5.75rem;" (change)="generateQuerys()">
+                                    <label ngbButtonLabel class="btn-light" title="JSON">
+                                        <input ngbButton type="radio" value="JSON">JSON
+                                    </label>
+                                    <label ngbButtonLabel class="btn-light" title="XML">
+                                        <input ngbButton type="radio" value="XML">XML
+                                    </label>
+                                </div>
+                                <button for="textEditar" type="button" class="btn btn-sm btn-light mx-2" (click)="copy_($event)" style="position: absolute;right: 3rem;top: 0.3rem;"><i class="far fa-copy"></i></button>
+                                <button type="button" class="btn btn-sm btn-light mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                <textarea id="textEditar" [innerHTML]="store.query_editar" style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                                <textarea [ohHighlight]="store.query_editar" [options]="{}" [lang]="'sql'"></textarea>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab id="tabEliminar">
+                    <ng-template ngbTabTitle> Eliminar </ng-template>
+                    <ng-template ngbTabContent>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="table-responsive mb-3 border-right border-left">
+                                    <button type="button" class="btn btn-sm btn-dark mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                    <table class="table table-hover bg-white mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" colspan="4" style="text-align: center;">REFERENCIAS (JSON/XML)</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">Tabla</th>
+                                                <th scope="col">Columna</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let referenciaItem of store.referenciasList;let i = index">
+                                                <td>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input class="custom-control-input ng-untouched ng-dirty" type="checkbox" [(ngModel)]="referenciaItem.json_eli"  name="json_eli{{i}}" id="json_eli{{i}}" (change)="generateEliminarQuery()">
+                                                        <label class="custom-control-label" for="json_eli{{i}}"></label>
+                                                    </div>
+                                                </td>
+                                                <td>{{referenciaItem.esquema}}.{{referenciaItem.tabla}}</td>
+                                                <td>{{referenciaItem.columna}} (FK)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <button for="textEliminar" type="button" class="btn btn-sm btn-light mx-2" (click)="copy_($event)" style="position: absolute;right: 3rem;top: 0.3rem;"><i class="far fa-copy"></i></button>
+                                <button type="button" class="btn btn-sm btn-light mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                <textarea id="textEliminar" [innerHTML]="store.query_eliminar" style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                                <textarea [ohHighlight]="store.query_eliminar" [options]="{}" [lang]="'sql'"></textarea>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab id="tabListar">
+                    <ng-template ngbTabTitle> Listar </ng-template>
+                    <ng-template ngbTabContent>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="table-responsive mb-3 border-right border-left">
+                                    <button type="button" class="btn btn-sm btn-dark mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                    <table class="table table-hover bg-white mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" colspan="4" style="text-align: center;">FORÁNEAS (JOIN)</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col">Columna (FK)</th>
+                                                <th scope="col">Tabla</th>
+                                                <th scope="col">Columna</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let foraneaItem of store.foraneasList; let i = index">
+                                                <td>
+                                                    <a href="#" (click)="$event.preventDefault(); verTablaForanea(modalFK, foraneaItem, i, 1);" class="text-size-10 text-info" ngbTooltip="Join Tabla FK">
+                                                        <i [ngClass]="foraneaItem.use_lis_join ? 'fas fa-network-wired join-use' : 'fas fa-network-wired join-not-use'"></i>
+                                                    </a>
+                                                </td>
+                                                <td>{{foraneaItem.columna}} (FK)</td>
+                                                <td>{{foraneaItem.ref_esquema}}.{{foraneaItem.ref_tabla}}</td>
+                                                <td>{{foraneaItem.ref_columna}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div>
+                                    <button for="jsonListar" type="button" class="btn btn-sm btn-light mx-2" (click)="copy_($event)" style="position: absolute; right: 3rem; margin-top: 0.3rem;"><i class="far fa-copy"></i></button>
+                                    <button type="button" class="btn btn-sm btn-light mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;margin-top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                    <textarea id="jsonListar" [innerHTML]="store.json_listar" style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                                    <textarea [ohHighlight]="store.json_listar" [options]="{}" [lang]="'json'"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <button for="textListar" type="button" class="btn btn-sm btn-light mx-2" (click)="copy_($event)" style="position: absolute;right: 3rem;top: 0.3rem;"><i class="far fa-copy"></i></button>
+                                <button type="button" class="btn btn-sm btn-light mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                <textarea id="textListar" [innerHTML]="store.query_listar" style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                                <textarea [ohHighlight]="store.query_listar" [options]="{}" [lang]="'sql'"></textarea>
+                            </div>
+                            <div class="col-sm-12">
+                                <button for="textTS" type="button" class="btn btn-sm btn-light mx-2" (click)="copy_($event)" style="position: absolute;right: 3rem;top: 0.3rem;"><i class="far fa-copy"></i></button>
+                                <button type="button" class="btn btn-sm btn-light mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                <textarea id="textTS" [innerHTML]="store.filter_ts_listar" style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                                <textarea [ohHighlight]="store.filter_ts_listar" [options]="{}" [lang]="'typescript'"></textarea>
+                            </div>
+                            <div class="col-sm-12">
+                                <button for="textHTML" type="button" class="btn btn-sm btn-light mx-2" (click)="copy_($event)" style="position: absolute;right: 3rem;top: 0.3rem;"><i class="far fa-copy"></i></button>
+                                <button type="button" class="btn btn-sm btn-light mx-2" (click)="toggleShort($event)" style="position: absolute;right: 0.75rem;top: 0.3rem;"><i class="fas fa-compress"></i></button>
+                                <textarea id="textHTML" [innerHTML]="store.filter_html_listar" style="height: 0px;position: absolute;z-index: -5;"></textarea>
+                                <textarea [ohHighlight]="store.filter_html_listar" [options]="{}" [lang]="'html'"></textarea>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+        </div>
+    </div>
+</div>
+<ng-template #modalFK let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h5 class="modal-title" id="modal-basic-title">
+            Clave Foránea: {{store.foraneaSelected.columna}} (FK) - <i>{{store.foraneaSelected.ref_esquema}}.{{store.foraneaSelected.ref_tabla}}</i>
+        </h5>
+        <a href="#" class="close" aria-label="Close" (click)="$event.preventDefault(); d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </a>
+    </div>
+    <div class="modal-body tis-card-sm">
+        <form>
+            <div class="form-group row">
+                <label class="col-sm-4  col-form-label">Tipo de enlace:</label>
+                <div class="col-sm-8">
+                    <select *ngIf="store.model_param == 0" class="form-control" [(ngModel)]="store.foraneaSelected.join_obt_type" name="join_obt_type" [value]="store.foraneaSelected.join_obt_type">
+                        <option *ngFor="let join of store.join_options" [value]="join" >{{join}}</option>
+                    </select>
+                    <select *ngIf="store.model_param == 1" class="form-control" [(ngModel)]="store.foraneaSelected.join_lis_type" name="join_lis_type" [value]="store.foraneaSelected.join_lis_type">
+                        <option *ngFor="let join of store.join_options" [value]="join" >{{join}}</option>
+                    </select>
+                </div>
+            </div>
+            <span>Columnas:</span>
+            <br>
+            <br>
+            <table class="table table-hover bg-white" style="max-height: 360px; overflow-y: scroll; display: block;">
+                <thead>
+                    <tr>
+                        <th scope="col" width="5%"></th>
+                        <th scope="col" width="20%">Columna</th>
+                        <th scope="col" width="20%">Tipo</th>
+                        <th scope="col" width="20%">Tam.</th>
+                        <th scope="col" width="30%">Alias (AS)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let columnaFK of store.foraneaSelected.describ; let i = index">
+                        <td *ngIf="store.model_param == 0">
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input ng-untouched ng-dirty" type="checkbox" [(ngModel)]="columnaFK.join_obt"  name="join_obt{{i}}" id="join_obt{{i}}" (change)="addColJoin(columnaFK)">
+                                <label class="custom-control-label" for="join_obt{{i}}"></label>
+                            </div>
+                        </td>
+                        <td *ngIf="store.model_param == 1">
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input ng-untouched ng-dirty" type="checkbox" [(ngModel)]="columnaFK.join_lis"  name="join_lis{{i}}" id="join_lis{{i}}" (change)="addColJoin(columnaFK)">
+                                <label class="custom-control-label" for="join_lis{{i}}"></label>
+                            </div>
+                        </td>
+                        <td>{{columnaFK.columna}}</td>
+                        <td>{{columnaFK.tipo}}</td>
+                        <td>{{columnaFK.tamano}}</td>
+                        <td *ngIf="store.model_param == 0">
+                            <input name="join_obt_as{{i}}" class="form-control" [(ngModel)]="columnaFK.join_obt_as" [placeholder]="columnaFK.join_obt_as_light ? columnaFK.join_obt_as_light : ''" type="text">
+                        </td>
+                        <td *ngIf="store.model_param == 1">
+                            <input name="join_obt_as{{i}}" class="form-control" [(ngModel)]="columnaFK.join_lis_as" [placeholder]="columnaFK.join_lis_as_light ? columnaFK.join_lis_as_light : ''" type="text">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-success" (click)="useFK(store.foraneaSelected)">Anclar</button>
+        <button type="button" class="btn btn-outline-warning" (click)="clearFK(store.foraneaSelected)">Desanclar</button>
+    </div>
+</ng-template>

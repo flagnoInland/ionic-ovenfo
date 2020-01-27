@@ -1,0 +1,17 @@
+.oh_custom_day {
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+}
+.oh_custom_day.focused {
+  background-color: #e6e6e6;
+}
+.oh_custom_day.range, .oh_custom_day:hover {
+  background-color: rgb(2, 117, 216);
+  color: white;
+}
+.oh_custom_day.faded {
+  background-color: rgba(2, 117, 216, 0.5);
+}

@@ -1,0 +1,67 @@
+<div class="oh_viewPhotos" *ngIf="typeView=='edit' || typeView=='view'">
+    <div class="oh_viewLane flex-row" #lanePhoto>
+        <ng-template [ngIf]="typeView=='edit'">
+            <ng-template ngFor let-photo [ngForOf]="photos" let-i="index" let-odd="odd">
+                <!-- [ngForTrackBy]="trackById" -->
+                <div class="oh_viewContentPhoto">
+                    <ng-template [ngIf]="photo">
+                        <img src="{{photo}}" class="oh_viewPhoto" [ngClass]="{'oh_viewPhotoOnCharge' : photosCharge && photosCharge[i] && !photosCharge[i].loaded}" />
+                    </ng-template>
+                    <ng-template [ngIf]="photosCharge && photosCharge[i] && !photosCharge[i].loaded">
+                        <div class="oh_charning"></div>
+                    </ng-template>
+                    <ng-template [ngIf]="(!photosCharge || photosCharge.length == 0) || (photosCharge && photosCharge[i] && photosCharge[i].loaded)">
+                        <span class="text-danger oh_viewDelete" (click)="deletePhoto(i)"><i class="fas fa-times-circle"></i></span>
+                    </ng-template>
+                </div>
+            </ng-template>
+        </ng-template>
+        <ng-template [ngIf]="typeView=='view' && photos.length > 0">
+            <ng-template ngFor let-photo [ngForOf]="photos" let-i="index" let-odd="odd">
+                <!-- [ngForTrackBy]="trackById" -->
+                <div class="oh_viewContentPhoto">
+                    <ng-template [ngIf]="photo.photo">
+                        <a href="#" (click)="$event.preventDefault(); vistaPrevia(photo, i, true)">
+                            <img src="data:image/jpeg;base64,{{photo.photo}}" class="oh_viewPhoto" />
+                        </a>
+                    </ng-template>
+                </div>
+            </ng-template>
+        </ng-template>
+    </div>
+</div>
+
+<ng-template [ngIf]="typeView == 'link' && photos.length > 0">
+    <a class="oh_text-size-10 text-info oh_btn-link-buttom mr-1" style="display: block;" href="#" (click)="vistaPrevia(photos[0], 0, true); $event.preventDefault();">
+        <span class="badge badge-outline-danger">{{photos.length}}</span><i class="fas fa-images"></i>
+    </a>
+</ng-template>
+
+<ng-template [ngIf]="typeView == 'link' && photos.length == 0">
+    <a class="oh_text-size-10 text-muted oh_btn-link-buttom" href="#" (click)="$event.preventDefault();"><i class="fas fa-images"></i></a>
+</ng-template>
+
+<ng-template #modalDetail let-modal>
+    <div class="modal-header d-flex align-items-center">
+        <button type="button" class="btn mr-1" (click)="atras()" [ngClass]="hasLoaded && indice > 0 ? 'btn-outline-primary' : 'btn-outline-secondary'" [disabled]="!(hasLoaded && indice > 0)">
+            <i class="fas fa-chevron-circle-left"></i>
+        </button>
+        <button type="button" class="btn mr-1" (click)="adelante()" [ngClass]="hasLoaded && indice < photos.length - 1 ? 'btn-outline-primary' : 'btn-outline-secondary'" [disabled]="!(hasLoaded && indice < photos.length - 1)">
+            <i class="fas fa-chevron-circle-right"></i>
+        </button>
+        <button type="button" class="btn btn-outline-info mr-2" (click)="descargar(foto_vista)">
+            <i class="fas fa-download"></i>
+        </button>
+        <span class="h5 vistaBC mb-0">Vista previa {{indice+1}}/{{photos.length}}</span>
+        <button type="button" class="close p-0 px-3" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <a href="#" (click)="$event.preventDefault(); descargar(foto_vista)">
+            <img src="data:image/jpeg;base64,{{foto_vista.photo}}" class="mx-auto d-block img-fluid img-thumbnail" />
+        </a>
+    </div>
+    <div class="modal-footer">
+    </div>
+</ng-template>

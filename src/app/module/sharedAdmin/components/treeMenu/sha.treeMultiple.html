@@ -1,0 +1,16 @@
+<ul class="list-group">
+    <li *ngFor="let item of hijos; let i = index" class="list-group-item" style="padding: 0px;border: 0px;">
+        <div class="p-1" style="position: relative;">
+            <i *ngIf="item.hijos.length==0" class="text-muted far fa-square"></i>
+            <a *ngIf="item.hijos.length>0" href="#" (click)="$event.preventDefault(); item.hide = !item.hide;"><i [ngClass]="{'fa-caret-square-down' : item.hide, 'fa-caret-square-up' : !item.hide}" class="text-info far"></i></a>
+            &nbsp;
+            <div class="custom-control custom-checkbox" style="display: inline-block;">
+                <input type="checkbox" class="custom-control-input" (change)="seleccionar(item);" [(ngModel)]="item.seleccionado" name="opcion_{{item.menu_id}}" id="opcion_{{item.menu_id}}" [disabled]="disabled">
+                <label class="custom-control-label" for="opcion_{{item.menu_id}}"><span [ngClass]="{'text-primary' : item.menu_padre_id == null, 'text-secondary' : item.menu_padre_id != null}"><i [class]="item.icono"></i> {{item.titulo}}</span></label>
+            </div>
+        </div>
+        <div class="pl-3">
+            <sha-treeMultiple [ngbCollapse]="!item.hide" [hijos]="item.hijos" (eventosItem)="eventosItemCall($event)" [disabled]="disabled" [selected]="item.selected"></sha-treeMultiple>
+        </div>
+    </li>
+</ul>

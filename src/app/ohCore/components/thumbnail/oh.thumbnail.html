@@ -1,0 +1,6 @@
+<svg *ngIf="!photo" class="bd-placeholder-img rounded-circle mr-1" width="36" height="36" xmlns="http://www.w3.org/2000/svg" focusable="false" role="img">
+    <title>{{_name}} {{_lastName}}</title>
+    <rect width="100%" height="100%" [attr.fill]="colors[index_color][0]"></rect>
+    <text x="50%" y="50%" [attr.fill]="colors[index_color][1]" dy=".3em" dx="-0.6rem">{{_nameFirst+_lastNameShort}}</text>
+</svg>
+<span *ngIf="showName" style="white-space: nowrap;">{{_nameShort}} {{_lastNameShort}}.</span>

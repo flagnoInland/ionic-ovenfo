@@ -1,0 +1,14 @@
+<div *ngIf="ohAd.show" class="oh_ad_A">
+	<div class="oh_ad_AA">
+		<div *ngIf="ohAd.view=='S' || ohAd.view=='W'" [@ohTopAd] class="alert alert-dismissible" [ngClass]="{'alert-success' : ohAd.view=='S', 'alert-warning' : ohAd.view=='W'}" role="alert">
+			<span [hidden]="ohAd.mensaje.length>0">Acción realizada corréctamente</span>
+		  <span [hidden]="ohAd.mensaje.length==0">{{ohAd.mensaje}}</span>
+		  <button *ngIf="showClose" (click)="closeAd($event)" type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    <span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div *ngIf="ohAd.view=='C'" [@ohTopAd] class="alert alert-primary" role="alert">
+		  <i class="fa fa-spinner fa-spin fa-fw"></i> Procesando acción... <span class="oh_ad_AAA">por favor espere</span>
+		</div>
+	</div>
+</div>

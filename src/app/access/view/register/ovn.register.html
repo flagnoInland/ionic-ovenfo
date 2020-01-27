@@ -1,0 +1,147 @@
+<div class="ind-body-maxContent">
+	<div class="container mb-5">
+		<div class="row justify-content-md-center">
+			<div class="col">
+				<div class="text-center">
+					<div class="img_logo_01_svg mt-2 mb-4"></div>
+				</div>
+				<h5 class="card-title text-white mb-2">Registro de Nuevo Usuario</h5>
+				<form #frmRegister="ngForm" class="form-enable" (ngSubmit)="register(frmRegister)">
+					<div class="card">
+						<div class="card-body">
+							<div class="form-group row">
+								<label class="col-form-label col-sm-4">
+									<span>Nombres</span>
+								</label>
+								<div class="col-sm-8">
+									<input #inpName="ngModel" name="inpName" class="form-control" [(ngModel)]="dateRegister.name" [ohInputFormat]="'upper'" type="text" required="true" minlength="2" maxlength="100">
+									<div *ngIf="inpName.invalid && (inpName.dirty || inpName.touched)" class="alert alert-danger alert-form">
+										<ul>
+											<li *ngIf="inpName.errors.required">El campo es requerido.</li>
+											<li *ngIf="inpName.errors.minlength">El campo debe tener como mínimo 2 caracteres.</li>
+											<li *ngIf="inpName.errors.maxlength">El campo debe tener como máximo 100 caracteres.</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-sm-4">
+									<span>Apellido paterno</span>
+								</label>
+								<div class="col-sm-8">
+									<input #inpLastName="ngModel" name="inpLastName" class="form-control" [(ngModel)]="dateRegister.lastName" [ohInputFormat]="'upper'" type="text" required="true" minlength="2" maxlength="100">
+									<div *ngIf="inpLastName.invalid && (inpLastName.dirty || inpLastName.touched)" class="alert alert-danger alert-form">
+										<ul>
+											<li *ngIf="inpLastName.errors.required">El campo es requerido.</li>
+											<li *ngIf="inpLastName.errors.minlength">El campo debe tener como mínimo 2 caracteres.</li>
+											<li *ngIf="inpLastName.errors.maxlength">El campo debe tener como máximo 100 caracteres.</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-sm-4">
+									<span>Apellido materno</span>
+								</label>
+								<div class="col-sm-8">
+									<input #inpMiddleName="ngModel" name="inpMiddleName" class="form-control" [(ngModel)]="dateRegister.middleName" [ohInputFormat]="'upper'" type="text" required="true" minlength="2" maxlength="100">
+									<div *ngIf="inpMiddleName.invalid && (inpMiddleName.dirty || inpMiddleName.touched)" class="alert alert-danger alert-form">
+										<ul>
+											<li *ngIf="inpMiddleName.errors.required">El campo es requerido.</li>
+											<li *ngIf="inpMiddleName.errors.minlength">El campo debe tener como mínimo 2 caracteres.</li>
+											<li *ngIf="inpMiddleName.errors.maxlength">El campo debe tener como máximo 100 caracteres.</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-sm-4">
+									<span>Correo (Usuario)</span>
+								</label>
+								<div class="col-sm-8">
+									<input #inpEmail="ngModel" name="inpRegisterEmail" class="form-control" [(ngModel)]="dateRegister.email" type="email" [ohInputFormat]="'upper'" email required="true" minlength="5" maxlength="100">
+									<div *ngIf="inpEmail.invalid && (inpEmail.dirty || inpEmail.touched)" class="alert alert-danger alert-form">
+											<ul>
+											<li *ngIf="inpEmail.errors.required">El campo es requerido.</li>
+											<li *ngIf="inpEmail.errors.minlength">El campo debe tener como mínimo 5 caracteres.</li>
+											<li *ngIf="inpEmail.errors.maxlength">El campo debe tener como máximo 100 caracteres.</li>
+											<li *ngIf="inpEmail.errors.email">Ingrese un correo corrécto.</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-sm-4">
+									<span>Clave</span>
+								</label>
+								<div class="col-sm-8">
+									<input #inpPassword="ngModel" autocomplete="new-password" name="inpPassword" class="form-control" [(ngModel)]="dateRegister.password" type="password" required="true" pattern="^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!\-_@#$%^&*])[\w!\-_@#$%^&*]{8,}$">
+									<div *ngIf="inpPassword.invalid && (inpPassword.dirty || inpPassword.touched)" class="alert alert-danger alert-form">
+										<ul>
+											<li *ngIf="inpPassword.errors.required">El campo es requerido.</li>
+											<li *ngIf="inpPassword.errors.pattern">La clave debe contener por lo menos
+												<ul>
+													<li>8 caracteres</li>
+													<li>1 número</li>
+													<li>1 caracter minúscula</li>
+													<li>1 caracter mayúscula</li>
+													<li>1 caracter especial (! - _ @ # $ % ^ & *)</li>
+												</ul>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-sm-4">
+									<span>Repetir clave</span>
+								</label>
+								<div class="col-sm-8">
+									<input #inpRepeatPassword="ngModel" autocomplete="new-password" name="inpRepeatPassword" class="form-control" [(ngModel)]="dateRegister.repeatPassword" type="password" required="true" ohValidateEqual="inpPassword">
+									<div *ngIf="inpRepeatPassword.invalid && (inpRepeatPassword.dirty || inpRepeatPassword.touched)" class="alert alert-danger alert-form">
+										<ul>
+											<li *ngIf="inpRepeatPassword.errors.required">El campo es requerido.</li>
+											<li *ngIf="!inpRepeatPassword.errors.validateEqual">Debes repetir la misma clave.</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-sm-4">
+									<span>Empresa (Razón Social)</span>
+								</label>
+								<div class="col-sm-8">
+									<input #inpCompany="ngModel" name="inpCompany" class="form-control" [(ngModel)]="dateRegister.company" [ohInputFormat]="'upper'" type="text"
+										required="true">
+									<div *ngIf="inpCompany.invalid && (inpCompany.dirty || inpCompany.touched)" class="alert alert-danger alert-form">
+										<ul>
+											<li *ngIf="inpCompany.errors.required">El campo es requerido.</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-sm-4">
+									<span>RUC</span>
+								</label>
+								<div class="col-sm-8">
+									<input #inpRuc="ngModel" name="inpRuc" class="form-control" [(ngModel)]="dateRegister.RUC" [ohInputFormat]="'upper'" type="text" required="true">
+									<div *ngIf="inpRuc.invalid && (inpRuc.dirty || inpRuc.touched)" class="alert alert-danger alert-form">
+										<ul>
+											<li *ngIf="inpRuc.errors.required">El campo es requerido.</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="mt-3">
+						<button type="submit" class="btn btn-primary mr-1" [disabled]="frmRegister.invalid"><i class="far fa-save"></i> Registrar</button>
+						<button type="button" class="btn btn-secondary mr-1" (click)="frmRegister.resetForm({});"><i class="fas fa-eraser"></i> Limpiar</button>
+						<button type="button" class="btn btn-secondary" [routerLink]="['/Login']"><i class="fas fa-reply"></i> Regresar al login</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,132 @@
+<div class="container-fluid mt-2">
+    <div class="row">
+        <div class="col-4">
+            <div class="form-group">
+                <label>Id</label>
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="item.config.id" placeholder="Id">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Valor</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" [ngClass]="{'btn-outline-primary' : !item.config.value.esEnlace, 'btn-primary' : item.config.value.esEnlace}" (click)="$event.preventDefault(); buscarValueBind()"><i class="fas fa-assistive-listening-systems" aria-hidden="true"></i></span>
+                    </div>
+                    <input #inp_value="ngModel" name="inp_value" type="text" class="form-control form-control-sm" [(ngModel)]="item.config.value.valor" placeholder="Valor" [required]="item.config.required">
+                </div>
+            </div>
+        </div>
+        <div class="col-4" *ngIf="item.config.type == 'money'">
+            <div class="form-group">
+                <label>Moneda configuracion</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" [ngClass]="{'btn-outline-primary' : !item.config.moneyValue.esEnlace, 'btn-primary' : item.config.moneyValue.esEnlace}" (click)="$event.preventDefault(); buscarMoneyBind()"><i class="fas fa-assistive-listening-systems" aria-hidden="true"></i></span>
+                    </div>
+                    <input #inp_monedaConf="ngModel" name="inp_monedaConf" type="text" class="form-control form-control-sm" [(ngModel)]="item.config.moneyValue.valor" placeholder="Configuracion de moneda" [required]="true">
+                </div>
+                <div *ngIf="inp_monedaConf.invalid && (inp_monedaConf.dirty || inp_monedaConf.touched)" class="alert alert-danger alert-form">
+                    <ul>
+                        <li *ngIf="inp_monedaConf.errors.required">El campo es requerido.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Formato</label>
+                <select class="form-control" [(ngModel)]="item.config.formato">
+                    <option *ngFor="let item of formato" [value]="item.value">{{item.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-4" *ngIf="item.config.formato == 'moneda'">
+            <div class="form-group">
+                <label>Símbolo moneda</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" [ngClass]="{'btn-outline-primary' : !item.config.simboloValue.esEnlace, 'btn-primary' : item.config.simboloValue.esEnlace}" (click)="$event.preventDefault(); buscarSimboloBind()"><i class="fas fa-assistive-listening-systems" aria-hidden="true"></i></span>
+                    </div>
+                    <input #inp_simboloValue="ngModel" name="inp_simboloValue" type="text" class="form-control form-control-sm" [(ngModel)]="item.config.simboloValue.valor" placeholder="Símbolo de moneda" [required]="true">
+                </div>
+                <div *ngIf="inp_simboloValue.invalid && (inp_simboloValue.dirty || inp_simboloValue.touched)" class="alert alert-danger alert-form">
+                    <ul>
+                        <li *ngIf="inp_simboloValue.errors.required">El campo es requerido.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-4" *ngIf="item.config.formato == 'moneda'">
+            <div class="form-group">
+                <label>Formato moneda</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" [ngClass]="{'btn-outline-primary' : !item.config.formatoValue.esEnlace, 'btn-primary' : item.config.formatoValue.esEnlace}" (click)="$event.preventDefault(); buscarFormatoBind()"><i class="fas fa-assistive-listening-systems" aria-hidden="true"></i></span>
+                    </div>
+                    <input #inp_formatoValue="ngModel" name="inp_formatoValue" type="text" class="form-control form-control-sm" [(ngModel)]="item.config.formatoValue.valor" placeholder="Formato de moneda" [required]="true">
+                </div>
+                <div *ngIf="inp_formatoValue.invalid && (inp_formatoValue.dirty || inp_formatoValue.touched)" class="alert alert-danger alert-form">
+                    <ul>
+                        <li *ngIf="inp_formatoValue.errors.required">El campo es requerido.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Tipo de texto</label>
+                <select class="form-control" [(ngModel)]="item.config.type">
+                    <option *ngFor="let item of type" [value]="item.value">{{item.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Color</label>
+                <select class="form-control" name="pColorTexto" [(ngModel)]="item.config.colorTexto">
+                    <option *ngFor="let color of colorTexto" [value]="color.class">{{color.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Tamaño</label>
+                <select class="form-control" name="pTamanoTexto" [(ngModel)]="item.config.tamanoTexto">
+                    <option *ngFor="let tamano of tamanoTexto" [value]="tamano.class">{{tamano.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Transformación</label>
+                <select class="form-control" name="pTransformacion" [(ngModel)]="item.config.transformacion">
+                    <option *ngFor="let item of transformacion" [value]="item.clase">{{item.nombre}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Grosor</label>
+                <select class="form-control" name="pGrosor" [(ngModel)]="item.config.grosor">
+                    <option *ngFor="let item of grosor" [value]="item.clase">{{item.nombre}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label>Opciones</label>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="opcion_italica"
+                        name="opcion_italica" [(ngModel)]="item.config.esItalica">
+                    <label class="custom-control-label" for="opcion_italica">&nbsp; Itálica</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="opcion_fuenteCodigo"
+                        name="opcion_fuenteCodigo" [(ngModel)]="item.config.esFuenteCodigo">
+                    <label class="custom-control-label" for="opcion_fuenteCodigo">&nbsp; Fuente Código</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+<ul class="list-group">
+    <li class="list-group-item" style="padding: 0px; border: 0px;">
+        <div class="p-1" style="position: relative;">
+            <i *ngIf="item.hijos.length==0" class="text-muted far fa-square"></i>
+            <a *ngIf="item.hijos.length>0" href="#" (click)="$event.preventDefault(); item.hide = !item.hide;"><i [ngClass]="{'fa-caret-square-down' : item.hide, 'fa-caret-square-up' : !item.hide}" class="text-info far"></i></a>
+            &nbsp;
+            <div class="custom-control custom-checkbox" style="display: inline-block;">
+                <input type="checkbox" class="custom-control-input" (change)="seleccionar(item.menu_id);" [(ngModel)]="item.seleccionado" name="opcion_{{item.menu_id}}" id="opcion_{{item.menu_id}}" [disabled]="disabled">
+                <label class="custom-control-label" for="opcion_{{item.menu_id}}"><span [ngClass]="{'text-danger' : item.menu_id == null, 'text-info' : item.menu_padre_id == null, 'text-primary' : item.menu_padre_id != null}"><i [class]="item.icono"></i> {{item.titulo}} <span class="font-italic text-muted">/{{item.plantilla}}</span></span></label>
+            </div>
+            <div *ngIf="item.folder" style="position: absolute; top: 0.1rem; right: 0.3rem;" class="text-muted font-italic">{{item.folder}}</div>
+        </div>
+        <div class="pl-3" [ngbCollapse]="!item.hide">
+            <ng-container *ngFor="let hijo of item.hijos; let i = index">
+                <sha-treeSelector *ngIf="proyecto_id == null || (proyecto_id != null && proyecto_id == hijo.menu_id && hijo.menu_padre_id == null)" [item]="hijo" (eventosItem)="eventosItemCall($event)" [disabled]="disabled" [proyecto_id]="obtenerProyectoHijo(hijo)"></sha-treeSelector>
+            </ng-container>
+        </div>
+    </li>
+</ul>

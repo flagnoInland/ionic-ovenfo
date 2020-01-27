@@ -1,0 +1,42 @@
+.oh_option_contain {
+	right: 15px; 
+	position: absolute; 
+	top: 17px; 
+	cursor: pointer; 
+	width: 30px;
+}
+
+.oh_option_contain-sm {
+	right: 4px;
+	top: 4px;
+	position: absolute; 
+	cursor: pointer; 
+}
+
+.oh_option_card {
+	margin-bottom: 5px;
+}
+
+.oh_option_card-sm {
+	margin-bottom: 0px;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.oh_option_card-sm .card-body {
+	padding: 0.3rem;
+}
+
+.oh_option_message-sm {
+	margin-right: 1rem;
+    padding-top: 0.15rem;
+    padding-bottom: 0.15rem;
+    padding-right: 1.4rem;
+}
+
+.oh_option_box {
+	cursor: pointer; 
+	/*width: 30px;*/
+	width: auto;
+}

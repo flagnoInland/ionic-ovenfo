@@ -1,0 +1,150 @@
+<div class="container-fluid tis-cards-mt-2">
+    <form #frmRegistrar="ngForm" class="form-enable" (ngSubmit)="registrar(frmRegistrar)">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-user-alt"></i> Nuevo Usuario</div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group col-6 col-sm-4 col-md-3 col-lg-3">
+                        <label>Correo</label>
+                        <input #inp_correo="ngModel" name="inp_correo" type="email" class="form-control"
+                            [(ngModel)]="usuario.datos.correo" [ohInputFormat]="'upper'" minlength="2" maxlength="100" required="true" (input)="correoCambiar()">
+                        <div *ngIf="inp_correo.invalid && (inp_correo.dirty || inp_correo.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_correo.errors.required">El campo es requerido.</li>
+                                <li *ngIf="inp_correo.errors.minlength">El campo debe tener como
+                                    mínimo 2 caracteres.</li>
+                                <li *ngIf="inp_correo.errors.maxlength">El campo debe tener como
+                                    máximo 100 caracteres.</li>
+                            </ul>
+                        </div>
+                        <ngb-alert *ngIf="!validar.correo.indicador_buscando && validar.correo.lista.length>0" [dismissible]="false" type="warning" class="mt-2" style="padding: .50rem 0.75rem;">El Correo ya se encuentra repetido.</ngb-alert>
+                    </div>
+                    <div class="form-group col-6 col-sm-4 col-md-3 col-lg-3">
+                        <label>Id / Usuario</label>
+                        <input #inp_id="ngModel" name="inp_id" type="text" class="form-control" [(ngModel)]="usuario.datos.id" minlength="2" maxlength="100" required="true" (input)="validarTipo('id')">
+                        <div *ngIf="inp_id.invalid && (inp_id.dirty || inp_id.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_id.errors.required">El campo es requerido.</li>
+                                <li *ngIf="inp_id.errors.minlength">El campo debe tener como
+                                    mínimo 2 caracteres.</li>
+                                <li *ngIf="inp_id.errors.maxlength">El campo debe tener como
+                                    máximo 100 caracteres.</li>
+                            </ul>
+                        </div>
+                        <ngb-alert *ngIf="!validar.correo.indicador_buscando && validar.id.lista.length>0" [dismissible]="false" type="danger" class="mt-2" style="padding: .50rem 0.75rem;">El Id existe, ingrese otro.</ngb-alert>
+                    </div>
+                    <div class="form-group col-6 col-sm-4 col-md-3 col-lg-3">
+                        <label>Clave</label>
+                        <input #inp_clave="ngModel" autocomplete="new-password" name="inp_clave" class="form-control"
+                            [(ngModel)]="usuario.datos.clave" type="password" required="true" pattern="^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!\-_@#$%^&*])[\w!\-_@#$%^&*]{8,}$">
+                        <div *ngIf="inp_clave.invalid && (inp_clave.dirty || inp_clave.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_clave.errors.required">El campo es requerido.</li>
+                                <li *ngIf="inp_clave.errors.pattern">La clave debe contener por lo menos
+                                    <ul>
+                                        <li>8 caracteres</li>
+                                        <li>1 número</li>
+                                        <li>1 caracter minúscula</li>
+                                        <li>1 caracter mayúscula</li>
+                                        <li>1 caracter especial (! - _ @ # $ % ^ & *)</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-group col-6 col-sm-4 col-md-3 col-lg-3">
+                        <label>Repetir clave</label>
+                        <input #inp_claveRepetir="ngModel" autocomplete="new-password" name="inp_claveRepetir"
+                            class="form-control" [(ngModel)]="usuario.datos.claveRepetir" type="password"
+                            required="true" ohValidateEqual="inp_clave">
+                        <div *ngIf="inp_claveRepetir.invalid && (inp_claveRepetir.dirty || inp_claveRepetir.touched)"
+                            class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_claveRepetir.errors.required">El campo es requerido.</li>
+                                <li *ngIf="!inp_claveRepetir.errors.validateEqual">Debes repetir la misma
+                                    clave.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-group col-6 col-sm-4 col-md-3 col-lg-3">
+                        <label>Nombres</label>
+                        <input #inp_nombres="ngModel" name="inp_nombres" class="form-control" [(ngModel)]="usuario.datos.nombres"
+                            [ohInputFormat]="'upper'" type="text" required="true" minlength="2" maxlength="100">
+                        <div *ngIf="inp_nombres.invalid && (inp_nombres.dirty || inp_nombres.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_nombres.errors.required">El campo es requerido.</li>
+                                <li *ngIf="inp_nombres.errors.minlength">El campo debe tener como
+                                    mínimo 2 caracteres.</li>
+                                <li *ngIf="inp_nombres.errors.maxlength">El campo debe tener como
+                                    máximo 100 caracteres.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-group col-6 col-sm-4 col-md-3 col-lg-3">
+                        <label>Apellido paterno</label>
+                        <input #inp_apellido_paterno="ngModel" name="inp_apellido_paterno" class="form-control"
+                            [(ngModel)]="usuario.datos.apellido_paterno" [ohInputFormat]="'upper'" type="text" required="true"
+                            minlength="2" maxlength="100">
+                        <div *ngIf="inp_apellido_paterno.invalid && (inp_apellido_paterno.dirty || inp_apellido_paterno.touched)"
+                            class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_apellido_paterno.errors.required">El campo es
+                                    requerido.</li>
+                                <li *ngIf="inp_apellido_paterno.errors.minlength">El campo debe
+                                    tener como
+                                    mínimo 2 caracteres.</li>
+                                <li *ngIf="inp_apellido_paterno.errors.maxlength">El campo debe
+                                    tener como
+                                    máximo 100 caracteres.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-group col-6 col-sm-4 col-md-3 col-lg-3">
+                        <label>Apellido materno</label>
+                        <input #inp_apellido_materno="ngModel" name="inp_apellido_materno" class="form-control" [(ngModel)]="usuario.datos.apellido_materno"
+                            [ohInputFormat]="'upper'" type="text" required="true" minlength="2" maxlength="100">
+                        <div *ngIf="inp_apellido_materno.invalid && (inp_apellido_materno.dirty || inp_apellido_materno.touched)"
+                            class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_apellido_materno.errors.required">El campo es requerido.</li>
+                                <li *ngIf="inp_apellido_materno.errors.minlength">El campo debe tener como
+                                    mínimo 2 caracteres.</li>
+                                <li *ngIf="inp_apellido_materno.errors.maxlength">El campo debe tener como
+                                    máximo 100 caracteres.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-group col-6 col-sm-4 col-md-3 col-lg-3">
+                        <label>Estado</label>
+                        <select #inp_estado="ngModel" name="inp_estado" class="form-control" [(ngModel)]="usuario.datos.estado" required="true">
+                            <option *ngFor="let estado of acs.data.catalogo.usuario_estado" [value]="estado.variable_3">{{estado.descripcion}}</option>
+                        </select>
+                        <div *ngIf="inp_estado.invalid && (inp_estado.dirty || inp_estado.touched)" class="alert alert-danger alert-form">
+                            <ul>
+                                <li *ngIf="inp_estado.errors.required">El campo es requerido.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-2">
+            <div class="card-header"><i class="fas fa-building"></i> Empresa(s)</div>
+            <div class="card-body">
+                <adm-companySearch [(empresas_xml)]="usuario.empresas" [(empresa_id)]="usuario.empresa_id" [mapearDefecto]="true" [required]="true" [form]="frmRegistrar" [name]="'inp_empresa'"></adm-companySearch>
+            </div>
+        </div>
+        <div class="card mb-2">
+            <div class="card-header"><i class="fas fa-users"></i> Rol(es)</div>
+            <div class="card-body">
+                <adm-rolSelect [(roles_xml)]="usuario.roles" [required]="true" [form]="frmRegistrar" [name]="'inp_rol'"></adm-rolSelect>
+            </div>
+        </div>
+        <div class="card bg-light botoneraCard">
+            <div class="card-body">
+                <button type="submit" class="btn btn-primary mr-1" [disabled]="frmRegistrar.invalid"><i class="far fa-save"></i> Grabar</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="frmRegistrar.resetForm({}); limpiar();"><i class="fas fa-eraser"></i> Limpiar</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,13 @@
+<ng-template [ngIf]="format == 'standard'">
+    <div class="input-group">
+        <input type="text" #inp_search="ngModel" class="form-control" [placeholder]="placeholder" name="{{name}}" [(ngModel)]="valueSearch" readonly [required]="required">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" (click)="openModal()" type="button" [disabled]="disabled"><i class="fas fa-search"></i></button>
+        </div>
+    </div>
+    <div *ngIf="inp_search.invalid && (inp_search.dirty || inp_search.touched)" class="alert alert-danger alert-form">
+        <ul>
+            <li *ngIf="inp_search.errors.required">El campo es requerido.</li>
+        </ul>
+    </div>
+</ng-template>

@@ -1,0 +1,99 @@
+<div class="container-fluid tabs-contenido">
+    <div class="card mb-2">
+        <div class="card-header"><i class="fas fa-database mr-1"></i>Datos</div>
+        <div class="card-body">
+            <form #frmCarga="ngForm" class="form-enable" (ngSubmit)="$event.preventDefault();">
+                <div class="form-group row">
+                    <label for="bulkopt" class="col-sm-2 col-form-label">Opción</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" [(ngModel)]="bulk.option" name="bulkopt" required="true" (change)="cleanFile()">
+                            <option *ngFor="let item of acs.data.catalogo.carga_masiva_options" [ngValue]="item">{{item.descripcion}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="storeTable" class="col-sm-2 col-form-label">Archivo</label>
+                    <div class="col-sm-10">
+                        <div class="custom-file">
+                            <input type="file" class="btn custom-file-input" #fileAttachment required="true" (change)="openXLS($event)" [(ngModel)]="bulk.files" name="files" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                            <label class="custom-file-label" for="fileAttachment">
+                                <i class="fas fa-paperclip"></i> {{nombreAdjunto ? nombreAdjunto : " No se adjuntó archivo..."}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <button type="button" class="btn btn-sm btn-dark mx-auto" (click)="validateExcel()" [disabled]="frmCarga.invalid">
+                        <i class="fas fa-crosshairs mr-1"></i>Validar
+                    </button>
+                    <div class="clearfix w-100 mb-4"></div>
+                    <button type="button" class="btn btn-sm btn-success mx-auto" (click)="sendData()" [disabled]="countAllCheck()" *ngIf="bulk.list_validate.length > 0">
+                        <i class="fas fa-upload mr-1"></i>Volcar Datos
+                    </button>
+                </div>
+            </form>
+            <!-- <button type="button" class="btn btn-sm btn-dark mx-auto" (click)="showJSON()" [disabled]="frmCarga.invalid">JSON</button> -->
+            <div *ngIf="bulk.list_validate.length > 0">
+                <ngb-tabset (tabChange)="cambiarTab($event)">
+                    <ng-template ngFor let-item [ngForOf]="bulk.list_validate" let-i="index" let-odd="odd" [ngForTrackBy]="trackById">
+                        <ngb-tab [attr.id]="bulk.config.sheet[i].name">
+                            <ng-template ngbTabTitle>{{bulk.config.sheet[i].name}}</ng-template>
+                            <ng-template ngbTabContent>
+                                <div class="tableContent table-responsive">
+                                    <table class="table table-hover bg-white">
+                                        <thead>
+                                            <tr>
+                                                <th attr.colspan="{{bulk.config.sheet[i].display.length + 3}}">
+                                                    <span>{{item.data.length}} registros</span>
+                                                    <button class="btn btn-sm btn-primary float-right" type="button" (click)="unselect(item)" [disabled]="countCheck(item)"><i class="mr-1 far fa-square"></i>Ninguno</button>
+                                                    <button class="btn btn-sm btn-primary float-right mr-2" type="button" (click)="selectUpd(item)" [disabled]="countUpd(item)"><i class="mr-1 fas fa-edit"></i>Por actualizar</button>
+                                                    <button class="btn btn-sm btn-primary float-right mr-2" type="button" (click)="selectIns(item)" [disabled]="countIns(item)"><i class="mr-1 fas fa-plus-square"></i>Por registrar</button>
+                                                    <button class="btn btn-sm btn-primary float-right mr-2" type="button" (click)="selectAll(item)" [disabled]="countAll(item)"><i class="mr-1 fas fa-check-square"></i>Todos</button>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th class="px-1" style="width:0.5rem">
+                                                    <!-- [checked]="countList() == items.length" -->
+                                                    <!-- <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="select_all{{i}}" name="select_all{{i}}" [(ngModel)]="item.select_all" (change)="selectAll($event, item)"> 
+                                                        <label class="custom-control-label" for="select_all{{i}}"></label>
+                                                    </div> -->
+                                                </th>
+                                                <th class="px-2" style="max-width:25rem">result</th>
+                                                <th class="px-2">{{bulk.config.sheet[i].key[0]}}</th>
+                                                <th class="px-2" *ngFor="let header of bulk.config.sheet[i].display; let h = index">
+                                                    {{header}}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- [ngClass]="tupla.posicion==1?'bg-pk':''" -->
+                                            <tr *ngFor="let row of item.data; let r = index">
+                                                <td class="px-1">
+                                                    <div class="custom-control custom-checkbox ml-2" *ngIf="row.opcion != 0" style="min-height: auto;">
+                                                        <input class="custom-control-input ng-untouched ng-dirty" type="checkbox" [(ngModel)]="row.chk_send"  name="chk_send{{r}}" id="chk_send{{r}}">
+                                                        <label class="custom-control-label" for="chk_send{{r}}"></label>
+                                                    </div>
+                                                </td>
+                                                <th class="px-2">
+                                                    <i *ngIf="row.opcion == 1" class="mr-1 text-success fas fa-plus-square"></i>
+                                                    <i *ngIf="row.opcion == 2" class="mr-1 text-info fas fa-edit"></i>
+                                                    <i *ngIf="row.opcion == 0" class="mr-1 text-danger fas fa-ban"></i>
+                                                    <span>{{row.result}}</span>
+                                                </th>
+                                                <td class="px-2">{{row[bulk.config.sheet[i].key[0]]}}</td>
+                                                <td class="px-2" *ngFor="let header of bulk.config.sheet[i].display; let h = index">
+                                                    {{checkValue(row[header])}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </ngb-tab>
+                    </ng-template>
+                </ngb-tabset>
+            </div>
+        </div>
+    </div>
+</div>

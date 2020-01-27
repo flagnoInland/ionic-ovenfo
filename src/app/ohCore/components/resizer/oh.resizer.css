@@ -1,0 +1,44 @@
+.oh_resizer_vContent {
+	width : 100%; 
+	/*height: 480px;*/
+	/*border: 1px solid red;*/ /* reduce oh_resizer_vSideB height 2px */
+}
+
+.oh_resizer_vSideA {
+	width: 100%; 
+}
+
+.oh_resizer_vBar {
+	width: 100%; 
+	height: 10px; 
+	background: #5b5b5b; 
+	cursor: row-resize
+}
+
+.oh_resizer_vSideB {
+	width: 100%; 
+	overflow: auto;
+}
+
+
+.oh_resizer_hContent {
+	width : 100%; 
+	height: 100%;
+	display: inline-flex;
+}
+
+.oh_resizer_hSideA {
+	height: 100%; 
+	overflow: auto;
+}
+
+.oh_resizer_hBar {
+	width: 10px; 
+	background: #5b5b5b; 
+	cursor: col-resize;
+}
+
+.oh_resizer_hSideB {
+	height: 100%; 
+	overflow: auto;
+}

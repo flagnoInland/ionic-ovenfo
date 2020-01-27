@@ -1,0 +1,8 @@
+<div style="cursor: default">
+  <ngb-tabset [activeId]="item.config.iSel" [type]="item.config.typeTab" [justify]="item.config.justify" [orientation]="item.config.orientation">
+    <ngb-tab *ngFor='let row of item.config.rows; let i = index' [disabled]="!row.enable" id="tab-{{i}}">
+      <ng-template ngbTabTitle><bue-editor [design]="row.selectedHead" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor></ng-template>
+      <ng-template ngbTabContent><bue-editor [design]="row.selectedBody" [bind]="bind" [nameDragula]='nameDragula' (onSelectedItem)="getSelectedItem($event)" [readOnly]="readOnly"></bue-editor></ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>

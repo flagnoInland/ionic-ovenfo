@@ -1,0 +1,52 @@
+<!-- <ng-template [ngIf]="show_var"> -->
+<ng-template [ngIf]="show_var_aux">
+    <div class="oh_loader_A">
+        <div class="ohCore-body-content">
+            <div class="ohCore-body-center">
+                <div class="ohCore-body-font">
+                    <div class="ohCore-body-img"></div>
+                    <br>
+                    <br>
+                    <span>Cargando.. espere por favor</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<div *ngIf="ohCarg.show && ohCarg.view!='C'" [@ohTransition] class="oh_loader_A">
+    <div class="row content justify-content-center align-items-center">
+        <div class="col align-self-center col-auto">
+            <div class="oh_loader_AA">
+                <div class="oh_loader_AAA">
+                    <div [hidden]="ohCarg.view!='C'" class="oh_loader_AAAA">
+                        <div class="ohCore-body-img"></div>
+                        <br> Cargando.. espere por favor
+                    </div>
+                    <div [hidden]="ohCarg.view!='E'">
+                        <a href="#" title="Cerrar" (click)="closeModal($event)" class="text-danger oh_loader_AAAB text-size-15i"><i class="fas fa-times-circle"></i></a>
+                        <i class="fas fa-tools fa-4x text-danger oh_carga_Bor"></i>
+                        <div style="text-align:left">
+                            Vaya!.. algo no salió bien, para ver o enviar el detalle del error al área de TI haga clíck en : <a href="#" [hidden]="ohCarg.errorDetail" (click)="showDetail($event)" class="text-primary enlaceUrl">Ver detalle</a><br>
+                            <span class="text-muted font-italic">Nro de error : {{ohCarg.errorCodigo}}</span>
+                            <div [hidden]="!ohCarg.errorDetail">
+                                <textarea class="form-control">{{ohCarg.error}}</textarea>
+                                <span><a href="mailto:{{ohCarg.emailAdm}}?subject={{ohCarg.title}}&body={{getBodyError(ohCarg.error)}}" data-rel="external">Enviar correo a TI</a> o<br> llamar al número <a href="tel:{{ohCarg.number+((ohCarg.annexed)?(','+ohCarg.annexed):'')}}" data-rel="external">{{ohCarg.number}} <span [hidden]="!ohCarg.annexed">anexo {{ohCarg.annexed}}</span></a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div [hidden]="ohCarg.view!='F'">
+                        <a href="#" title="Cerrar" (click)="closeModal($event)" class="text-danger oh_loader_AAAB text-size-15i"><i class="fas fa-times-circle"></i></a>
+                        <i class="fas fa-hammer fa-4x text-primary oh_carga_Bor"></i>
+                        <div style="text-align:left">
+                            <div class="text-left mb-2">
+                                <strong>Estimado usuario</strong>
+                            </div>
+                            <p class="text-justify">Nuestros servicios se encuentran temporalmente inactivos por motivos de mantenimiento, favor de intentar en otro momento.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

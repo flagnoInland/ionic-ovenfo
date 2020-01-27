@@ -1,0 +1,36 @@
+<input type="hidden" #inp_select="ngModel" class="form-control" name="{{name}}" [(ngModel)]="_roles_valid" [required]="required">
+<div style="max-height: 20rem; overflow-y: scroll;">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col">Rol
+                    <span class="text-danger" *ngIf="required && ((roles_xml && roles_xml.length == 0) || !roles_xml)"><i class="fas fa-exclamation-triangle"></i></span>
+                    <span class="text-success" *ngIf="required && roles_xml && roles_xml.length > 0"><i class="fas fa-check-circle"></i></span>
+                </th>
+                <th scope="col" *ngIf="show_state">Estado</th>
+                <th scope="col" *ngIf="show_un">Unidad(es) de Negocio</th>
+                <th scope="col" style="width:1rem"><i title="Seleccionar" class="text-muted text-size-10 far fa-check-square"></i></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of roles; let i = index">
+                <th scope="row">{{item.nombre}}</th>
+                <td *ngIf="show_state">
+                    <span *ngIf="item.estado" class="badge badge-pill badge-outline-success"><i class="far fa-thumbs-up"></i> Activo</span>
+                    <span *ngIf="!item.estado" class="badge badge-pill badge-outline-danger"><i class="fas fa-exclamation-triangle"></i> Inactivo</span>
+                </td>
+                <td *ngIf="show_un">
+                    <div *ngFor="let unidad_negocio of item.unidades_lista; let e = index">
+                        {{unidad_negocio.nombre}}
+                    </div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="{{name}}_inp_rol_{{i}}" name="{{name}}_inp_rol_{{i}}" [(ngModel)]="item.seleccionado" (change)="seleccionar(i)" [disabled]="disabled">
+                        <label class="custom-control-label" for="{{name}}_inp_rol_{{i}}">&nbsp;</label>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
