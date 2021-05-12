@@ -24,7 +24,7 @@
     "angular-google-charts": "^0.1.6",
     "angular-tinymce": "^6.0.0",
     "angularx-qrcode": "^1.6.4",
-    "chart.js": "^2.8.0",
+    "chart.js": "^2.9.4",
     "@types/googlemaps": "^3.37.0",
     "@types/html2canvas": "0.0.35",
     "@types/file-saver": "^2.0.1",
